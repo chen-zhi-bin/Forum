@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/dp_10"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.program.moudle_base.view.LoginEditView
+        android:id="@+id/edit_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:inputHint="请输入手机号(验证信息)"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <com.program.moudle_base.view.LoginEditView
+        android:id="@+id/edit_new_psd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@+id/edit_phone"
+        app:inputHint="输入新密码"
+        app:isPassword="true"
+        app:inputLeftIcon="@mipmap/ic_password"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_phone"
+        />
+
+    <com.program.moudle_base.view.LoginEditView
+        android:id="@+id/edit_new_psd_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@+id/edit_phone"
+        app:inputHint="再次输入，确认新密码"
+        app:isPassword="true"
+        app:inputLeftIcon="@mipmap/ic_password"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_new_psd"
+        />
+
+    <Button
+        android:id="@+id/btn_forget"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/blue_solid_btn_selector"
+        android:gravity="center"
+        android:stateListAnimator="@null"
+        android:text="修改密码"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_new_psd_confirm" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="该功能还未实现"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_forget"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

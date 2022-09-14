@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_app_name">登录</string>
+    <string name="login_agreement">登录表示同意《用户服务协议》</string>
+    <string name="login_register_agreement">注册表示已阅读并同意《用户服务协议》</string>
+
+<!--    <string-array name="indicator_title">-->
+<!--        <item>最新问答</item>-->
+<!--        <item>推荐推荐</item>-->
+<!--    </string-array>-->
+
+</resources>
