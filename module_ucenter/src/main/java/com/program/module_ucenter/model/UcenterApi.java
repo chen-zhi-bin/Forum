@@ -2,6 +2,7 @@ package com.program.module_ucenter.model;
 
 import com.program.module_ucenter.model.domain.AchievementBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
+import com.program.module_ucenter.model.domain.LoginoutBean;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -19,4 +20,7 @@ public interface UcenterApi {
 
     @GET("/ast/achievement")
     Observable<AchievementBean> getUserAchievementBean(@Header("sob_token")String token);
+
+    @GET("/uc/user/logout")
+    Observable<LoginoutBean> loginout(@Header("sob_token")String token);
 }

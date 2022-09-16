@@ -1,9 +1,11 @@
 package com.program.module_ucenter.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,12 +17,14 @@ import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.UIUtils;
+import com.program.lib_common.Constants;
 import com.program.module_ucenter.R;
 
 import com.program.module_ucenter.callback.IUserFragmentCallback;
 import com.program.module_ucenter.model.domain.AchievementBean;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 import com.program.module_ucenter.presenter.IUserFragmentPresenter;
+import com.program.module_ucenter.ui.SettingActivity;
 import com.program.module_ucenter.utils.PresenterManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
@@ -52,6 +56,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     private TextView mTvSobNum;
     private TextView mTvSobDx;
     private SmartRefreshLayout mRefreshLayout;
+    private ImageView mIvSetting;
 
       static {
           //设置全局的Header构建器
@@ -90,6 +95,8 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
 
         mRefreshLayout = rootView.findViewById(R.id.refreshLayout);
 
+        mIvSetting = rootView.findViewById(R.id.iv_setting);
+
     }
 
     @Override
@@ -98,6 +105,14 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 getData();
+            }
+        });
+
+        mIvSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivityForResult(intent, Constants.NEED_RESULT);
             }
         });
     }

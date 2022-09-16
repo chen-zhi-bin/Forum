@@ -1,16 +1,19 @@
 package com.program.moudle_main.ui;
 
+import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.home.wrap.HomeServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
@@ -18,6 +21,7 @@ import com.program.moudle_base.base.BaseActivity;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_main.R;
 import com.program.moudle_main.R2;
 
@@ -172,6 +176,15 @@ public class MainActivity extends BaseActivity {
 //        fragmentTransaction.commit();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.d("test","requestCode ="+requestCode+",resultCode="+resultCode+",data = "+data.toString());
+        if (resultCode == Constants.RETURN_TO_HMOE){
+            switchFragment(mRecommendFragment);
+            mNavigationView.setSelectedItemId(mNavigationView.getMenu().getItem(Constants.NAVIGATION_VIEW_MENU_RECOMMEND_ITEM_ID_INDEX).getItemId());
+        }
+    }
 
     /**
      * 返回键的事件
