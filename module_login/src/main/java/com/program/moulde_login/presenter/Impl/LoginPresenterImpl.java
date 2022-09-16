@@ -36,20 +36,20 @@ public class LoginPresenterImpl implements ILoginPresenter {
         task.enqueue(new Callback<LoginBean>() {
             @Override
             public void onResponse(Call<LoginBean> call, Response<LoginBean> response) {
-                Log.d("test", "onResponse: respose="+response.body());
+//                Log.d("test", "onResponse: respose="+response.body());
                 LoginBean bean = response.body();
                 if (response.code()==200){
                     if (bean.getCode()==10000){
 
                         String token = response.headers().get("sob_token");
-                        LogUtils.d("test","token ="+token);
+//                        LogUtils.d("test","token ="+token);
                         mSharedPreferencesUtils.putString(SharedPreferencesUtils.USER_TOKEN_COOKIE,token);
                         mSharedPreferencesUtils.putString(SharedPreferencesUtils.USER_PHONE,user.getPhoneNum());
 
                         getTokenMessage(token);
 
                     }else {
-                        mLoginCallback.onLoginError();
+                        mLoginCallback.onLoginError(bean.getMessage());
                     }
                 }else {
                     mLoginCallback.onError();
@@ -78,9 +78,9 @@ public class LoginPresenterImpl implements ILoginPresenter {
                         String userId = data.getData().getId();
                         mSharedPreferencesUtils.putString(SharedPreferencesUtils.USER_ID,userId);
 
-                        mLoginCallback.onResultLoginSuccess();
+                        mLoginCallback.onResultLoginSuccess(data.getMessage());
                     } else {
-                        mLoginCallback.onLoginError();
+                        mLoginCallback.onLoginError(data.getMessage());
                     }
                 }else {
                     mLoginCallback.onError();

@@ -75,14 +75,14 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
     }
 
     @Override
-    public void onResultLoginSuccess() {
-        ToastUtils.showToast("Success");
+    public void onResultLoginSuccess(String message) {
         loginFragmentListener.onCallbackBack();
+        ToastUtils.showToast("Success");
 //        getActivity().onBackPressed();
     }
 
     @Override
-    public void onLoginError() {
+    public void onLoginError(String message) {
         ToastUtils.showToast("Error");
     }
 

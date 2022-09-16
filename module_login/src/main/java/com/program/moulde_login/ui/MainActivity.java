@@ -3,20 +3,25 @@ package com.program.moulde_login.ui;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.program.lib_base.LogUtils;
+import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.moudle_base.base.BaseActivity;
 import com.program.moudle_base.base.BaseFragment;
 
+import com.program.moudle_base.utils.ToastUtils;
 import com.program.moulde_login.R;
 import com.program.moulde_login.ui.fragment.*;
+import com.program.moulde_login.view.ILoginCallback;
 
 
 @Route(path=RoutePath.Login.PATH_lOGIN)
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
 
 //    @BindView(R2.id.tv_register)
     public TextView mRegisterOrLoginTv;
@@ -100,7 +105,8 @@ public class MainActivity extends BaseActivity{
         mLoginFragment.setLoginFragmentListener(new LoginFragment.LoginFragmentListener() {
             @Override
             public void onCallbackBack() {
-               finish();
+                LogUtils.d("onCallbackBack","back");
+                finish();
             }
         });
     }

@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity {
 //    private UserFragment mUserFragment;
     private BaseFragment mUserFragment = null;
     private boolean isLogin = false;            //是否登录
+    private boolean isNeedtoFragmentUser=false;
     private SharedPreferencesUtils mSharedPreferencesUtils;
     private BaseFragment mFragment;
 
@@ -107,7 +108,6 @@ public class MainActivity extends BaseActivity {
 
                             mUserFragment = (BaseFragment) UcenterServiceWrap.Singletion.INSTANCE.getHolder().getFragment();
                         }
-                        //TODO:登录过
                         LogUtils.d("test","logined");
                         switchFragment(mUserFragment);
                         return true;
@@ -117,6 +117,7 @@ public class MainActivity extends BaseActivity {
                                 .withString(RoutePath.PATH,RoutePath.Ucenter.FRAGMENT_UCENTER)
                                 .navigation();
                         LogUtils.d("test","to login");
+                        isNeedtoFragmentUser=true;
                         return false;
                     }
 
@@ -179,10 +180,27 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.d("test","requestCode ="+requestCode+",resultCode="+resultCode+",data = "+data.toString());
+//        LogUtils.d("onActivityResult","requestCode ="+requestCode+",resultCode="+resultCode+",data = "+data.toString());
         if (resultCode == Constants.RETURN_TO_HMOE){
             switchFragment(mRecommendFragment);
             mNavigationView.setSelectedItemId(mNavigationView.getMenu().getItem(Constants.NAVIGATION_VIEW_MENU_RECOMMEND_ITEM_ID_INDEX).getItemId());
+        }else if (resultCode==Constants.RETURN_TO_USER){
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.d("onResume","onResume()");
+        if (isNeedtoFragmentUser) {
+            isLogin = mSharedPreferencesUtils.contains(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+            LogUtils.d("boolean", "isLogin == " + isLogin);
+            if (isLogin) {
+                switchFragment(mUserFragment);
+                mNavigationView.setSelectedItemId(mNavigationView.getMenu().getItem(Constants.NAVIGATION_VIEW_MENU_USER_ITEM_ID_INDEX).getItemId());
+            }
+            isNeedtoFragmentUser = false;
         }
     }
 

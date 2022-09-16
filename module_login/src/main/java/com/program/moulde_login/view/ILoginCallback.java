@@ -4,7 +4,7 @@ import com.program.moudle_base.base.IBaseCallback;
 
 public interface ILoginCallback extends IBaseCallback {
 
-    void onResultLoginSuccess();
+    void onResultLoginSuccess(String message);
 
-    void onLoginError();
+    void onLoginError(String message);
 }
