@@ -10,6 +10,7 @@ import com.program.module_ucenter.callback.IUserFragmentCallback;
 import com.program.module_ucenter.model.UcenterApi;
 import com.program.module_ucenter.model.domain.AchievementBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
+import com.program.module_ucenter.model.domain.UnreadMsgBean;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 import com.program.module_ucenter.presenter.IUserFragmentPresenter;
 import com.program.module_ucenter.utils.RetrofitManager;
@@ -29,11 +30,12 @@ public class UserFragmentPresenterImpl implements IUserFragmentPresenter {
     private final SharedPreferencesUtils mSharedPreferencesUtils;
     private final UcenterApi mApi;
 
-
+    private final static int REQUEST_SUCCESS=10000;
     private final static int RETURN_AVATAR = 0;
     private final static int ERROR = 1;
     private final static int RETURN_USER_MSG = 2;
     private final static int RETURN_USER_ACHIEVEMENT = 3;
+    private final static int RETURN_USER_UNREADCOUNT = 4;
     private Handler mHandler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -50,6 +52,13 @@ public class UserFragmentPresenterImpl implements IUserFragmentPresenter {
                     break;
                 case RETURN_USER_ACHIEVEMENT:
                     mCallback.setUserAchievement((AchievementBean) msg.obj);
+                    break;
+                case RETURN_USER_UNREADCOUNT:
+                    UnreadMsgBean data = (UnreadMsgBean) msg.obj;
+                    UnreadMsgBean.DataBean dataBean = data.getData();
+                    int count = dataBean.getArticleMsgCount()+dataBean.getAtMsgCount()+dataBean.getMomentCommentCount()+dataBean.getShareMsgCount()
+                            +dataBean.getSystemMsgCount()+dataBean.getThumbUpMsgCount()+dataBean.getWendaMsgCount();
+                    mCallback.setUnreadMsgCount(count+"");
                     break;
                 case ERROR:
                     mCallback.onErrorMessage(msg.obj.toString());
@@ -199,6 +208,46 @@ public class UserFragmentPresenterImpl implements IUserFragmentPresenter {
 
                     }
                 });
+
+    }
+
+    @Override
+    public void getUnreadMsg() {
+        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mApi.getUnreadBean(token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Observer<UnreadMsgBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull UnreadMsgBean unreadMsgBean) {
+                        LogUtils.d("bean","UnreadMsgBean = "+unreadMsgBean.toString());
+                        Message message = new Message();
+                        if (unreadMsgBean.getCode()==REQUEST_SUCCESS){
+                            message.what=RETURN_USER_UNREADCOUNT;
+                            message.obj = unreadMsgBean;
+                        }else {
+                            message.what=  ERROR;
+                            message.obj = unreadMsgBean.getMessage();
+                        }
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        toHandlerError(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
 
     }
 

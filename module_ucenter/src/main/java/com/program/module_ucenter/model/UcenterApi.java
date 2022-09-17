@@ -3,6 +3,7 @@ package com.program.module_ucenter.model;
 import com.program.module_ucenter.model.domain.AchievementBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
 import com.program.module_ucenter.model.domain.LoginoutBean;
+import com.program.module_ucenter.model.domain.UnreadMsgBean;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -23,4 +24,7 @@ public interface UcenterApi {
 
     @GET("/uc/user/logout")
     Observable<LoginoutBean> loginout(@Header("sob_token")String token);
+
+    @GET("/ct/msg/count")
+    Observable<UnreadMsgBean> getUnreadBean(@Header("sob_token")String token);
 }

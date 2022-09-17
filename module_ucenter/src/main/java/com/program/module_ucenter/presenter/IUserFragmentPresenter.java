@@ -9,4 +9,6 @@ public interface IUserFragmentPresenter extends IBasePresenter<IUserFragmentCall
     void getUserMsg();
 
     void getUserAchievement();
+
+    void getUnreadMsg();
 }

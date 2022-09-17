@@ -18,6 +18,8 @@ public interface IUserFragmentCallback extends IBaseCallback {
 
     void onErrorMessage(String message);
 
+    void setUnreadMsgCount(String num);
+
     /**
      * 暂时无用 ， 起初的计划是绑定rxjava的生命周期使用
      * @return

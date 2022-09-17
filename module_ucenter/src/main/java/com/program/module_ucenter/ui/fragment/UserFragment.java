@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner;
 import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.program.lib_base.LogUtils;
 import com.program.lib_base.UIUtils;
 import com.program.lib_common.Constants;
 import com.program.module_ucenter.R;
@@ -68,6 +69,9 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
               }
           });
       }
+
+    private TextView mTvNotifyNum;
+
     @Override
     protected int getRootViewResId() {
         return R.layout.moduleucenter_fragment_user;
@@ -97,6 +101,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
 
         mIvSetting = rootView.findViewById(R.id.iv_setting);
 
+        mTvNotifyNum = rootView.findViewById(R.id.tv_notify_num);
     }
 
     @Override
@@ -128,7 +133,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         mUserFragmentPresenter.getAvatar();
         mUserFragmentPresenter.getUserMsg();
         mUserFragmentPresenter.getUserAchievement();
-
+        mUserFragmentPresenter.getUnreadMsg();
         if (mRefreshLayout.isRefreshing()){
             mRefreshLayout.finishRefresh();
         }
@@ -202,6 +207,13 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     @Override
     public void onErrorMessage(String message) {
         ToastUtils.showToast(message);
+    }
+
+    @Override
+    public void setUnreadMsgCount(String num) {
+        LogUtils.d("test","Unread ="+num);
+        mTvNotifyNum.setText(num);
+        mTvNotifyNum.setVisibility(View.VISIBLE);
     }
 
     @Override
