@@ -22,6 +22,7 @@ import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle3.LifecycleProvider;
+import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 
 public class SettingActivity extends RxAppCompatActivity implements ISettingCallback {

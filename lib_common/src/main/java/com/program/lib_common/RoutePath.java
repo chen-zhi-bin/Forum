@@ -14,5 +14,6 @@ public class RoutePath {
     public static class Ucenter{
         public static final String FRAGMENT_UCENTER="/ucenter/FRAGMENT_UCENTER";
         public static final String SERVICE_UCENTER="/ucenter/SERVICE_UCENTER";
+        public static final String PAGE_MESSAGE="/ucenter/MsgCenterActivity";
     }
 }

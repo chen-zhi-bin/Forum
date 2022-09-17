@@ -19,6 +19,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_base.UIUtils;
 import com.program.lib_common.Constants;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_ucenter.R;
 
 import com.program.module_ucenter.callback.IUserFragmentCallback;
@@ -71,6 +72,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
       }
 
     private TextView mTvNotifyNum;
+    private ImageView mIvNotify;
 
     @Override
     protected int getRootViewResId() {
@@ -102,6 +104,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         mIvSetting = rootView.findViewById(R.id.iv_setting);
 
         mTvNotifyNum = rootView.findViewById(R.id.tv_notify_num);
+        mIvNotify = rootView.findViewById(R.id.iv_notify);
     }
 
     @Override
@@ -118,6 +121,13 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SettingActivity.class);
                 startActivityForResult(intent, Constants.NEED_RESULT);
+            }
+        });
+
+        mIvNotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMassage();
             }
         });
     }
@@ -212,8 +222,10 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     @Override
     public void setUnreadMsgCount(String num) {
         LogUtils.d("test","Unread ="+num);
-        mTvNotifyNum.setText(num);
-        mTvNotifyNum.setVisibility(View.VISIBLE);
+        if (!num.equals("0")){
+            mTvNotifyNum.setText(num);
+            mTvNotifyNum.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

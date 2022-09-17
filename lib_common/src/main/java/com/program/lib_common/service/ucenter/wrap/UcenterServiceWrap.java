@@ -21,12 +21,6 @@ public class UcenterServiceWrap{
         instance = Singletion.INSTANCE.getHolder();
     }
 
-
-    public Fragment getFragment(){
-
-        return mService.getFragment();
-    }
-
     private UcenterServiceWrap() {
         Log.d("UcenterServiceWrap","onCreate");
         ARouter.getInstance().inject(this);
@@ -34,6 +28,21 @@ public class UcenterServiceWrap{
         mService = (IUcenterService) navigation;
         Log.d("UcenterServiceWrap","test mService = "+mService);
     }
+
+
+    public Fragment getFragment(){
+
+        return mService.getFragment();
+    }
+
+
+    public void launchMassage(){
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_MESSAGE)
+                .navigation();
+    }
+
+
 
     public static final class Singletion{
         private static final UcenterServiceWrap holder;
