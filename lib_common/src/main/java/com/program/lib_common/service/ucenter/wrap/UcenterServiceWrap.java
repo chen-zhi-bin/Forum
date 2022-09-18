@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.IUcenterService;
 
@@ -39,6 +40,15 @@ public class UcenterServiceWrap{
     public void launchMassage(){
         ARouter.getInstance()
                 .build(RoutePath.Ucenter.PAGE_MESSAGE)
+                .navigation();
+    }
+
+    public void launchMsgList(int pageType,String title){
+        Log.d("test","title = "+title + "===pageType ="+pageType);
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_MSG_LIST)
+                .withInt(Constants.Ucenter.PAGE_TYPE,pageType)
+                .withString("title",title)
                 .navigation();
     }
 

@@ -15,7 +15,9 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.allen.library.SuperTextView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_base.UIUtils;
+import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.IMsgCenterCallback;
 import com.program.module_ucenter.model.domain.UnreadMsgBean;
@@ -23,10 +25,13 @@ import com.program.module_ucenter.presenter.IMsgCenterPresenter;
 import com.program.module_ucenter.utils.PresenterManager;
 import com.program.moudle_base.R2;
 import com.program.moudle_base.base.BaseActivity;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshFooter;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.DefaultRefreshFooterCreator;
 import com.scwang.smart.refresh.layout.listener.DefaultRefreshHeaderCreator;
 
 import com.trello.rxlifecycle4.LifecycleTransformer;
@@ -53,6 +58,14 @@ public class MsgCenterActivity extends RxAppCompatActivity implements IMsgCenter
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
                 layout.setPrimaryColorsId(R.color.transparent, R.color.colorPrimary);//全局设置主题颜色
                 return new ClassicsHeader(context);//.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
+            }
+        });
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                //指定为经典Footer，默认是 BallPulseFooter
+                return new ClassicsFooter(context).setDrawableSize(20);
             }
         });
     }
@@ -88,6 +101,12 @@ public class MsgCenterActivity extends RxAppCompatActivity implements IMsgCenter
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+        mTvSystem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_SYSTEM,"系统消息");
             }
         });
     }

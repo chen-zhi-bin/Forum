@@ -99,6 +99,8 @@ dependencies {
     implementation rootProject.ext.dependencies.roundedimageview
     implementation rootProject.ext.dependencies.super_text_view
 
+    implementation rootProject.ext.dependencies.basequick_adapter
+
 
     api project(':module_base')
     api project(":lib_base")

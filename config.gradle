@@ -34,8 +34,8 @@ ext {
     def RXLIFECYCLE_COMPONENTS_VERSION="4.0.2"
     def RXLIFCYCLE_ANDROID_VERSION="3.1.0"
 
-    def GLIDE_VERSION="4.11.0"
-    def GLIDE_COMPILER_VERSION="4.11.0"
+    def GLIDE_VERSION="4.9.0"
+    def GLIDE_COMPILER_VERSION="4.9.0"
 
     def REFRESH_LAYOUT_VERSION = "2.0.5"
     def REFRESH_HEADER_VERSION = "2.0.5"
@@ -44,7 +44,7 @@ ext {
     def ROUNDED_IMAGEVIEW_VERSION = "2.3.0"
 
     def SUPERTEXT_VERSION = "2.4.6"
-
+    def BASE_QUICK_ADAPTER_VERSION = "3.0.2"
     //三方库统一管理_VERSION
     dependencies = [
             appcompatV7         : 'com.android.support:appcompat-v7:' + APPCOMPAT_V7_VERSION,
@@ -74,6 +74,7 @@ ext {
             refresh_header      :'io.github.scwang90:refresh-header-classics:'+REFRESH_HEADER_VERSION,                     //经典刷新头
             refresh_footer      :'io.github.scwang90:refresh-footer-classics:'+REFRESH_FOOTER_VERSION,                     //经典加载
             roundedimageview    :'com.makeramen:roundedimageview:'+ROUNDED_IMAGEVIEW_VERSION,                //圆角头像
-            super_text_view     :'com.github.lygttpod:SuperTextView:'+SUPERTEXT_VERSION
+            super_text_view     :'com.github.lygttpod:SuperTextView:'+SUPERTEXT_VERSION,
+            basequick_adapter   :'com.github.CymChad:BaseRecyclerViewAdapterHelper:'+BASE_QUICK_ADAPTER_VERSION
     ]
 }

@@ -3,6 +3,7 @@ package com.program.module_ucenter.model;
 import com.program.module_ucenter.model.domain.AchievementBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
 import com.program.module_ucenter.model.domain.LoginoutBean;
+import com.program.module_ucenter.model.domain.MsgSystemBean;
 import com.program.module_ucenter.model.domain.ReadAllBean;
 import com.program.module_ucenter.model.domain.UnreadMsgBean;
 import com.program.module_ucenter.model.domain.UserMessageBean;
@@ -31,4 +32,7 @@ public interface UcenterApi {
 
     @GET("/ct/msg/read")
     Observable<ReadAllBean> readAllMsg(@Header("sob_token")String token);
+
+    @GET("/ct/ucenter/message/system/{page}")
+    Observable<MsgSystemBean> getSystemMsg(@Path("page")int page,@Header("sob_token")String token);
 }
