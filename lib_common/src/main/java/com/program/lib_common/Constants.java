@@ -10,11 +10,14 @@ public class Constants {
     public static final int RETURN_TO_USER = 3;
     public static final int NEED_RESULT = 0;
 
+    public static final int SUCCESS=10000;
 
     public class Ucenter{
 
         public static final String PAGE_TYPE = "page_type";
 
+        //消息-@我
+        public static final int PAGE_MSG_AT =11;
         //消息-系统消息
         public static final int PAGE_MSG_SYSTEM =12;
     }

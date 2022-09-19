@@ -12,6 +12,10 @@
         android:name=".UcenterApplication"
         android:supportsRtl="true"
         android:theme="@style/Theme.Forum">
+
+        <activity android:name=".ui.MessageListActivity">
+
+        </activity>
         <activity android:name=".ui.MainActivity">
 
         </activity>

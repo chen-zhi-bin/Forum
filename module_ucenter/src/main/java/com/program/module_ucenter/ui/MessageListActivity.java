@@ -68,6 +68,7 @@ public class MessageListActivity extends AppCompatActivity {
             default:
                 UserMessageListFragment fragment = new UserMessageListFragment();
                 Bundle bundle = new Bundle();
+                bundle.putInt("pageType",pageType);
                 fragment.setArguments(bundle);
                 transaction.add(R.id.fl_content,fragment).commit();
                 break;

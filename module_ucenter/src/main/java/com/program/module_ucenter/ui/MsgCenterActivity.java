@@ -109,6 +109,12 @@ public class MsgCenterActivity extends RxAppCompatActivity implements IMsgCenter
                 UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_SYSTEM,"系统消息");
             }
         });
+        mTvAt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_AT,"@我的");
+            }
+        });
     }
 
 
