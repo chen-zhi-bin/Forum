@@ -197,6 +197,9 @@ public class MainActivity extends BaseActivity {
             isLogin = mSharedPreferencesUtils.contains(SharedPreferencesUtils.USER_TOKEN_COOKIE);
             LogUtils.d("boolean", "isLogin == " + isLogin);
             if (isLogin) {
+                if (mUserFragment == null){
+                    mUserFragment = (BaseFragment) UcenterServiceWrap.Singletion.INSTANCE.getHolder().getFragment();
+                }
                 switchFragment(mUserFragment);
                 mNavigationView.setSelectedItemId(mNavigationView.getMenu().getItem(Constants.NAVIGATION_VIEW_MENU_USER_ITEM_ID_INDEX).getItemId());
             }

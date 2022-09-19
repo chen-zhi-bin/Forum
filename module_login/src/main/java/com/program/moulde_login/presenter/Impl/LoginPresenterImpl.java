@@ -52,13 +52,13 @@ public class LoginPresenterImpl implements ILoginPresenter {
                         mLoginCallback.onLoginError(bean.getMessage());
                     }
                 }else {
-                    mLoginCallback.onError();
+                    mLoginCallback.onLoginError("网络错误");
                 }
             }
 
             @Override
             public void onFailure(Call<LoginBean> call, Throwable t) {
-                    mLoginCallback.onError();
+                mLoginCallback.onLoginError("网络错误");
             }
         });
 
@@ -83,13 +83,13 @@ public class LoginPresenterImpl implements ILoginPresenter {
                         mLoginCallback.onLoginError(data.getMessage());
                     }
                 }else {
-                    mLoginCallback.onError();
+                    mLoginCallback.onLoginError(data.getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<TokenBean> call, Throwable t) {
-                    mLoginCallback.onError();
+                mLoginCallback.onLoginError("网络错误");
             }
         });
 

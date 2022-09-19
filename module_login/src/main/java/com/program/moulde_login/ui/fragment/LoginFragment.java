@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.program.lib_base.Md5Utils;
+import com.program.lib_base.view.LoadingDialog;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.model.User;
 import com.program.moudle_base.utils.ToastUtils;
@@ -24,6 +25,7 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
     private Button mBtnLogin;
     private ILoginPresenter mLoginPresenter;
     private LoginFragmentListener loginFragmentListener=null;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected int getRootViewResId() {
@@ -38,6 +40,7 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
         mEditPsw = rootView.findViewById(R.id.edit_password);
         mEditCode = rootView.findViewById(R.id.edit_turing_code);
         mBtnLogin = rootView.findViewById(R.id.btn_login);
+        mLoadingDialog = new LoadingDialog(getContext());
     }
 
     @Override
@@ -67,6 +70,7 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
                     return;
                 }
 
+                mLoadingDialog.showDialog(getContext());
                 User user = new User(mEditPhone.getValue().toString(), Md5Utils.md5(mEditPsw.getValue().toString()));
                 mLoginPresenter.getLogin(code,user,key);
             }
@@ -76,6 +80,7 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
 
     @Override
     public void onResultLoginSuccess(String message) {
+        mLoadingDialog.dismissDialog();
         loginFragmentListener.onCallbackBack();
         ToastUtils.showToast("Success");
 //        getActivity().onBackPressed();
@@ -83,7 +88,8 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
 
     @Override
     public void onLoginError(String message) {
-        ToastUtils.showToast("Error");
+        mLoadingDialog.dismissDialog();
+        ToastUtils.showToast(message);
     }
 
     @Override
