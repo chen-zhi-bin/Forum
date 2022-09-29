@@ -11,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.program.lib_base.view.LoadingDialog;
 import com.program.moudle_base.R;
-import com.trello.rxlifecycle4.components.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -71,7 +69,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.moudlebase_base_fragment_layout, container,false);
+        return inflater.inflate(R.layout.modulebase_base_fragment_layout, container,false);
     }
 
     /**
@@ -108,11 +106,11 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected View loadErrorView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.moudlebase_base_fragment_base_error,container,false);
+        return inflater.inflate(R.layout.modulebase_base_fragment_base_error,container,false);
     }
 
     protected View loadEmptyView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.moudlebase_base_fragment_base_empty,container,false);
+        return inflater.inflate(R.layout.modulebase_base_fragment_base_empty,container,false);
     }
 
     /**
@@ -136,7 +134,7 @@ public abstract class BaseFragment extends Fragment {
      * @return
      */
     private View loadLoadingView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.moudlebase_base_fragment_base_loading,container,false);
+        return inflater.inflate(R.layout.modulebase_base_fragment_base_loading,container,false);
     }
 
     protected void initView(View rootView) {

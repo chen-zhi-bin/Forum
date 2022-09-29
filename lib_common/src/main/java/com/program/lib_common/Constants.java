@@ -12,6 +12,11 @@ public class Constants {
 
     public static final int SUCCESS=10000;
 
+    public static final String DATA_TYPE = "data_type";
+    public static final String DATA_TPTE_ARTICLE = "article";
+    public static final String DATA_TPTE_SHARA = "share";
+    public static final String DATA_TPTE_WENDA = "wenda";
+
     public class Ucenter{
 
         public static final String PAGE_TYPE = "page_type";

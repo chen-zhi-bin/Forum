@@ -20,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
-import com.program.lib_base.UIUtils;
+import com.program.lib_common.UIUtils;
 import com.program.moudle_base.R;
 
 public class LoginEditView extends LinearLayout {
@@ -51,7 +51,7 @@ public class LoginEditView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         this.context = context;
         initattrs(context,attrs);
-        LayoutInflater.from(context).inflate(R.layout.moudlebase_login_input_layout,this);
+        LayoutInflater.from(context).inflate(R.layout.modulebase_login_input_layout,this);
         initView();
 
         initListener();

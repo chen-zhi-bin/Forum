@@ -1,8 +1,6 @@
 package com.program.module_ucenter.ui;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Lifecycle;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.allen.library.SuperTextView;
 import com.program.lib_base.LogUtils;
-import com.program.lib_base.UIUtils;
+import com.program.lib_common.UIUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
@@ -23,8 +21,6 @@ import com.program.module_ucenter.callback.IMsgCenterCallback;
 import com.program.module_ucenter.model.domain.UnreadMsgBean;
 import com.program.module_ucenter.presenter.IMsgCenterPresenter;
 import com.program.module_ucenter.utils.PresenterManager;
-import com.program.moudle_base.R2;
-import com.program.moudle_base.base.BaseActivity;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
@@ -36,9 +32,6 @@ import com.scwang.smart.refresh.layout.listener.DefaultRefreshHeaderCreator;
 
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
-
-import butterknife.BindView;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 @Route(path = RoutePath.Ucenter.PAGE_MESSAGE)
 public class MsgCenterActivity extends RxAppCompatActivity implements IMsgCenterCallback {

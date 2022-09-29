@@ -1,12 +1,8 @@
 package com.program.module_ucenter.adapter;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.program.lib_common.CommonViewUtils;
+import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.model.domain.MsgSystemBean;
 

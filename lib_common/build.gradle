@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
 }
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 31
@@ -40,4 +41,7 @@ dependencies {
 
     implementation rootProject.ext.dependencies.glide
     annotationProcessor rootProject.ext.dependencies.glide_compiler
+
+    implementation rootProject.ext.dependencies.mojito_version
+    implementation rootProject.ext.dependencies.mojito_image_view_loader
 }

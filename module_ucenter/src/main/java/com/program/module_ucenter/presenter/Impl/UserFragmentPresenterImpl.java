@@ -173,9 +173,8 @@ public class UserFragmentPresenterImpl implements IUserFragmentPresenter {
 
     @Override
     public void getUserAchievement() {
-        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
-        LogUtils.d("getUserAchievement","token = "+token);
-        mApi.getUserAchievementBean(token)
+        String id = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_ID);
+        mApi.getUserAchievementBean(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Observer<AchievementBean>() {

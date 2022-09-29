@@ -100,7 +100,16 @@ dependencies {
     implementation rootProject.ext.dependencies.super_text_view
 
     implementation rootProject.ext.dependencies.basequick_adapter
+    implementation rootProject.ext.dependencies.mojito_version
+    implementation rootProject.ext.dependencies.mojito_image_view_loader
+    implementation rootProject.ext.dependencies.banner
 
+    //load with coil
+    implementation "com.github.mikaelzero.mojito:coilimageloader:1.8.5"
+//load with glide
+    implementation "com.github.mikaelzero.mojito:GlideImageLoader:1.8.5"
+//load with fresco
+    implementation "com.github.mikaelzero.mojito:FrescoImageLoader:1.8.5"
 
     api project(':module_base')
     api project(":lib_base")

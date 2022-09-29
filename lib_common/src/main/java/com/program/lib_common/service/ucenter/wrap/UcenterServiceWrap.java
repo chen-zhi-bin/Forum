@@ -36,6 +36,12 @@ public class UcenterServiceWrap{
         return mService.getFragment();
     }
 
+    public void launchDetail(String userId){
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_UCENTER)
+                .withString(RoutePath.Ucenter.PARAMS_USER_ID, userId)
+                .navigation();
+    }
 
     public void launchMassage(){
         ARouter.getInstance()

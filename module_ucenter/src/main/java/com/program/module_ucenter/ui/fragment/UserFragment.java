@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +18,7 @@ import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
-import com.program.lib_base.UIUtils;
+import com.program.lib_common.UIUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_ucenter.R;
@@ -73,6 +74,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
 
     private TextView mTvNotifyNum;
     private ImageView mIvNotify;
+    private AchievementBean data;
 
     @Override
     protected int getRootViewResId() {
@@ -109,26 +111,18 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
 
     @Override
     protected void initListener() {
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                getData();
-            }
+        mRefreshLayout.setOnRefreshListener(refreshLayout -> getData());
+
+        mIvSetting.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), SettingActivity.class);
+            startActivityForResult(intent, Constants.NEED_RESULT);
         });
 
-        mIvSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SettingActivity.class);
-                startActivityForResult(intent, Constants.NEED_RESULT);
-            }
-        });
+        mIvNotify.setOnClickListener(view -> UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMassage());
 
-        mIvNotify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMassage();
-            }
+        mAvatarIv.setOnClickListener(view -> {
+            UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(data.getData().getUserId());
+//                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail("1382711465131241472");
         });
     }
 
@@ -166,6 +160,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
 
     @Override
     public void setUserAchievement(AchievementBean data) {
+        this.data=data;
         AchievementBean.DataBean achieve = data.getData();
         mTvStars.setCenterTopString(achieve.getThumbUpTotal().toString());
         mTvStars.setCenterTopTextIsBold(true);
@@ -198,7 +193,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
                         thumbUpDx,
                         new AbsoluteSizeSpan(UIUtils.dp2px(14f)),
                         new ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.colorPrimary)),
-                        5,dxView.length()
+                        5,thumbUpDx.length()
                 )
         );
 
@@ -209,7 +204,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
                         sobDx,
                         new AbsoluteSizeSpan(UIUtils.dp2px(14f)),
                         new ForegroundColorSpan(ContextCompat.getColor(requireContext(),R.color.colorPrimary)),
-                        5,dxView.length()
+                        5,sobDx.length()
                 )
         );
     }

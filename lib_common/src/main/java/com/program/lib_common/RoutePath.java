@@ -12,9 +12,12 @@ public class RoutePath {
     }
 
     public static class Ucenter{
+        public static final String PARAMS_USER_ID="userId";
+
         public static final String FRAGMENT_UCENTER="/ucenter/FRAGMENT_UCENTER";
         public static final String SERVICE_UCENTER="/ucenter/SERVICE_UCENTER";
         public static final String PAGE_MESSAGE="/ucenter/MsgCenterActivity";
         public static final String PAGE_MSG_LIST="/ucenter/MessageListActivity";
+        public static final String PAGE_UCENTER="/ucenter/UserCenterActivity";
     }
 }

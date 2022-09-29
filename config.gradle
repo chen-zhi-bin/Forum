@@ -45,6 +45,9 @@ ext {
 
     def SUPERTEXT_VERSION = "2.4.6"
     def BASE_QUICK_ADAPTER_VERSION = "3.0.2"
+    def BANNER_VERSION="2.1.0"
+
+    def MOJITO_VERSION="1.8.5"
     //三方库统一管理_VERSION
     dependencies = [
             appcompatV7         : 'com.android.support:appcompat-v7:' + APPCOMPAT_V7_VERSION,
@@ -75,6 +78,9 @@ ext {
             refresh_footer      :'io.github.scwang90:refresh-footer-classics:'+REFRESH_FOOTER_VERSION,                     //经典加载
             roundedimageview    :'com.makeramen:roundedimageview:'+ROUNDED_IMAGEVIEW_VERSION,                //圆角头像
             super_text_view     :'com.github.lygttpod:SuperTextView:'+SUPERTEXT_VERSION,
-            basequick_adapter   :'com.github.CymChad:BaseRecyclerViewAdapterHelper:'+BASE_QUICK_ADAPTER_VERSION
+            basequick_adapter   :'com.github.CymChad:BaseRecyclerViewAdapterHelper:'+BASE_QUICK_ADAPTER_VERSION,
+            banner              :'com.youth.banner:banner:'+BANNER_VERSION,
+            mojito_version      :'com.github.mikaelzero.mojito:mojito:'+MOJITO_VERSION,          //浏览图片
+            mojito_image_view_loader: "com.github.mikaelzero.mojito:SketchImageViewLoader:"+MOJITO_VERSION
     ]
 }

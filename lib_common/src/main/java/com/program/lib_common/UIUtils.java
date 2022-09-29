@@ -1,5 +1,6 @@
-package com.program.lib_base;
+package com.program.lib_common;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -8,6 +9,7 @@ import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -17,9 +19,18 @@ public class UIUtils {
 
     private static final DisplayMetrics sMetrics = Resources.getSystem().getDisplayMetrics();
 
+    public static int getScreenWidth() {
+            return sMetrics != null ? sMetrics.widthPixels : 0;
+        }
+
     public static int dp2px(float dipValue) {
         final float scale = sMetrics != null ? sMetrics.density : 1;
         return (int) (dipValue * scale + 0.5f);
+    }
+
+    public static int dip2px(float dpValue) {
+        float scale = sMetrics.density;
+        return (int) (dpValue * scale + 0.5f);
     }
 
     /**

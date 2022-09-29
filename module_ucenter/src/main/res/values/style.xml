@@ -1,0 +1,6 @@
+<resources>
+    <style name="moduleucenter_ucenter_TabLayoutTextStyle">
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+</resources>

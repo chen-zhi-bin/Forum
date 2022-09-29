@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,17 +27,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.program.lib_base.LogUtils;
-import com.program.lib_base.UIUtils;
+import com.program.lib_common.UIUtils;
 import com.program.moudle_base.R;
 import com.program.moulde_login.CodeIntercepter;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -96,7 +92,7 @@ public class CodeEditView extends LinearLayout implements View.OnFocusChangeList
         super(context, attrs, defStyleAttr);
         this.context = context;
         initattrs(context,attrs);
-        LayoutInflater.from(context).inflate(R.layout.moudlebase_base_view_code_edit,this,true);
+        LayoutInflater.from(context).inflate(R.layout.modulebase_base_view_code_edit,this,true);
         initView();
         initListener();
     }
