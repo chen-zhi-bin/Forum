@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.program.lib_common.service.moyu.wrap.MoyuServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.IMoyuCallback;
 import com.program.module_ucenter.presenter.IMoyuPresentere;
@@ -63,6 +66,15 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
         mRefreshLayout.setOnLoadMoreListener(refreshLayout -> {
             mMoyuPreseenter.getMoyuListMore();
         });
+
+        mMoyuAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                if (adapter.getItem(position) instanceof MoyuItemBean){
+                    MoyuServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MoyuItemBean)adapter.getItem(position)).getId());
+                }
+            }
+        });
     }
 
     @Override
@@ -85,7 +97,7 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
         setupState(State.SUCCESS);
     }
 
-    //todo:摸鱼更多返回
+    //摸鱼更多返回
     @Override
     public void setMoyuListMore(List<MoyuItemBean> data) {
         mMoyuAdapter.addData(data);

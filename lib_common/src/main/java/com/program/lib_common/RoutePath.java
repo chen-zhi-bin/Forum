@@ -11,6 +11,13 @@ public class RoutePath {
         public static final String SERVICE_HOME="/home/SERVICE_HOME";
     }
 
+    public static class Moyu{
+        public static final String SERVICE_MOYU="/moyu/moyu_service";
+        public static final String PAGE_DETAIL="/moyu/MoyuDetailActivity";
+        public static final String MOYU_ID="/moyu/moyu_id";
+
+    }
+
     public static class Ucenter{
         public static final String PARAMS_USER_ID="userId";
 

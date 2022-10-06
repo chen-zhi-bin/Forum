@@ -1,6 +1,6 @@
 ext {
     //表示是作为module还是application          true集合
-    isModule = false
+    isModule = true
     //applicationId版本好sdkVersion统一管理
     android = [
             compileSdkVersion        : 31,

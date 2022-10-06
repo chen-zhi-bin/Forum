@@ -57,6 +57,7 @@ public class CodeEditView extends LinearLayout implements View.OnFocusChangeList
                     Glide.with(context).load((Bitmap) msg.obj).apply(mRequestOptions).into(mIvTuring);
                     break;
                 case 2:
+                    Toast.makeText(context,"错误,无法获取验证码",Toast.LENGTH_SHORT).show();
                     Glide.with(context).load(R.mipmap.ic_close).apply(mRequestOptions).into(mIvTuring);
                     break;
             }
@@ -189,7 +190,6 @@ public class CodeEditView extends LinearLayout implements View.OnFocusChangeList
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(context,"错误,无法获取验证码",Toast.LENGTH_SHORT).show();
                 Message message = new Message();
                 message.what=2;
                 mHandler.sendMessage(message);

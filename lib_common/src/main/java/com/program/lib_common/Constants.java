@@ -26,4 +26,23 @@ public class Constants {
         //消息-系统消息
         public static final int PAGE_MSG_SYSTEM =12;
     }
+
+    public  class MultiItemType{
+        //标题
+        public static final int TYPE_TITLE = 1;
+
+        //内容
+        public static final int TYPE_CONTENT = 2;
+
+        //评论
+        public static final int TYPE_COMMENT = 3;
+
+        //评论的评论
+        public static final int TYPE_SUB_COMMENT = 4;
+
+        //推荐
+        public static final int TYPE_RECOMMEND = 5;
+    }
+
+
 }

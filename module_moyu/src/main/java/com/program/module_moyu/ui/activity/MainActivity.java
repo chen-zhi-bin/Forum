@@ -1,8 +1,10 @@
-package com.program.module_moyu;
+package com.program.module_moyu.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.program.module_moyu.R;
 
 public class MainActivity extends AppCompatActivity {
 

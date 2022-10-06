@@ -1,4 +1,4 @@
-package com.program.module_ucenter.ui;
+ package com.program.module_ucenter.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -241,18 +241,8 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
     }
 
     private void initListener() {
-        mIvBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        mIvMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ToastUtils.showToast("更多");
-            }
-        });
+        mIvBack.setOnClickListener(view -> finish());
+        mIvMore.setOnClickListener(view -> ToastUtils.showToast("更多"));
         mIvRewardCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -274,6 +264,7 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
                 unfollow(userId);
             }
         });
+
 
     }
 
