@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
+import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.UserCenterArticleAdapter;
 import com.program.module_ucenter.callback.IUserCenterArticleCallback;
@@ -104,6 +107,17 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
                     case 3:
                         mCenterArticlePresenter.getWendaListMore(mUserId);
                         break;
+                }
+            }
+        });
+
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                if (adapter.getItem(position) instanceof UserWendaBean.DataBean.ContentBean){
+                    UserWendaBean.DataBean.ContentBean wendaComment = (UserWendaBean.DataBean.ContentBean) adapter.getItem(position);
+                    LogUtils.d("test"," asdasddata = "+wendaComment.getWendaComment().getWendaId());
+                    WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(wendaComment.getWendaComment().getWendaId());
                 }
             }
         });

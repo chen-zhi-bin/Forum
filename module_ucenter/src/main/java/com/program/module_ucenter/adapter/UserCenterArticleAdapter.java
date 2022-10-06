@@ -30,6 +30,9 @@ public class UserCenterArticleAdapter extends BaseQuickAdapter<MultiItemEntity, 
         super(layoutResId, data);
     }
 
+    {
+        addChildClickViewIds(R.id.wenda_layout);
+    }
     private static final int w50dp = UIUtils.dp2px(50f);
 
     @Override

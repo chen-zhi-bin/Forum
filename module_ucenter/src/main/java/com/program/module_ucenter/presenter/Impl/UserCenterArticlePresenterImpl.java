@@ -3,6 +3,7 @@ package com.program.module_ucenter.presenter.Impl;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;

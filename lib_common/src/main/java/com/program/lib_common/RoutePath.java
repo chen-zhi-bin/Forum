@@ -18,6 +18,13 @@ public class RoutePath {
 
     }
 
+    public static class Wenda{
+        public static final String SERVICE_WENDA="/wenda/wenda_service";
+        public static final String PAGE_DETAIL="/wenda/WendaDetailActivity";
+        public static final String WENDA_ID="/wenda/wenda_id";
+
+    }
+
     public static class Ucenter{
         public static final String PARAMS_USER_ID="userId";
 

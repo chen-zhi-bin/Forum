@@ -364,7 +364,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
         for (MomentCommentBean.DataBean.ListBean listBean : momentCommentBean.getData().getList()) {
             mAdapter.addData(listBean);
             mAdapter.addData(listBean.getSubComments());
-            LogUtils.d("test"," comments == "+listBean.getContent().toString());
+            LogUtils.d("test"," comments == "+ listBean.getContent());
             LogUtils.d("test","sub comments == "+listBean.getSubComments().toString());
         }
     }
