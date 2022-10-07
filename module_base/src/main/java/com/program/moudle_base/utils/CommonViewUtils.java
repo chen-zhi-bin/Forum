@@ -13,7 +13,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.program.lib_common.Constants;
 import com.program.lib_common.HtmlImageGetter;
+import com.program.lib_common.service.home.wrap.HomeServiceWrap;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
+import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.moudle_base.R;
 import com.program.moudle_base.base.BaseApplication;
 
@@ -216,6 +220,21 @@ public class CommonViewUtils {
                 btn.setTextColor(ContextCompat.getColor(btn.getContext(), R.color.white));
                 btn.setBackgroundResource(R.drawable.blue_solid_btn_selector);
                 break;
+        }
+    }
+
+    public static void toWebView(String url){
+//        if (url.startsWith(Constants.WEBSITE_URL)){
+//            String[] split = url.split("/");
+//        }
+        if (url.startsWith(Constants.UCENTER_URL)){
+            String[] split = url.split("/");
+            UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[split.length-1]);
+        }else if (url.startsWith(Constants.WENDA_URL)){
+            String[] split = url.split("/");
+            WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[split.length-1]);
+        }else {
+
         }
     }
 }

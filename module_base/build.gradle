@@ -87,6 +87,8 @@ dependencies {
 
     implementation rootProject.ext.dependencies.mojito_version
     implementation rootProject.ext.dependencies.mojito_image_view_loader
+    implementation rootProject.ext.dependencies.codeview
+    implementation rootProject.ext.dependencies.jsoup
 
     api project(":lib_base")
     api project(":lib_common")

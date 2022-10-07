@@ -5,7 +5,7 @@ if (rootProject.ext.isModule){
 }
 
 android {
-    resourcePrefix "moduleuwenda_"
+    resourcePrefix "modulewenda_"
     sourceSets {
         main {
             if (rootProject.ext.isModule) {
@@ -104,6 +104,7 @@ dependencies {
     implementation rootProject.ext.dependencies.mojito_version
     implementation rootProject.ext.dependencies.mojito_image_view_loader
     implementation rootProject.ext.dependencies.banner
+    implementation rootProject.ext.dependencies.codeview
 
     //load with coil
     implementation "com.github.mikaelzero.mojito:coilimageloader:1.8.5"

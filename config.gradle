@@ -48,6 +48,9 @@ ext {
     def BANNER_VERSION="2.1.0"
 
     def MOJITO_VERSION="1.8.5"
+
+    def CODEVIEW_VERSION="0.3.1"        //显示代码之类
+    def JSOUP_VERSION="1.11.1"
     //三方库统一管理_VERSION
     dependencies = [
             appcompatV7         : 'com.android.support:appcompat-v7:' + APPCOMPAT_V7_VERSION,
@@ -81,6 +84,8 @@ ext {
             basequick_adapter   :'com.github.CymChad:BaseRecyclerViewAdapterHelper:'+BASE_QUICK_ADAPTER_VERSION,
             banner              :'com.youth.banner:banner:'+BANNER_VERSION,
             mojito_version      :'com.github.mikaelzero.mojito:mojito:'+MOJITO_VERSION,          //浏览图片
-            mojito_image_view_loader: "com.github.mikaelzero.mojito:SketchImageViewLoader:"+MOJITO_VERSION
+            mojito_image_view_loader: "com.github.mikaelzero.mojito:SketchImageViewLoader:"+MOJITO_VERSION,
+            codeview            :'thereisnospon.codeview:codeview:'+CODEVIEW_VERSION,
+            jsoup               :'org.jsoup:jsoup:'+JSOUP_VERSION
     ]
 }

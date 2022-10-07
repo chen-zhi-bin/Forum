@@ -1,31 +1,29 @@
-package com.program.module_ucenter.model.domain;
+package com.program.moudle_base.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class FollowBean {
+import java.io.Serializable;
 
-//0表示没有关注对方，可以显示为：关注
-//1表示对方关注自己，可以显示为：回粉
-//2表示已经关注对方，可以显示为：已关注
-//3表示相互关注，可以显示为：相互关注
+
+public class AddOrUnFollowBean implements Serializable {
 
     /**
      * success : true
      * code : 10000
-     * message : 查询成功.
-     * data : 2
+     * message : 感谢关注
+     * data : null
      */
 
     @SerializedName("success")
-    private boolean success;
+    private Boolean success;
     @SerializedName("code")
     private Integer code;
     @SerializedName("message")
     private String message;
     @SerializedName("data")
-    private Integer data;
+    private Object data;
 
-    public boolean isSuccess() {
+    public Boolean getSuccess() {
         return success;
     }
 
@@ -37,13 +35,13 @@ public class FollowBean {
         return message;
     }
 
-    public Integer getData() {
+    public Object getData() {
         return data;
     }
 
     @Override
     public String toString() {
-        return "FollowBean{" +
+        return "addFollowBean{" +
                 "success=" + success +
                 ", code=" + code +
                 ", message='" + message + '\'' +

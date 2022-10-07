@@ -1,10 +1,10 @@
 package com.program.module_ucenter.model;
 
 import com.program.module_ucenter.model.domain.AchievementBean;
-import com.program.module_ucenter.model.domain.AddOrUnFollowBean;
+import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
-import com.program.module_ucenter.model.domain.FollowBean;
+import com.program.moudle_base.model.FollowBean;
 import com.program.module_ucenter.model.domain.LoginoutBean;
 import com.program.module_ucenter.model.domain.MoyuBean;
 import com.program.module_ucenter.model.domain.MsgAtBean;

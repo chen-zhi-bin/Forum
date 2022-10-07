@@ -1,7 +1,7 @@
 package com.program.module_ucenter.callback;
 
 import com.program.module_ucenter.model.domain.AchievementBean;
-import com.program.module_ucenter.model.domain.FollowBean;
+import com.program.moudle_base.model.FollowBean;
 import com.program.module_ucenter.model.domain.UserInfoBean;
 import com.program.moudle_base.base.IBaseCallback;
 

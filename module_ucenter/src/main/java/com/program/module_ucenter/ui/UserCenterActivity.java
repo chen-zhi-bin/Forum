@@ -18,7 +18,6 @@ import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,7 +37,7 @@ import com.program.lib_common.UIUtils;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.IUserCenterCallback;
 import com.program.module_ucenter.model.domain.AchievementBean;
-import com.program.module_ucenter.model.domain.FollowBean;
+import com.program.moudle_base.model.FollowBean;
 import com.program.module_ucenter.model.domain.UserInfoBean;
 import com.program.module_ucenter.presenter.IUserCenterPresenter;
 import com.program.module_ucenter.ui.fragment.UserCenterArticleFragment;
@@ -63,7 +62,6 @@ import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static java.lang.Math.abs;
 

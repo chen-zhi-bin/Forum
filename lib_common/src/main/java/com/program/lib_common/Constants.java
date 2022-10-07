@@ -3,6 +3,10 @@ package com.program.lib_common;
 public class Constants {
     public static final String BASE_URL="https://api.sunofbeaches.com";
 
+   public static final String WEBSITE_URL = "https://www.sunofbeach.net/a/";
+   public static final String UCENTER_URL = "https://www.sunofbeach.net/u/";
+   public static final String WENDA_URL = "https://www.sunofbeach.net/qa/";
+
     public static final int NAVIGATION_VIEW_MENU_RECOMMEND_ITEM_ID_INDEX = 0;
     public static final int NAVIGATION_VIEW_MENU_USER_ITEM_ID_INDEX = 2;
 
