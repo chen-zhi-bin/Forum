@@ -181,6 +181,26 @@ public class AnswerBean implements Serializable {
         }
 
         @Override
+        public String toString() {
+            return "DataBean{" +
+                    "id='" + id + '\'' +
+                    ", wendaId='" + wendaId + '\'' +
+                    ", thumbUp=" + thumbUp +
+                    ", bestAs='" + bestAs + '\'' +
+                    ", content='" + content + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", avatar='" + avatar + '\'' +
+                    ", uid='" + uid + '\'' +
+                    ", subCommentCount=" + subCommentCount +
+                    ", publishTime='" + publishTime + '\'' +
+                    ", publishTimeText='" + publishTimeText + '\'' +
+                    ", vip=" + vip +
+                    ", thumbUps=" + thumbUps +
+                    ", wendaSubComments=" + wendaSubComments +
+                    '}';
+        }
+
+        @Override
         public int describeContents() {
             return 0;
         }

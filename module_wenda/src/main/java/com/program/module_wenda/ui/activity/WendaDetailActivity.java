@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
@@ -30,22 +32,32 @@ import com.program.lib_common.UIUtils;
 import com.program.module_wenda.R;
 import com.program.module_wenda.adapter.WendaDetailAdapter;
 import com.program.module_wenda.callback.IWendaDetailCallback;
+import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.module_wenda.presenter.IWendaDetailPresenter;
 import com.program.module_wenda.utils.PresenterManager;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
+import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.MyCodeViewJava;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 
 import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
+
+import java.util.Iterator;
+import java.util.List;
+
+import kotlin.collections.CollectionsKt;
 
 @Route(path = RoutePath.Wenda.PAGE_DETAIL)
 public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDetailCallback {
@@ -71,6 +83,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     private TextView mTvHeaderNickName;
     private RoundedImageView mIvHeaderAvatar;
     private Button mTvHeaderFollow;
+    private List<MultiItemEntity> answerList = CollectionsKt.mutableListOf();
+    private SharedPreferencesUtils mSharedPreferencesUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,20 +93,30 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "wendaId = " + mWendaId);
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
+        mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(this);
 
         initView();
-        intListener();
         initPresenter();
+        intListener();
     }
 
     private void initPresenter() {
         mWendaDetailPresenter = PresenterManager.getInstance().getWendaDetailPresenter();
         mWendaDetailPresenter.registerViewCallback(this);
         mWendaDetailPresenter.getWendaDetail(mWendaId);
+        mWendaDetailPresenter.getWendaAnswerList(mWendaId);
+        mRefreshLayout.setEnableLoadMore(false);
     }
 
     private void intListener() {
         mIvBack.setOnClickListener(view -> finish());
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mWendaDetailPresenter.getWendaDetail(mWendaId);
+                mWendaDetailPresenter.getWendaAnswerList(mWendaId);
+            }
+        });
     }
 
     private void initView() {
@@ -146,6 +170,42 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         }else {
             mWendaDetailPresenter.getUserFollowState(mWendaContent.getUserId());
         }
+    }
+
+
+    //todo:加载更多没做
+    @Override
+    public void setAnswerList(AnswerBean data) {
+        //评论返回布局
+        List<AnswerBean.DataBean> aList = data.getData();
+        LogUtils.d("test","data  = = = = = "+aList.toString());
+        answerList.add(new TitleMultiBean("回答("+aList.size()+")"));
+        answerList.addAll(aList);
+        mAdapter.addData(answerList);
+//        if (aList!=null&&!aList.isEmpty()){
+//            Iterator<MultiItemEntity> iterator = answerList.iterator();
+//            while (iterator.hasNext()) {
+//                MultiItemEntity itemEntity = iterator.next();
+//                mAdapter.getData().remove(itemEntity);
+//            }
+//            answerList.clear();
+//            answerList.add(new TitleMultiBean("回答（"+aList.size()+"）"));
+//            answerList.addAll(aList);
+//            if (mAdapter.getData().size()>answerList.size()){
+//                mAdapter.notifyItemChanged(answerList.size()+1);
+//            }
+//        }
+        mRefreshLayout.setEnableLoadMore(true);
+        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (token!=null && token != ""){
+            mWendaDetailPresenter.isThumb(token);
+        }
+    }
+
+    @Override
+    public void setThumbState(BaseResponseBean data) {
+        mTvThumb.setTag(true);
+        CommonViewUtils.setThumbStyle(mTvThumb,true);
     }
 
     @Override

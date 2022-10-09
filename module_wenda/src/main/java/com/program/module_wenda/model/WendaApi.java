@@ -1,7 +1,9 @@
 package com.program.module_wenda.model;
 
+import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -15,6 +17,12 @@ public interface WendaApi {
 
     @GET("/ct/wenda/{wendaId}")
     Observable<WendaContentBean> getWendaDetail(@Path("wendaId") String wendaId);
+
+    @GET("/ct/wenda/comment/list/{wendaId}/{page}")
+    Observable<AnswerBean> getAnswerList(@Path("wendaId")String wendaId,@Path("page")int page);
+
+    @GET("/ct/wenda/comment/thumb-up/check/{wendaId}")
+    Observable<BaseResponseBean> isThumbState(@Header("sob_token")String token,@Path("wendaId")String wendaId);
 
     /**
      * 查看受否关注
