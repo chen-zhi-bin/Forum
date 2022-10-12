@@ -45,14 +45,15 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case RETURN_ARTICLE:
-                    if ((((ArticleBean) msg.obj).getData().getList() == null || ((ArticleBean) msg.obj).getData().getList().size() == 0)) {
-                        mCallback.onEmpty();
-                    }else {
-                        if (((ArticleBean) msg.obj).getData().getHasNext()) {
-                            mArticlePage++;
-                        }
-                        mCallback.setArticleData((ArticleBean) msg.obj);
-                    }
+//                    if ((((ArticleBean) msg.obj).getData().getList() == null || ((ArticleBean) msg.obj).getData().getList().size() == 0)) {
+//                        mCallback.onEmpty();
+//                    }else {
+//                        if (((ArticleBean) msg.obj).getData().getHasNext()) {
+//                            mArticlePage++;
+//                        }
+//                        mCallback.setArticleData((ArticleBean) msg.obj);
+//                    }
+                    mCallback.setArticleData((ArticleBean) msg.obj);
                     break;
                 case RETURN_ARTICLE_ERROR:
                     mCallback.ToastErrorMsg(((ArticleBean) msg.obj).getMessage());

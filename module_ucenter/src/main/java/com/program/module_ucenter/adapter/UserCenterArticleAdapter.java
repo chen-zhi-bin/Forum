@@ -2,20 +2,20 @@ package com.program.module_ucenter.adapter;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.UIUtils;
 import com.program.module_ucenter.R;
-import com.program.module_ucenter.model.domain.AchievementBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.ShareBean;
 import com.program.module_ucenter.model.domain.UserWendaBean;
-import com.program.moudle_base.base.BaseApplication;
 import com.youth.banner.util.BannerUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,10 +39,13 @@ public class UserCenterArticleAdapter extends BaseQuickAdapter<MultiItemEntity, 
     protected void convert(@NotNull BaseViewHolder viewHolder, MultiItemEntity multiItemEntity) {
         if (multiItemEntity instanceof ArticleBean.DataBean.ListBean){
             ArticleBean.DataBean.ListBean articleData = (ArticleBean.DataBean.ListBean) multiItemEntity;
-            viewHolder.setText(R.id.tv_content,articleData.getTitle());
             viewHolder.setText(R.id.tv_star,articleData.getThumbUp().toString());
             viewHolder.setText(R.id.tv_time, DateUtils.timeFormat(articleData.getCreateTime()));
             viewHolder.setText(R.id.tv_labels,articleData.labels(true));
+//            viewHolder.setText(R.id.tv_title,articleData.getTitle());
+            TextView view = viewHolder.getView(R.id.tv_content);
+            view.setText(articleData.getTitle());
+            LogUtils.d("test","view = "+view+"==text  = "+articleData.getTitle());
             ImageView ivCover = viewHolder.getView(R.id.iv_cover);
             BannerUtils.setBannerRound(ivCover,10f);
             Glide.with(ivCover.getContext()).load(articleData.getCovers().get(0))

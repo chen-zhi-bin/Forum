@@ -144,13 +144,16 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
 
     @Override
     public void setArticleData(ArticleBean data) {
-        LogUtils.d("test", "data size == " + data.getData().getList().size());
-        mAdapter.setList(data.getData().getList());
+        setupState(State.SUCCESS);
+        LogUtils.d("ArticleData","ArticleData data success");
+        LogUtils.d("test", "data == " + data.getData().getList());
+        LogUtils.d("test", "data == " + mAdapter);
+//        mAdapter.setList(data.getData().getList());
+        mAdapter.addData(data.getData().getList());
         finishRefresh();
         if (!data.getData().getHasNext()) {
             mRefreshLayout.setEnableLoadMore(false);
         }
-        setupState(State.SUCCESS);
     }
 
     private void finishRefresh() {
@@ -161,6 +164,7 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
 
     @Override
     public void setShareData(ShareBean data) {
+        LogUtils.d("ShareData","ShareData data success");
         mAdapter.setList(data.getData().getList());
         finishRefresh();
         if (!data.getData().getHasNext()) {
@@ -171,12 +175,14 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
 
     @Override
     public void setWendaData(UserWendaBean data) {
+        setupState(State.SUCCESS);
+        LogUtils.d("WendaData","WendaData data success");
         mAdapter.setList(data.getData().getContent());
         finishRefresh();
         if (data.getData().getLast()) {
             mRefreshLayout.setEnableLoadMore(false);
         }
-        setupState(State.SUCCESS);
+
     }
 
     @Override

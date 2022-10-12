@@ -122,7 +122,7 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         setContentView(R.layout.moduleucenter_activity_user_center);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "userId = " + userId);
-//        userId = "1153952789488054272";
+        userId = "1153952789488054272";
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory());
 
         initView();
@@ -176,8 +176,8 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
             needFollowState = false;
         }
         mTitles.add("动态");
-        mTitles.add("文章");
         mTitles.add("分享");
+        mTitles.add("文章");
         mTitles.add("问答");
 //        mFragments.add(new Fragment());
 //        mFragments.add(new Fragment());
@@ -188,6 +188,7 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         mFragments.add(UserCenterArticleFragment.class);
         mFragments.add(UserCenterArticleFragment.class);
         mFragments.add(UserCenterArticleFragment.class);
+
         mAdapter = (FragmentStateAdapter) (new FragmentStateAdapter((FragmentActivity) this) {
             @NonNull
             @Override
@@ -200,10 +201,10 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
                         Bundle bundle = new Bundle();
                         bundle.putString("userId", userId);
                         switch (position) {
-                            case 1:
+                            case 2:
                                 bundle.putString(Constants.DATA_TYPE, Constants.DATA_TPTE_ARTICLE);
                                 break;
-                            case 2:
+                            case 1:
                                 bundle.putString(Constants.DATA_TYPE, Constants.DATA_TPTE_SHARA);
                                 break;
                             case 3:
@@ -229,7 +230,6 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         });
 
         mVpContent.setAdapter(mAdapter);
-
         new TabLayoutMediator(mTabLayout, mVpContent, (tab, position) -> tab.setText(mTitles.get(position))).attach();
 
         initScroll();
