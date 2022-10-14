@@ -1,6 +1,8 @@
 package com.program.module_wenda.callback;
 
 import com.program.module_wenda.model.bean.AnswerBean;
+import com.program.module_wenda.model.bean.RelatedQuestionBean;
+import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.moudle_base.base.IBaseCallback;
 import com.program.moudle_base.model.BaseResponseBean;
@@ -16,6 +18,8 @@ public interface IWendaDetailCallback extends IBaseCallback {
     void setWendaDetail(WendaContentBean data);
 
     void setAnswerList(AnswerBean data);
+
+    void setRelatedQuestionList(WendaBean data);
 
     void setThumbState(BaseResponseBean data);
 

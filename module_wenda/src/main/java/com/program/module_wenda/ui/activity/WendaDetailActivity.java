@@ -33,6 +33,8 @@ import com.program.module_wenda.R;
 import com.program.module_wenda.adapter.WendaDetailAdapter;
 import com.program.module_wenda.callback.IWendaDetailCallback;
 import com.program.module_wenda.model.bean.AnswerBean;
+import com.program.module_wenda.model.bean.RelatedQuestionBean;
+import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.module_wenda.presenter.IWendaDetailPresenter;
 import com.program.module_wenda.utils.PresenterManager;
@@ -84,7 +86,10 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     private RoundedImageView mIvHeaderAvatar;
     private Button mTvHeaderFollow;
     private List<MultiItemEntity> answerList = CollectionsKt.mutableListOf();
+    private List<MultiItemEntity> mRelatedQuestionList = CollectionsKt.mutableListOf();
     private SharedPreferencesUtils mSharedPreferencesUtils;
+    private AnswerBean mPresentData = null;
+    private boolean isAddRelatedQuestionHeader = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +205,20 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         if (token!=null && token != ""){
             mWendaDetailPresenter.isThumb(token);
         }
+        mPresentData = data;
+//        if (mPresentData.getData().)
+        mWendaDetailPresenter.getRelatedQuestion(mWendaId);
+    }
+
+    @Override
+    public void setRelatedQuestionList(WendaBean data) {
+        mRelatedQuestionList.clear();
+        if (!isAddRelatedQuestionHeader) {
+            mRelatedQuestionList.add(new TitleMultiBean("相关问题"));
+        }
+        mRelatedQuestionList.addAll(data.getData());
+        mAdapter.addData(mRelatedQuestionList);
+
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.program.lib_common.DateUtils;
 import com.program.lib_common.UIUtils;
 import com.program.module_wenda.R;
 import com.program.module_wenda.model.bean.AnswerBean;
+import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.model.TitleMultiBean;
@@ -67,7 +68,8 @@ public class WendaDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 break;
             case Constants.MultiItemType.TYPE_RECOMMEND:
                     //相关推荐item
-                WendaContentBean.DataBean wenda = (WendaContentBean.DataBean) multiItemEntity;
+//                WendaContentBean.DataBean wenda = (WendaContentBean.DataBean) multiItemEntity;
+                WendaBean.DataBean wenda = (WendaBean.DataBean) multiItemEntity;
                 //昵称
                 viewHolder.setText(R.id.tv_comment_nickname,wenda.getNickname());
                 //发布时间

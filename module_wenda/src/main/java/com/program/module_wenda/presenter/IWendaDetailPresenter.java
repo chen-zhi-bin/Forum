@@ -7,6 +7,7 @@ import com.program.moudle_base.base.IBasePresenter;
 public interface IWendaDetailPresenter extends IBasePresenter<IWendaDetailCallback> {
         void getWendaDetail(String wendaId);
         void getWendaAnswerList(String wendaId);
+        void getRelatedQuestion(String wendaId);
 
         void isThumb(String wendaId);
         /**

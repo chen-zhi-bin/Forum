@@ -1,6 +1,8 @@
 package com.program.module_wenda.model;
 
 import com.program.module_wenda.model.bean.AnswerBean;
+import com.program.module_wenda.model.bean.RelatedQuestionBean;
+import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
@@ -23,6 +25,15 @@ public interface WendaApi {
 
     @GET("/ct/wenda/comment/thumb-up/check/{wendaId}")
     Observable<BaseResponseBean> isThumbState(@Header("sob_token")String token,@Path("wendaId")String wendaId);
+
+    /**
+     * 获取相关推荐
+     * @param wendaId   问题id
+     * @param size      需要的size
+     * @return          bean
+     */
+    @GET("/ct/wenda/relative/{wendaId}/{size}")
+    Observable<WendaBean> getRelatedQuestion(@Path("wendaId")String wendaId, @Path("size")int size);
 
     /**
      * 查看受否关注

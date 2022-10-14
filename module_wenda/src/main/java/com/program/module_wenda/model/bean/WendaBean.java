@@ -201,7 +201,7 @@ public class WendaBean implements Serializable {
 
         @Override
         public int getItemType() {
-            return Constants.MultiItemType.TYPE_COMMENT;
+            return Constants.MultiItemType.TYPE_RECOMMEND;
         }
     }
 }

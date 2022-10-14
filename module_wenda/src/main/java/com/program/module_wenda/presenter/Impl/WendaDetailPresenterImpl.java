@@ -9,6 +9,8 @@ import com.program.lib_common.Constants;
 import com.program.module_wenda.callback.IWendaDetailCallback;
 import com.program.module_wenda.model.WendaApi;
 import com.program.module_wenda.model.bean.AnswerBean;
+import com.program.module_wenda.model.bean.RelatedQuestionBean;
+import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.module_wenda.presenter.IWendaDetailPresenter;
 import com.program.module_wenda.utils.RetrofitManager;
@@ -42,6 +44,8 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
     private static final int RETURN_ANSWER_LIST = 10;
     private static final int RETURN_ANSWER_LIST_EERROR = 11;
     private static final int RETURN_THUMBE = 12;
+    private static final int RETURN_RELATEDQUESTION = 13;
+    private static final int RETURN_RELATEDQUESTION_ERROR = 14;
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -82,6 +86,12 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
                     break;
                 case RETURN_THUMBE:
                     mCallback.setThumbState((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_RELATEDQUESTION:
+                    mCallback.setRelatedQuestionList((WendaBean)msg.obj);
+                    break;
+                case RETURN_RELATEDQUESTION_ERROR:
+                    mCallback.setRequestError(((WendaBean)msg.obj).getMessage());
                     break;
             }
         }
@@ -148,6 +158,38 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
                     public void onNext(@NonNull Object o) {
                         Message message = new Message();
                         message.what = ((AnswerBean) o).getCode() == Constants.SUCCESS ? RETURN_ANSWER_LIST : RETURN_ANSWER_LIST_EERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getRelatedQuestion(String wendaId) {
+        mApi.getRelatedQuestion(wendaId,5)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = ((WendaBean)o).getCode()==Constants.SUCCESS?RETURN_RELATEDQUESTION:RETURN_RELATEDQUESTION_ERROR;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }
