@@ -3,6 +3,7 @@ package com.program.module_ucenter.ui.fragment;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,9 +22,18 @@ import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
+import com.trello.rxlifecycle3.LifecycleProvider;
 import com.trello.rxlifecycle4.LifecycleTransformer;
+import com.trello.rxlifecycle4.RxLifecycle;
+import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.ObservableTransformer;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallback{
 
@@ -112,6 +122,12 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
         if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
         }
+    }
+
+    @Override
+    public LifecycleTransformer<Object> TobindToLifecycle() {
+        BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
+        return  RxLifecycle.bind(objectBehaviorSubject);
     }
 
     @Override

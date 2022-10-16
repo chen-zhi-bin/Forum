@@ -1,5 +1,6 @@
 package com.program.lib_common.service.wenda.wrap;
 
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -8,6 +9,8 @@ import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.IUcenterService;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.lib_common.service.wenda.IWendaService;
+
+import java.io.Serializable;
 
 public class WendaServiceWrap {
     @Autowired(name = RoutePath.Wenda.SERVICE_WENDA)
@@ -29,6 +32,14 @@ public class WendaServiceWrap {
      .build(RoutePath.Wenda.PAGE_DETAIL)
      .withString(RoutePath.Wenda.WENDA_ID,wendaId)
      .navigation();
+    }
+
+    public void launchAnswerDetail(Parcelable wenda , Parcelable answer){
+        ARouter.getInstance()
+                .build(RoutePath.Wenda.PAGE_ANSWER_DETAIL)
+                .withParcelable(RoutePath.Wenda.PARAMS_ANSWER,  answer)
+                .withParcelable(RoutePath.Wenda.PARAMS_WENDA_CONTENT, wenda)
+                .navigation();
     }
 
 

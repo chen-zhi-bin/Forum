@@ -57,52 +57,70 @@ public class SubCommentBean implements Serializable , MultiItemEntity, Parcelabl
     @SerializedName("vip")
     private Boolean vip;
 
-    public SubCommentBean(Parcel parcel) {
-        parcel.writeString(this.id);
-        parcel.writeString(this.wendaId);
-        parcel.writeString(this.beNickname);
-        parcel.writeString(this.beUid);
-        parcel.writeString(this.content);
-        parcel.writeString(this.parentId);
-        parcel.writeString(this.publishTime);
-        parcel.writeByte((byte)(this.vip ? 1 : 0));
-        parcel.writeString(this.yourAvatar);
-        parcel.writeString(this.yourNickname);
-        parcel.writeString(this.yourRole);
-        parcel.writeString(this.yourUid);
+    public String getId() {
+        return id;
     }
 
-    public static final Creator<SubCommentBean> CREATOR = new Creator<SubCommentBean>() {
-        @Override
-        public SubCommentBean createFromParcel(Parcel in) {
-            return new SubCommentBean(in);
-        }
+    public String getParentId() {
+        return parentId;
+    }
 
-        @Override
-        public SubCommentBean[] newArray(int size) {
-            return new SubCommentBean[size];
-        }
-    };
+    public String getWendaId() {
+        return wendaId;
+    }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getBeUid() {
+        return beUid;
+    }
+
+    public String getBeNickname() {
+        return beNickname;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getPublishTime() {
+        return publishTime;
+    }
+
+    public String getYourUid() {
+        return yourUid;
+    }
+
+    public String getYourAvatar() {
+        return yourAvatar;
+    }
+
+    public String getYourNickname() {
+        return yourNickname;
+    }
+
+    public String getYourRole() {
+        return yourRole;
+    }
+
+    public Boolean getVip() {
+        return vip;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(wendaId);
-        parcel.writeString(beNickname);
-        parcel.writeString(beUid);
-        parcel.writeString(content);
-        parcel.writeString(parentId);
-        parcel.writeString(publishTime);
-        parcel.writeByte((byte) (vip? 1 : 0));
-        parcel.writeString(yourAvatar);
-        parcel.writeString(yourNickname);
-        parcel.writeString(yourRole);
-        parcel.writeString(yourUid);
+    public String toString() {
+        return "SubCommentBean{" +
+                "id='" + id + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", wendaId='" + wendaId + '\'' +
+                ", beUid='" + beUid + '\'' +
+                ", beNickname='" + beNickname + '\'' +
+                ", content='" + content + '\'' +
+                ", publishTime='" + publishTime + '\'' +
+                ", yourUid='" + yourUid + '\'' +
+                ", yourAvatar='" + yourAvatar + '\'' +
+                ", yourNickname='" + yourNickname + '\'' +
+                ", yourRole='" + yourRole + '\'' +
+                ", vip=" + vip +
+                '}';
     }
 
     @Override
@@ -110,16 +128,69 @@ public class SubCommentBean implements Serializable , MultiItemEntity, Parcelabl
         return Constants.MultiItemType.TYPE_SUB_COMMENT;
     }
 
-    public static final class CREATOR implements Creator{
-
-        @Override
-        public Object createFromParcel(Parcel parcel) {
-            return new SubCommentBean(parcel);
-        }
-
-        @Override
-        public Object[] newArray(int i) {
-            return new SubCommentBean[i];
-        }
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.parentId);
+        dest.writeString(this.wendaId);
+        dest.writeString(this.beUid);
+        dest.writeString(this.beNickname);
+        dest.writeString(this.content);
+        dest.writeString(this.publishTime);
+        dest.writeString(this.yourUid);
+        dest.writeString(this.yourAvatar);
+        dest.writeString(this.yourNickname);
+        dest.writeString(this.yourRole);
+        dest.writeByte((byte) (vip!=null&&this.vip?1:0));
+    }
+
+    public void readFromParcel(Parcel source) {
+        this.id = source.readString();
+        this.parentId = source.readString();
+        this.wendaId = source.readString();
+        this.beUid = source.readString();
+        this.beNickname = source.readString();
+        this.content = source.readString();
+        this.publishTime = source.readString();
+        this.yourUid = source.readString();
+        this.yourAvatar = source.readString();
+        this.yourNickname = source.readString();
+        this.yourRole = source.readString();
+        this.vip =  source.readByte()!=0;
+    }
+
+    public SubCommentBean() {
+    }
+
+    protected SubCommentBean(Parcel in) {
+        this.id = in.readString();
+        this.parentId = in.readString();
+        this.wendaId = in.readString();
+        this.beUid = in.readString();
+        this.beNickname = in.readString();
+        this.content = in.readString();
+        this.publishTime = in.readString();
+        this.yourUid = in.readString();
+        this.yourAvatar = in.readString();
+        this.yourNickname = in.readString();
+        this.yourRole = in.readString();
+        this.vip = in.readByte()!=0;
+    }
+
+    public static final Creator<SubCommentBean> CREATOR = new Creator<SubCommentBean>() {
+        @Override
+        public SubCommentBean createFromParcel(Parcel source) {
+            return new SubCommentBean(source);
+        }
+
+        @Override
+        public SubCommentBean[] newArray(int size) {
+            return new SubCommentBean[size];
+        }
+    };
 }

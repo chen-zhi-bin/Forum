@@ -1,6 +1,7 @@
 package com.program.module_wenda.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
@@ -23,12 +24,17 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
+import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_wenda.R;
 import com.program.module_wenda.adapter.WendaDetailAdapter;
 import com.program.module_wenda.callback.IWendaDetailCallback;
@@ -90,6 +96,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     private SharedPreferencesUtils mSharedPreferencesUtils;
     private AnswerBean mPresentData = null;
     private boolean isAddRelatedQuestionHeader = false;
+    private TextView mTvInvite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,11 +122,40 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
 
     private void intListener() {
         mIvBack.setOnClickListener(view -> finish());
+        mTvInvite.setOnClickListener(view -> ToastUtils.showToast("开发中"));
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 mWendaDetailPresenter.getWendaDetail(mWendaId);
                 mWendaDetailPresenter.getWendaAnswerList(mWendaId);
+            }
+        });
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                Object item = adapter.getItem(position);
+                if (view.getId() == R.id.tv_comment_nickname || view.getId() == R.id.iv_comment_avatar) {
+                    if (item instanceof WendaBean.DataBean){
+                        WendaBean.DataBean wendaData = (WendaBean.DataBean) adapter.getItem(position);
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(wendaData.getUserId());
+                    }else if (item instanceof AnswerBean.DataBean){
+                        AnswerBean.DataBean dataBean = (AnswerBean.DataBean) item;
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(dataBean.getUid());
+                    }
+                }else if (view.getId()==R.id.tv_comment||view.getId()==R.id.tv_more){
+                    if (item instanceof WendaBean.DataBean){
+                        WendaBean.DataBean wenda = (WendaBean.DataBean) item;
+                        WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(wenda.getId());
+                    }else if (item instanceof AnswerBean.DataBean){
+                        AnswerBean.DataBean dataBean = (AnswerBean.DataBean) item;
+                        LogUtils.d("answer test","answer data = "+dataBean.toString());
+                        LogUtils.d("test","data = "+mWendaContent.toString());
+                        WendaServiceWrap.Singletion.INSTANCE.getHolder().launchAnswerDetail(mWendaContent,dataBean);
+                    }
+                }
+
+
+
             }
         });
     }
@@ -146,6 +182,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mTvHeaderNickName = this.findViewById(R.id.tv_header_nickname);
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
+        mTvInvite = this.findViewById(R.id.tv_invite);
 
         mRvContent.setHasFixedSize(true);   //设置为true让RecyclerView避免重新计算大小。
         mRvContent.setAdapter(mAdapter);
@@ -170,9 +207,9 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mWendaContent = data.getData();
 //        LogUtils.d("test","data = "+data.toString());
         setContentData(data.getData());
-        if (mWendaContent.getUserId().equals(SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_ID))){
+        if (mWendaContent.getUserId().equals(SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_ID))) {
             mTvHeaderFollow.setVisibility(View.GONE);
-        }else {
+        } else {
             mWendaDetailPresenter.getUserFollowState(mWendaContent.getUserId());
         }
     }
@@ -183,8 +220,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     public void setAnswerList(AnswerBean data) {
         //评论返回布局
         List<AnswerBean.DataBean> aList = data.getData();
-        LogUtils.d("test","data  = = = = = "+aList.toString());
-        answerList.add(new TitleMultiBean("回答("+aList.size()+")"));
+        LogUtils.d("test", "data  = = = = = " + aList.toString());
+        answerList.add(new TitleMultiBean("回答(" + aList.size() + ")"));
         answerList.addAll(aList);
         mAdapter.addData(answerList);
 //        if (aList!=null&&!aList.isEmpty()){
@@ -202,12 +239,15 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
 //        }
         mRefreshLayout.setEnableLoadMore(true);
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
-        if (token!=null && token != ""){
+        if (token != null && token != "") {
             mWendaDetailPresenter.isThumb(token);
         }
         mPresentData = data;
 //        if (mPresentData.getData().)
         mWendaDetailPresenter.getRelatedQuestion(mWendaId);
+        if (mRefreshLayout != null && mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.finishRefresh();
+        }
     }
 
     @Override
@@ -224,7 +264,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     @Override
     public void setThumbState(BaseResponseBean data) {
         mTvThumb.setTag(true);
-        CommonViewUtils.setThumbStyle(mTvThumb,true);
+        CommonViewUtils.setThumbStyle(mTvThumb, true);
     }
 
     @Override

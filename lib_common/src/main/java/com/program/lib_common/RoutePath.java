@@ -21,7 +21,10 @@ public class RoutePath {
     public static class Wenda{
         public static final String SERVICE_WENDA="/wenda/wenda_service";
         public static final String PAGE_DETAIL="/wenda/WendaDetailActivity";
+        public static final String PAGE_ANSWER_DETAIL="/wenda/WendaAnswerActivity";
         public static final String WENDA_ID="/wenda/wenda_id";
+        public static final String PARAMS_ANSWER = "answer";
+        public static final String PARAMS_WENDA_CONTENT = "wenda";
 
     }
 

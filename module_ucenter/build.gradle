@@ -88,6 +88,7 @@ dependencies {
     implementation rootProject.ext.dependencies.rxlifecycle
     implementation rootProject.ext.dependencies.rxlifecycle_compontent
     implementation rootProject.ext.dependencies.rxlifecycle_android
+    implementation rootProject.ext.dependencies.rxlifecycle_android_rx
 
     implementation rootProject.ext.dependencies.glide
     annotationProcessor rootProject.ext.dependencies.glide_compiler

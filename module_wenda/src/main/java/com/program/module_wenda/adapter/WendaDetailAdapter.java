@@ -7,6 +7,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.UIUtils;
@@ -28,7 +29,7 @@ public class WendaDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
         addItemType(Constants.MultiItemType.TYPE_TITLE, R.layout.modulewenda_common_adapter_title);
         addItemType(Constants.MultiItemType.TYPE_COMMENT, R.layout.modulewenda_wenda_detail_answer_adapter);
         addItemType(Constants.MultiItemType.TYPE_RECOMMEND, R.layout.modulewenda_wenda_detail_answer_adapter);
-        addChildClickViewIds(R.id.tv_comment_nickname, R.id.iv_comment_avatar);
+        addChildClickViewIds(R.id.tv_comment_nickname, R.id.iv_comment_avatar,R.id.tv_comment,R.id.tv_more);
     }
 
     @Override
@@ -58,6 +59,7 @@ public class WendaDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 Glide.with(ivAvatar.getContext())
                         .load(comment.getAvatar())
                         .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
+                        .circleCrop()
                         .into(ivAvatar);
                 //是否是最近答案
                 if (comment.getBestAs() == "1") {
@@ -80,6 +82,7 @@ public class WendaDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 Glide.with(ivAvatarView.getContext())
                         .load(wenda.getAvatar())
                         .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
+                        .circleCrop()
                         .into(ivAvatarView);
                 // 隐藏查看详情（和回答的item共有一个layout）
                 viewHolder.getView(R.id.tv_more).setVisibility(View.GONE);
@@ -90,7 +93,7 @@ public class WendaDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 //回答数
                 viewHolder.setText(R.id.tv_reply,wenda.getAnswerCount()+"回答");
                 //是否已经解决
-                if (wenda.getIsResolve()=="1"){
+                if (wenda.getIsResolve().equals("1")){
                     viewHolder.setText(R.id.tv_solved,"已解决");
                     viewHolder.getView(R.id.tv_solved).setVisibility(View.VISIBLE);
                 }else {

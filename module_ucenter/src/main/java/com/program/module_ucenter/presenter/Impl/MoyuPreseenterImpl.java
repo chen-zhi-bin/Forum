@@ -68,15 +68,17 @@ public class MoyuPreseenterImpl implements IMoyuPresentere {
         mApi.getMoyuList(userId,page,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<MoyuBean>() {
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull MoyuBean moyuBean) {
-                        LogUtils.d("test","data ="+moyuBean.getData().get(0).getThumbUpList());
+                    public void onNext(@NonNull Object data) {
+                        MoyuBean moyuBean = (MoyuBean) data;
+                        LogUtils.d("test","data ="+moyuBean);
                         Message message = new Message();
                         if (moyuBean.getCode()==SUCCESS){
                             message.what = RETURN_MOYU_LIST;
@@ -105,14 +107,16 @@ public class MoyuPreseenterImpl implements IMoyuPresentere {
         mApi.getMoyuList(userId,page,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<MoyuBean>() {
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull MoyuBean moyuBean) {
+                    public void onNext(@NonNull Object data) {
+                        MoyuBean moyuBean = (MoyuBean) data;
                         Message message = new Message();
                         message.what = moyuBean.getCode()==SUCCESS?RETURN_MOYU_LIST_MORE:RETURN_MOYU_LIST_MORE_ERROR;
                         message.obj = moyuBean;

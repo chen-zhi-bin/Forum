@@ -32,7 +32,7 @@ ext {
     def RXJAVA_ANDROID_VERSION="3.0.0"
     def RXLIFECYCLE_VERSION="4.0.2"
     def RXLIFECYCLE_COMPONENTS_VERSION="4.0.2"
-    def RXLIFCYCLE_ANDROID_VERSION="3.1.0"
+    def RXLIFCYCLE_ANDROID_VERSION="4.0.2"
 
     def GLIDE_VERSION="4.9.0"
     def GLIDE_COMPILER_VERSION="4.9.0"
@@ -70,6 +70,7 @@ ext {
             rxjava              :'io.reactivex.rxjava3:rxjava:'+RXJAVA_VERSION,
             rxjava_android      :'io.reactivex.rxjava3:rxandroid:'+RXJAVA_ANDROID_VERSION,
             rxlifecycle         :'com.trello.rxlifecycle4:rxlifecycle:'+RXLIFECYCLE_VERSION,                                //rxjava生命周期相关
+            rxlifecycle_android_rx         :'com.trello.rxlifecycle4:rxlifecycle-android:'+RXLIFCYCLE_ANDROID_VERSION,                                //rxjava生命周期相关
             rxlifecycle_compontent:'com.trello.rxlifecycle4:rxlifecycle-components:'+RXLIFECYCLE_COMPONENTS_VERSION,        //rxjava生命周期相关
             rxlifecycle_android :'com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:'+RXJAVA_ANDROID_VERSION,            //使自动取消订阅更加灵活
 

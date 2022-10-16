@@ -5,8 +5,9 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
-        <activity android:name=".ui.activity.WendaDetailActivity"></activity>
-        <activity android:name=".ui.activity.MainActivity"></activity>
+        <activity android:name=".ui.activity.WendaAnswerActivity"></activity>
+        <activity android:name=".ui.activity.WendaDetailActivity" />
+        <activity android:name=".ui.activity.MainActivity" />
     </application>
 
 </manifest>

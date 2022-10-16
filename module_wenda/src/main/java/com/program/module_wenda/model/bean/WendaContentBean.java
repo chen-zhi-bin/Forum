@@ -1,9 +1,17 @@
 package com.program.module_wenda.model.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import kotlin.collections.CollectionsKt;
 
 public class WendaContentBean implements Serializable {
 
@@ -49,7 +57,7 @@ public class WendaContentBean implements Serializable {
                 '}';
     }
 
-    public static class DataBean implements Serializable {
+    public static class DataBean implements Serializable, Parcelable {
         /**
          * id : 1513107843181506562
          * title : Retrofit初始化问题
@@ -85,7 +93,7 @@ public class WendaContentBean implements Serializable {
         @SerializedName("answerCount")
         private Integer answerCount;
         @SerializedName("label")
-        private Object label;
+        private String label;
         @SerializedName("isVip")
         private String isVip;
         @SerializedName("createTime")
@@ -133,7 +141,7 @@ public class WendaContentBean implements Serializable {
             return answerCount;
         }
 
-        public Object getLabel() {
+        public String getLabel() {
             return label;
         }
 
@@ -195,5 +203,76 @@ public class WendaContentBean implements Serializable {
                     ", labels=" + labels +
                     '}';
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.id);
+            dest.writeString(this.title);
+            dest.writeString(this.userId);
+            dest.writeString(this.avatar);
+            dest.writeString(this.nickname);
+            dest.writeString(this.description);
+            dest.writeInt(this.answerCount);
+            dest.writeString(this.label);
+            dest.writeString(this.isVip);
+            dest.writeString(this.createTime);
+            dest.writeString(this.isResolve);
+            dest.writeInt(this.viewCount);
+            dest.writeInt(this.thumbUp);
+            dest.writeInt(this.sob);
+            dest.writeString(this.categoryId);
+            dest.writeString(this.categoryName);
+            dest.writeStringList(this.labels);
+        }
+
+        protected DataBean(Parcel in) {
+            String id = in.readString();
+            this.id = id!=null?id:"";
+            String title = in.readString();
+            this.title = title!=null?title:"";
+            String userId = in.readString();
+            this.userId = userId!=null?userId:"";
+            String avatar = in.readString();
+            this.avatar = avatar!=null?avatar:"";
+            String nickname = in.readString();
+            this.nickname = nickname!=null?nickname:"";
+            String description = in.readString();
+            this.description = description!=null?description:"";
+            this.answerCount = (Integer) in.readInt();
+            String label = in.readString();
+            this.label = label!=null?label:"";
+            String isVip = in.readString();
+            this.isVip = isVip!=null?isVip:"";
+            String createTime = in.readString();
+            this.createTime = createTime!=null?createTime:"";
+            String isResolve = in.readString();
+            this.isResolve = isResolve!=null?isResolve:"";
+            this.viewCount = (Integer) in.readInt();
+            this.thumbUp = (Integer) in.readInt();
+            this.sob = (Integer) in.readInt();
+            String categoryId = in.readString();
+            this.categoryId = categoryId!=null?categoryId:"";
+            String categoryName = in.readString();
+            this.categoryName = categoryName!=null?categoryName:"";
+            ArrayList<String> stringArrayList = in.createStringArrayList();
+            this.labels = stringArrayList!=null?stringArrayList:CollectionsKt.mutableListOf();
+        }
+
+        public static final Creator<DataBean> CREATOR = new Creator<DataBean>() {
+            @Override
+            public DataBean createFromParcel(Parcel source) {
+                return new DataBean(source);
+            }
+
+            @Override
+            public DataBean[] newArray(int size) {
+                return new DataBean[size];
+            }
+        };
     }
 }

@@ -176,7 +176,7 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void getRelatedQuestion(String wendaId) {
-        mApi.getRelatedQuestion(wendaId,5)
+        mApi.getRelatedQuestion(wendaId,10)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(mCallback.TobindToLifecycle())

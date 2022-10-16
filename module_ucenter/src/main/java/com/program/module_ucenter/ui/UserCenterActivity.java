@@ -122,7 +122,7 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         setContentView(R.layout.moduleucenter_activity_user_center);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "userId = " + userId);
-        userId = "1153952789488054272";
+//        userId = "1153952789488054272";
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory());
 
         initView();
