@@ -23,10 +23,15 @@ public interface IWendaDetailCallback extends IBaseCallback {
 
     void setSendCommentReturn(BaseResponseBean data);
 
+    void setReturnThumbCheck(BaseResponseBean data);
+
+    /**
+     * 点赞结果
+     */
+    void setReturnThumb(BaseResponseBean data);
 
 
-
-    void setThumbState(BaseResponseBean data);
+//    void setThumbState(BaseResponseBean data);
 
     void setFollowState(FollowBean data);
 

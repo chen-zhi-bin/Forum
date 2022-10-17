@@ -10,8 +10,9 @@ public interface IWendaDetailPresenter extends IBasePresenter<IWendaDetailCallba
         void getWendaAnswerList(String wendaId);
         void getRelatedQuestion(String wendaId);
         void sendComment(Answer answer);
-
-        void isThumb(String wendaId);
+        void isWendaThumbClick(String wendaId);
+        void toWendaThumb(String wendaId);              //点赞
+//        void isThumb(String wendaId);
         /**
          * 得到与目标用户之间的关系
          * @param userId    id

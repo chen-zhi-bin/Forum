@@ -101,6 +101,8 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     private void initPresenter() {
         mWendaAnswerPresenter = PresenterManager.getInstance().getWendaAnswerPresenter();
         mWendaAnswerPresenter.registerViewCallback(this);
+        //检查是否点赞
+        mWendaAnswerPresenter.isThumbCheck(mAnswerBean.getId());
     }
 
     private void initListener() {
@@ -120,6 +122,14 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
                 }
             }
         });
+        mTvThumb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mTvThumb.getTag() == null) {
+                    mWendaAnswerPresenter.toWendaCommentThumb(mAnswerBean.getId());
+                }
+            }
+        });
         //todo:关注
         mIvHeaderAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +146,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
             }
         });
         //todo:点赞
+        //打赏
         mTvReward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,8 +270,6 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
             //todo:用户关系
 
             mTvThumb.setText(mAnswerBean.getThumbUp().toString());
-            //todo:检查是否点赞
-
         }
         if (mWendaContentBean != null) {
             if (mWendaContentBean.getIsResolve().equals("1")) {
@@ -305,6 +314,24 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public void setReturnThumbClick(BaseResponseBean data) {
+        if (data.getSuccess()&&Integer.parseInt(data.getData()+"")!=0){
+            mTvThumb.setTag(true);
+            CommonViewUtils.setThumbStyle(mTvThumb,true);
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void setReturnClickThumb(BaseResponseBean data) {
+        if (data.getSuccess()){
+            mTvThumb.setTag(true);
+            mTvThumb.setText((mAnswerBean.getThumbUp()+1)+"");
+            CommonViewUtils.setThumbStyle(mTvThumb,true);
+        }
     }
 
     @Override

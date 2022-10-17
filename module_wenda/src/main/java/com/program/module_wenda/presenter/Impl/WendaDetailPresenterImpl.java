@@ -48,6 +48,8 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
     private static final int RETURN_RELATEDQUESTION = 13;
     private static final int RETURN_RELATEDQUESTION_ERROR = 14;
     private static final int RETURN_SEND_COMMENT = 15;
+    private static final int RETURN_IS_THUMB = 16;              //是否点赞
+    private static final int RETURN_CLICK_THUMB = 17;              //点赞
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -86,9 +88,9 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
                 case RETURN_ANSWER_LIST_EERROR:
                     mCallback.setRequestError(((AnswerBean) msg.obj).getMessage());
                     break;
-                case RETURN_THUMBE:
-                    mCallback.setThumbState((BaseResponseBean)msg.obj);
-                    break;
+//                case RETURN_THUMBE:
+//                    mCallback.setThumbState((BaseResponseBean)msg.obj);
+//                    break;
                 case RETURN_RELATEDQUESTION:
                     mCallback.setRelatedQuestionList((WendaBean)msg.obj);
                     break;
@@ -97,6 +99,12 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
                     break;
                 case RETURN_SEND_COMMENT:
                     mCallback.setSendCommentReturn((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_IS_THUMB:
+                    mCallback.setReturnThumbCheck((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_CLICK_THUMB:
+                    mCallback.setReturnThumb((BaseResponseBean)msg.obj);
                     break;
             }
         }
@@ -245,6 +253,71 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
     }
 
     @Override
+    public void isWendaThumbClick(String wendaId) {
+        mApi.wendaThumbClick(wendaId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = RETURN_IS_THUMB;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void toWendaThumb(String wendaId) {
+        mApi.toWendaThumb(wendaId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        LogUtils.d("test","Badagwobpq vw  = "+((BaseResponseBean)o).toString());
+                        Message message = new Message();
+                        message.what = ((BaseResponseBean)o).getCode()==Constants.SUCCESS?RETURN_CLICK_THUMB:ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+ /*   @Override
     public void isThumb(String wendaId) {
         mApi.isThumbState(mToken, wendaId)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -275,7 +348,7 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
                     }
                 });
-    }
+    }*/
 
     @Override
     public void getUserFollowState(String userId) {

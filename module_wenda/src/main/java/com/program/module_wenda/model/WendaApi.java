@@ -16,6 +16,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface WendaApi {
@@ -26,8 +27,8 @@ public interface WendaApi {
     @GET("/ct/wenda/comment/list/{wendaId}/{page}")
     Observable<AnswerBean> getAnswerList(@Path("wendaId")String wendaId,@Path("page")int page);
 
-    @GET("/ct/wenda/comment/thumb-up/check/{wendaId}")
-    Observable<BaseResponseBean> isThumbState(@Header("sob_token")String token,@Path("wendaId")String wendaId);
+//    @GET("/ct/wenda/comment/thumb-up/check/{wendaId}")
+//    Observable<BaseResponseBean> isThumbState(@Header("sob_token")String token,@Path("wendaId")String wendaId);
 
     /**
      * 发表答案
@@ -40,6 +41,30 @@ public interface WendaApi {
      */
     @POST("/ct/wenda/sub-comment")
     Observable<BaseResponseBean> replyAnswer(@Body WendaSubCommentInputBean data,@Header("sob_token")String token);
+
+    /**
+     * 点赞问题
+     */
+    @PUT("/ct/wenda/thumb-up/{wendaId}")
+    Observable<BaseResponseBean> toWendaThumb(@Path("wendaId")String wendaId,@Header("sob_token")String token);
+
+    /**
+     * 点赞回答
+     */
+    @PUT("ct/wenda/comment/thumb-up/{wendaCommentId}")
+    Observable<BaseResponseBean> tiWendaCommentThumb(@Path("wendaCommentId")String wendaCommentId,@Header("sob_token")String token);
+
+    /**
+     * 是否点赞某个问题
+     */
+    @GET("/ct/wenda/thumb-up/check/{wendaId}")
+    Observable<BaseResponseBean> wendaThumbClick(@Path("wendaId")String wendaId,@Header("sob_token")String token);
+
+    /**
+     * 是否点赞某个回答
+     */
+    @GET("/ct/wenda/comment/thumb-up/check/{commentId}")
+    Observable<BaseResponseBean> commentThumbCheck(@Path("commentId")String commentId,@Header("sob_token")String token);
 
     /**
      * 获取相关推荐

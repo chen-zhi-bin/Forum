@@ -3,6 +3,7 @@ package com.program.module_wenda.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.CharacterPickerDialog;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -114,8 +115,14 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         mIsLogin = token != null && !token.equals("");
         initView();
-        initPresenter();
         intListener();
+        initPresenter();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mWendaDetailPresenter.getWendaAnswerList(mWendaId);
     }
 
     private void initPresenter() {
@@ -126,7 +133,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mRefreshLayout.setEnableLoadMore(false);
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         if (token != null && token != "") {
-            mWendaDetailPresenter.isThumb(token);
+//            mWendaDetailPresenter.isThumb(token);
+            mWendaDetailPresenter.isWendaThumbClick(mWendaId);
         }
     }
 
@@ -170,6 +178,14 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
             public void onClick(View view) {
                 if (mIsLogin) {
                     showReplyDialog();
+                }
+            }
+        });
+        mTvThumb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mTvThumb.getTag()==null){
+                    mWendaDetailPresenter.toWendaThumb(mWendaId);
                 }
             }
         });
@@ -253,15 +269,17 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         List<AnswerBean.DataBean> aList = data.getData();
         if (aList != null && !aList.isEmpty()) {
             LogUtils.d("test", "data  = = = = = " + aList.toString());
-            for (MultiItemEntity multiItemEntity : answerList) {
-                mAdapter.getData().remove(multiItemEntity);
-            }
+//            for (MultiItemEntity multiItemEntity : answerList) {
+//                mAdapter.getData().remove(multiItemEntity);
+//            }
             answerList.clear();
-            answerList.add(new TitleMultiBean("回答(" + aList.size() + ")"));
-            answerList.addAll(aList);
-            mAdapter.addData(answerList);
-            mPresentData = data;
+
         }
+        mAdapter.getData().clear();
+        answerList.add(new TitleMultiBean("回答(" + aList.size() + ")"));
+        answerList.addAll(aList);
+        mAdapter.addData(answerList);
+        mPresentData = data;
         mWendaDetailPresenter.getRelatedQuestion(mWendaId);
         if (mRefreshLayout != null && mRefreshLayout.isRefreshing()) {
             mRefreshLayout.finishRefresh();
@@ -271,17 +289,18 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     @Override
     public void setRelatedQuestionList(WendaBean data) {
         if (mRelatedQuestionList!=null&&!mRelatedQuestionList.isEmpty()){
-            for (MultiItemEntity multiItemEntity : mRelatedQuestionList) {
-                mAdapter.getData().remove(multiItemEntity);
-            }
+//            for (MultiItemEntity multiItemEntity : mRelatedQuestionList) {
+//                mAdapter.getData().remove(multiItemEntity);
+//            }
+//            mAdapter.getData().clear();
             mRelatedQuestionList.clear();
         }
-        if (!isAddRelatedQuestionHeader) {
+//        if (!isAddRelatedQuestionHeader) {
             mRelatedQuestionList.add(new TitleMultiBean("相关问题"));
-        }
+//        }
         mRelatedQuestionList.addAll(data.getData());
         mAdapter.addData(mRelatedQuestionList);
-
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -293,10 +312,30 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     }
 
     @Override
-    public void setThumbState(BaseResponseBean data) {
-        mTvThumb.setTag(true);
-        CommonViewUtils.setThumbStyle(mTvThumb, true);
+    public void setReturnThumbCheck(BaseResponseBean data) {
+        if (data.getSuccess()&&Integer.parseInt(data.getData()+"")!=0){
+            mTvThumb.setTag(true);
+            CommonViewUtils.setThumbStyle(mTvThumb,true);
+        }
     }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void setReturnThumb(BaseResponseBean data) {
+        if (data.getSuccess()){
+            mTvThumb.setTag(true);
+            mTvThumb.setText(mWendaContent.getThumbUp()+1+"好问题");
+            CommonViewUtils.setThumbStyle(mTvThumb,true);
+        }
+    }
+
+/*    @Override
+    public void setThumbState(BaseResponseBean data) {
+        if (data.getSuccess()&&Integer.parseInt(data.getData()+"")!=0){
+            mTvThumb.setTag(true);
+            CommonViewUtils.setThumbStyle(mTvThumb,true);
+        }
+    }*/
 
     @Override
     public void setFollowState(FollowBean data) {
@@ -367,23 +406,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         Glide.with(this).load(wenda.getAvatar()).circleCrop().into(mIvHeaderAvatar);
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        if (answerList != null && !answerList.isEmpty()) {
-            for (MultiItemEntity multiItemEntity : answerList) {
-                mAdapter.getData().remove(multiItemEntity);
-            }
-            answerList.clear();
-        }
-        if (mRelatedQuestionList!=null&&!mRelatedQuestionList.isEmpty()){
-            for (MultiItemEntity multiItemEntity : mRelatedQuestionList) {
-                mAdapter.getData().remove(multiItemEntity);
-            }
-            mRelatedQuestionList.clear();
-        }
-        mWendaDetailPresenter.getWendaAnswerList(mWendaId);
-    }
+
 
     @Override
     public void onError() {

@@ -8,5 +8,7 @@ public interface IWendaAnswerPresenter extends IBasePresenter<IWendaAnswerCallba
 
     void replyAnswer(WendaSubCommentInputBean data);
 
+    void isThumbCheck(String commentId);
 
+    void toWendaCommentThumb(String wendaCommentId);
 }

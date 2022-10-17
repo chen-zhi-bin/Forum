@@ -24,12 +24,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     private IWendaAnswerCallback mCalllback = null;
     private final SharedPreferencesUtils mSharedPreferencesUtils;
-    private final String mToken;
+    private String mToken;
     private final WendaApi mApi;
 
     private static final int ERROR = -1;        //能请求，但是错误
     private static final int RETURN_ERROR = 0;    //错误
     private static final int RETURN_REPLY = 1;
+    private static final int RETURN_THUMB = 2;
+    private static final int RETURN_CLCIK_THUMB = 3;
 
     private final Handler mHandler = new Handler(Looper.myLooper()){
         @Override
@@ -44,6 +46,12 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                     break;
                 case RETURN_REPLY:
                     mCalllback.replyAnswerReturn((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_THUMB:
+                    mCalllback.setReturnThumbClick((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_CLCIK_THUMB:
+                    mCalllback.setReturnClickThumb((BaseResponseBean)msg.obj);
                     break;
             }
         }
@@ -73,6 +81,73 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                         Message message = new Message();
                         message.what = ((BaseResponseBean)o).getCode()== Constants.SUCCESS?RETURN_REPLY:ERROR;
                         message.obj=o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void isThumbCheck(String commentId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mApi.commentThumbCheck(commentId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCalllback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what=RETURN_THUMB;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void toWendaCommentThumb(String wendaCommentId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mApi.commentThumbCheck(wendaCommentId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCalllback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        LogUtils.d("test","data thumb = "+((BaseResponseBean)o).toString());
+                        Message message = new Message();
+                        message.what = ((BaseResponseBean)o).getCode()==Constants.SUCCESS?RETURN_CLCIK_THUMB:ERROR;
+                        message.obj = o;
                         mHandler.sendMessage(message);
                     }
 

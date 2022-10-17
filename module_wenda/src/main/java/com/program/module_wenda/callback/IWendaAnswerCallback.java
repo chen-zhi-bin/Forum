@@ -11,4 +11,14 @@ public interface IWendaAnswerCallback extends IBaseCallback {
     LifecycleTransformer<Object> TobindToLifecycle();
 
     void setRequestError(String msg);
+
+    /**
+     * 是否点赞
+     */
+    void setReturnThumbClick(BaseResponseBean data);
+
+    /**
+     * 点赞返回
+     */
+    void setReturnClickThumb(BaseResponseBean data);
 }
