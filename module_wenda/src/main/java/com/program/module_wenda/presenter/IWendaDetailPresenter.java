@@ -1,6 +1,7 @@
 package com.program.module_wenda.presenter;
 
 import com.program.module_wenda.callback.IWendaDetailCallback;
+import com.program.module_wenda.model.bean.Answer;
 import com.program.moudle_base.base.IBaseCallback;
 import com.program.moudle_base.base.IBasePresenter;
 
@@ -8,6 +9,7 @@ public interface IWendaDetailPresenter extends IBasePresenter<IWendaDetailCallba
         void getWendaDetail(String wendaId);
         void getWendaAnswerList(String wendaId);
         void getRelatedQuestion(String wendaId);
+        void sendComment(Answer answer);
 
         void isThumb(String wendaId);
         /**

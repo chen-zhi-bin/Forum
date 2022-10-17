@@ -30,6 +30,7 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_common.Constants;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
@@ -38,6 +39,7 @@ import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_wenda.R;
 import com.program.module_wenda.adapter.WendaDetailAdapter;
 import com.program.module_wenda.callback.IWendaDetailCallback;
+import com.program.module_wenda.model.bean.Answer;
 import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.RelatedQuestionBean;
 import com.program.module_wenda.model.bean.WendaBean;
@@ -97,6 +99,9 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     private AnswerBean mPresentData = null;
     private boolean isAddRelatedQuestionHeader = false;
     private TextView mTvInvite;
+    private TextView mTvReply;
+    private boolean mIsLogin;
+    private boolean isJustCreate = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +111,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         LogUtils.d("test", "wendaId = " + mWendaId);
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(this);
-
+        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mIsLogin = token != null && !token.equals("");
         initView();
         initPresenter();
         intListener();
@@ -118,6 +124,10 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mWendaDetailPresenter.getWendaDetail(mWendaId);
         mWendaDetailPresenter.getWendaAnswerList(mWendaId);
         mRefreshLayout.setEnableLoadMore(false);
+        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (token != null && token != "") {
+            mWendaDetailPresenter.isThumb(token);
+        }
     }
 
     private void intListener() {
@@ -135,27 +145,48 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 Object item = adapter.getItem(position);
                 if (view.getId() == R.id.tv_comment_nickname || view.getId() == R.id.iv_comment_avatar) {
-                    if (item instanceof WendaBean.DataBean){
+                    if (item instanceof WendaBean.DataBean) {
                         WendaBean.DataBean wendaData = (WendaBean.DataBean) adapter.getItem(position);
                         UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(wendaData.getUserId());
-                    }else if (item instanceof AnswerBean.DataBean){
+                    } else if (item instanceof AnswerBean.DataBean) {
                         AnswerBean.DataBean dataBean = (AnswerBean.DataBean) item;
                         UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(dataBean.getUid());
                     }
-                }else if (view.getId()==R.id.tv_comment||view.getId()==R.id.tv_more){
-                    if (item instanceof WendaBean.DataBean){
+                } else if (view.getId() == R.id.tv_comment || view.getId() == R.id.tv_more) {
+                    if (item instanceof WendaBean.DataBean) {
                         WendaBean.DataBean wenda = (WendaBean.DataBean) item;
                         WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(wenda.getId());
-                    }else if (item instanceof AnswerBean.DataBean){
+                    } else if (item instanceof AnswerBean.DataBean) {
                         AnswerBean.DataBean dataBean = (AnswerBean.DataBean) item;
-                        LogUtils.d("answer test","answer data = "+dataBean.toString());
-                        LogUtils.d("test","data = "+mWendaContent.toString());
-                        WendaServiceWrap.Singletion.INSTANCE.getHolder().launchAnswerDetail(mWendaContent,dataBean);
+                        LogUtils.d("answer test", "answer data = " + dataBean.toString());
+                        LogUtils.d("test", "data = " + mWendaContent.toString());
+                        WendaServiceWrap.Singletion.INSTANCE.getHolder().launchAnswerDetail(mWendaContent, dataBean);
                     }
                 }
+            }
+        });
+        mTvReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mIsLogin) {
+                    showReplyDialog();
+                }
+            }
+        });
+    }
 
-
-
+    private void showReplyDialog() {
+        mReplyDialog.show();
+        if (mWendaContent != null) {
+            String name = mWendaContent.getNickname() != null ? mWendaContent.getNickname() : "";
+            mReplyDialog.setReplyTitle("回答 @" + name);
+        }
+        mReplyDialog.sendListener(new ReplyBottomSheetDialog.OnSendListener() {
+            @Override
+            public void onSend(String v) {
+                //提交回答
+                mWendaDetailPresenter.sendComment(new Answer(mWendaId, v));
+                mReplyDialog.dismiss();
             }
         });
     }
@@ -183,6 +214,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
         mTvInvite = this.findViewById(R.id.tv_invite);
+        mTvReply = this.findViewById(R.id.tv_reply);
 
         mRvContent.setHasFixedSize(true);   //设置为true让RecyclerView避免重新计算大小。
         mRvContent.setAdapter(mAdapter);
@@ -215,35 +247,21 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     }
 
 
-    //todo:加载更多没做
     @Override
     public void setAnswerList(AnswerBean data) {
         //评论返回布局
         List<AnswerBean.DataBean> aList = data.getData();
-        LogUtils.d("test", "data  = = = = = " + aList.toString());
-        answerList.add(new TitleMultiBean("回答(" + aList.size() + ")"));
-        answerList.addAll(aList);
-        mAdapter.addData(answerList);
-//        if (aList!=null&&!aList.isEmpty()){
-//            Iterator<MultiItemEntity> iterator = answerList.iterator();
-//            while (iterator.hasNext()) {
-//                MultiItemEntity itemEntity = iterator.next();
-//                mAdapter.getData().remove(itemEntity);
-//            }
-//            answerList.clear();
-//            answerList.add(new TitleMultiBean("回答（"+aList.size()+"）"));
-//            answerList.addAll(aList);
-//            if (mAdapter.getData().size()>answerList.size()){
-//                mAdapter.notifyItemChanged(answerList.size()+1);
-//            }
-//        }
-        mRefreshLayout.setEnableLoadMore(true);
-        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
-        if (token != null && token != "") {
-            mWendaDetailPresenter.isThumb(token);
+        if (aList != null && !aList.isEmpty()) {
+            LogUtils.d("test", "data  = = = = = " + aList.toString());
+            for (MultiItemEntity multiItemEntity : answerList) {
+                mAdapter.getData().remove(multiItemEntity);
+            }
+            answerList.clear();
+            answerList.add(new TitleMultiBean("回答(" + aList.size() + ")"));
+            answerList.addAll(aList);
+            mAdapter.addData(answerList);
+            mPresentData = data;
         }
-        mPresentData = data;
-//        if (mPresentData.getData().)
         mWendaDetailPresenter.getRelatedQuestion(mWendaId);
         if (mRefreshLayout != null && mRefreshLayout.isRefreshing()) {
             mRefreshLayout.finishRefresh();
@@ -252,13 +270,26 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
 
     @Override
     public void setRelatedQuestionList(WendaBean data) {
-        mRelatedQuestionList.clear();
+        if (mRelatedQuestionList!=null&&!mRelatedQuestionList.isEmpty()){
+            for (MultiItemEntity multiItemEntity : mRelatedQuestionList) {
+                mAdapter.getData().remove(multiItemEntity);
+            }
+            mRelatedQuestionList.clear();
+        }
         if (!isAddRelatedQuestionHeader) {
             mRelatedQuestionList.add(new TitleMultiBean("相关问题"));
         }
         mRelatedQuestionList.addAll(data.getData());
         mAdapter.addData(mRelatedQuestionList);
 
+    }
+
+    @Override
+    public void setSendCommentReturn(BaseResponseBean data) {
+        if (data.getCode() == Constants.SUCCESS) {
+            ToastUtils.showToast("评论成功");
+            mWendaDetailPresenter.getWendaAnswerList(mWendaId);
+        }
     }
 
     @Override
@@ -306,8 +337,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
 
     @SuppressLint({"JavascriptInterface", "SetTextI18n"})
     private void setContentData(WendaContentBean.DataBean wenda) {
-        if (wenda.getIsResolve() == "1") {
-            String title = "已解决" + wenda.getTitle();
+        if (wenda.getIsResolve().equals("1")) {
+            String title = "【已解决】" + wenda.getTitle();
             mTvTitle.setText(UIUtils.setTextViewContentStyle(
                     title,
                     new AbsoluteSizeSpan(UIUtils.dp2px(14f)),
@@ -334,6 +365,24 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mTvLabels.setText(wenda.getLabels().toString());
         mTvHeaderNickName.setText(wenda.getNickname());
         Glide.with(this).load(wenda.getAvatar()).circleCrop().into(mIvHeaderAvatar);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (answerList != null && !answerList.isEmpty()) {
+            for (MultiItemEntity multiItemEntity : answerList) {
+                mAdapter.getData().remove(multiItemEntity);
+            }
+            answerList.clear();
+        }
+        if (mRelatedQuestionList!=null&&!mRelatedQuestionList.isEmpty()){
+            for (MultiItemEntity multiItemEntity : mRelatedQuestionList) {
+                mAdapter.getData().remove(multiItemEntity);
+            }
+            mRelatedQuestionList.clear();
+        }
+        mWendaDetailPresenter.getWendaAnswerList(mWendaId);
     }
 
     @Override

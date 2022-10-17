@@ -8,6 +8,7 @@ import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.module_wenda.callback.IWendaDetailCallback;
 import com.program.module_wenda.model.WendaApi;
+import com.program.module_wenda.model.bean.Answer;
 import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.RelatedQuestionBean;
 import com.program.module_wenda.model.bean.WendaBean;
@@ -46,6 +47,7 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
     private static final int RETURN_THUMBE = 12;
     private static final int RETURN_RELATEDQUESTION = 13;
     private static final int RETURN_RELATEDQUESTION_ERROR = 14;
+    private static final int RETURN_SEND_COMMENT = 15;
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -92,6 +94,9 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
                     break;
                 case RETURN_RELATEDQUESTION_ERROR:
                     mCallback.setRequestError(((WendaBean)msg.obj).getMessage());
+                    break;
+                case RETURN_SEND_COMMENT:
+                    mCallback.setSendCommentReturn((BaseResponseBean)msg.obj);
                     break;
             }
         }
@@ -190,6 +195,39 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
                     public void onNext(@NonNull Object o) {
                         Message message = new Message();
                         message.what = ((WendaBean)o).getCode()==Constants.SUCCESS?RETURN_RELATEDQUESTION:RETURN_RELATEDQUESTION_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void sendComment(Answer answer) {
+        mApi.toAnswer(answer,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        LogUtils.d("test","send data = "+((BaseResponseBean)o).toString());
+                        Message message = new Message();
+                        message.what = ((BaseResponseBean)o).getCode()==Constants.SUCCESS?RETURN_SEND_COMMENT:ERROR;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }

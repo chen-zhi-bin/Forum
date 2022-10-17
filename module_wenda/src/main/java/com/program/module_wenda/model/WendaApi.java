@@ -1,14 +1,17 @@
 package com.program.module_wenda.model;
 
+import com.program.module_wenda.model.bean.Answer;
 import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.RelatedQuestionBean;
 import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
+import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
 
 import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -25,6 +28,18 @@ public interface WendaApi {
 
     @GET("/ct/wenda/comment/thumb-up/check/{wendaId}")
     Observable<BaseResponseBean> isThumbState(@Header("sob_token")String token,@Path("wendaId")String wendaId);
+
+    /**
+     * 发表答案
+     */
+    @POST("/ct/wenda/comment")
+    Observable<BaseResponseBean> toAnswer(@Body Answer answer,@Header("sob_token")String token);
+
+    /**
+     * 评论答案
+     */
+    @POST("/ct/wenda/sub-comment")
+    Observable<BaseResponseBean> replyAnswer(@Body WendaSubCommentInputBean data,@Header("sob_token")String token);
 
     /**
      * 获取相关推荐

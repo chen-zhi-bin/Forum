@@ -61,8 +61,8 @@ public class WendaDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                         .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
                         .circleCrop()
                         .into(ivAvatar);
-                //是否是最近答案
-                if (comment.getBestAs() == "1") {
+                //是否是最佳答案
+                if (comment.getBestAs().equals("1")) {
                     viewHolder.getView(R.id.tv_solved).setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.getView(R.id.tv_solved).setVisibility(View.GONE);

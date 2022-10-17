@@ -21,6 +21,11 @@ public interface IWendaDetailCallback extends IBaseCallback {
 
     void setRelatedQuestionList(WendaBean data);
 
+    void setSendCommentReturn(BaseResponseBean data);
+
+
+
+
     void setThumbState(BaseResponseBean data);
 
     void setFollowState(FollowBean data);

@@ -30,7 +30,7 @@ public class WendaAnswerAdapter extends BaseMultiItemQuickAdapter<MultiItemEntit
                 case Constants.MultiItemType.TYPE_SUB_COMMENT:
                     SubCommentBean subConmment = (SubCommentBean) multiItemEntity;
                     viewHolder.setText(R.id.tv_your_nickname,subConmment.getYourNickname());
-                    viewHolder.setText(R.id.tv_be_nickname,subConmment.getBeNickname());
+                    viewHolder.setText(R.id.tv_be_nickname,"@"+subConmment.getBeNickname());
                     viewHolder.setText(R.id.tv_publishTime,subConmment.getPublishTime());
                     viewHolder.setText(R.id.tv_comment,subConmment.getContent());
                     RoundedImageView ivAvatar = viewHolder.getView(R.id.iv_your_avatar);

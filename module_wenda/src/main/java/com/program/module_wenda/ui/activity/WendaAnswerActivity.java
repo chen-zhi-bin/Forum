@@ -33,21 +33,33 @@ import com.program.lib_common.UIUtils;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_wenda.R;
 import com.program.module_wenda.adapter.WendaAnswerAdapter;
+import com.program.module_wenda.callback.IWendaAnswerCallback;
 import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
+import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
+import com.program.module_wenda.presenter.IWendaAnswerPresenter;
+import com.program.module_wenda.presenter.Impl.WendaAnswerPresenterImpl;
+import com.program.module_wenda.utils.PresenterManager;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.SubCommentBean;
 import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
+import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
 import com.program.moudle_base.view.MyCodeViewJava;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
+import com.trello.rxlifecycle4.LifecycleTransformer;
+import com.trello.rxlifecycle4.RxLifecycle;
+import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 
 import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+
 @Route(path = RoutePath.Wenda.PAGE_ANSWER_DETAIL)
-public class WendaAnswerActivity extends AppCompatActivity {
+public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAnswerCallback {
 
     @Autowired(name = RoutePath.Wenda.PARAMS_WENDA_CONTENT)
     public WendaContentBean.DataBean mWendaContentBean;
@@ -68,6 +80,10 @@ public class WendaAnswerActivity extends AppCompatActivity {
     private TextView mTvView;
     private TextView mTvPublishTime;
     private TextView mTvQuestioner;
+    private IWendaAnswerPresenter mWendaAnswerPresenter;
+    private TextView mTvHeaderFollow;
+    private TextView mTvReply;
+    private TextView mTvReward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +99,8 @@ public class WendaAnswerActivity extends AppCompatActivity {
     }
 
     private void initPresenter() {
-
+        mWendaAnswerPresenter = PresenterManager.getInstance().getWendaAnswerPresenter();
+        mWendaAnswerPresenter.registerViewCallback(this);
     }
 
     private void initListener() {
@@ -93,21 +110,88 @@ public class WendaAnswerActivity extends AppCompatActivity {
                 Object item = adapter.getItem(position);
                 if (item instanceof SubCommentBean){
                     int id = view.getId();
-                    item = (SubCommentBean)item;
                     if (id == R.id.tv_your_nickname || id == R.id.iv_your_avatar) {
                         UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((SubCommentBean) item).getYourUid());
                     }else if (id==R.id.tv_be_nickname){
                         UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((SubCommentBean) item).getBeUid());
                     } else if (id == R.id.iv_comment_reply) {
-                        showReplyDialog(item);
+                        showReplyDialog((SubCommentBean) item);
                     }
                 }
             }
         });
+        //todo:关注
+        mIvHeaderAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mAnswerBean != null) {
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(mAnswerBean.getUid());
+                }
+            }
+        });
+        mTvReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReplyDialog(null);
+            }
+        });
+        //todo:点赞
+        mTvReward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPriseDialog();
+            }
+        });
     }
 
-    private void showReplyDialog(Object item) {
+    private void showPriseDialog() {
+//        if (mAnswerBean)
+    }
 
+    private void showReplyDialog(SubCommentBean subComment) {
+        mReplyDialog.show();
+        if (subComment==null) {
+            if (mAnswerBean != null) {
+                mReplyDialog.setReplyTitle("评论 @"+mAnswerBean.getNickname());
+            }
+        }else {
+            mReplyDialog.setReplyTitle("评论 @"+subComment.getBeNickname());
+        }
+        mReplyDialog.sendListener(new ReplyBottomSheetDialog.OnSendListener() {
+            @Override
+            public void onSend(String v) {
+                if (subComment==null){
+                    replyAnswer(v);
+                }else {
+                    replyComment(v,subComment);
+                }
+            }
+        });
+
+    }
+
+    private void replyComment(String v, SubCommentBean subComment) {
+        WendaSubCommentInputBean wendaSubCommentInputBean = new WendaSubCommentInputBean(
+                subComment.getParentId(),
+                subComment.getBeNickname(),
+                subComment.getBeUid(),
+                mAnswerBean.getWendaId(),
+                v
+        );
+        mWendaAnswerPresenter.replyAnswer(wendaSubCommentInputBean);
+    }
+
+    private void replyAnswer(String v) {
+        if (mAnswerBean != null) {
+            WendaSubCommentInputBean wendaSubCommentInputBean = new WendaSubCommentInputBean(
+                    mAnswerBean.getId(),
+                    mAnswerBean.getNickname(),
+                    mAnswerBean.getUid(),
+                    mAnswerBean.getWendaId(),
+                    v
+            );
+            mWendaAnswerPresenter.replyAnswer(wendaSubCommentInputBean);
+        }
     }
 
     private void initView() {
@@ -116,7 +200,9 @@ public class WendaAnswerActivity extends AppCompatActivity {
         mTvHeaderBickName = this.findViewById(R.id.tv_header_nickname);
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvThumb = this.findViewById(R.id.tv_thumb);
-
+        mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
+        mTvReply = this.findViewById(R.id.tv_reply);
+        mTvReward = this.findViewById(R.id.tv_reward);
         includeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
         includeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
 
@@ -201,5 +287,38 @@ public class WendaAnswerActivity extends AppCompatActivity {
                     str.indexOf("@"),str.length()
             ));
         }
+    }
+
+    @Override
+    public void replyAnswerReturn(BaseResponseBean data) {
+        ToastUtils.showToast("评论成功");
+        mReplyDialog.dismiss();
+    }
+
+    @Override
+    public LifecycleTransformer<Object> TobindToLifecycle() {
+//        BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
+//        return  RxLifecycle.bind(objectBehaviorSubject);
+        return this.bindToLifecycle();
+    }
+
+    @Override
+    public void setRequestError(String msg) {
+        ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onEmpty() {
+
     }
 }
