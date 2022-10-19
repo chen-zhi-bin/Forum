@@ -1,7 +1,6 @@
 package com.program.module_wenda.ui.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +24,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -41,20 +39,20 @@ import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
 import com.program.module_wenda.presenter.IWendaAnswerPresenter;
-import com.program.module_wenda.presenter.Impl.WendaAnswerPresenterImpl;
 import com.program.module_wenda.utils.PresenterManager;
 import com.program.moudle_base.adapter.CommPriseAdapter;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseSobBean;
 import com.program.moudle_base.model.SubCommentBean;
 import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
+import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
 import com.program.moudle_base.view.MyCodeViewJava;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
 import com.trello.rxlifecycle4.LifecycleTransformer;
-import com.trello.rxlifecycle4.RxLifecycle;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 
 import net.mikaelzero.mojito.Mojito;
@@ -63,8 +61,6 @@ import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
 import java.util.Iterator;
 import java.util.List;
-
-import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 @Route(path = RoutePath.Wenda.PAGE_ANSWER_DETAIL)
 public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAnswerCallback {
@@ -89,7 +85,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     private TextView mTvPublishTime;
     private TextView mTvQuestioner;
     private IWendaAnswerPresenter mWendaAnswerPresenter;
-    private TextView mTvHeaderFollow;
+    private Button mBtnHeaderFollow;
     private TextView mTvReply;
     private TextView mTvReward;
 
@@ -111,6 +107,13 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         mWendaAnswerPresenter.registerViewCallback(this);
         //检查是否点赞
         mWendaAnswerPresenter.isThumbCheck(mAnswerBean.getId());
+        SharedPreferencesUtils instance = SharedPreferencesUtils.getInstance(this);
+        String myID = instance.getString(SharedPreferencesUtils.USER_ID);
+        if (mAnswerBean.getUid().equals(myID)){
+            mBtnHeaderFollow.setVisibility(View.GONE);
+        }else {
+            mWendaAnswerPresenter.getUserFollowState(mAnswerBean.getUid());
+        }
     }
 
     private void initListener() {
@@ -138,7 +141,16 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
                 }
             }
         });
-        //todo:关注
+        mBtnHeaderFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getTag().equals(0) || view.getTag().equals(1)) {
+                    follow(mAnswerBean.getUid());
+                } else {
+                    unfollow(mAnswerBean.getUid());
+                }
+            }
+        });
         mIvHeaderAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,7 +165,6 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
                 showReplyDialog(null);
             }
         });
-        //todo:点赞
         //打赏
         mTvReward.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +172,14 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
                 showPriseDialog();
             }
         });
+    }
+
+    private void unfollow(String uid) {
+        mWendaAnswerPresenter.unFollow(mAnswerBean.getUid());
+    }
+
+    private void follow(String uid) {
+        mWendaAnswerPresenter.addFollow(mAnswerBean.getUid());
     }
 
     private void showPriseDialog() {
@@ -263,7 +282,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         mTvHeaderBickName = this.findViewById(R.id.tv_header_nickname);
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvThumb = this.findViewById(R.id.tv_thumb);
-        mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
+        mBtnHeaderFollow = this.findViewById(R.id.tv_header_follow);
         mTvReply = this.findViewById(R.id.tv_reply);
         mTvReward = this.findViewById(R.id.tv_reward);
         includeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
@@ -319,7 +338,6 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
             });
             mAdapter.addData(new TitleMultiBean("评论（"+mAnswerBean.getWendaSubComments().size()+"）"));
             mAdapter.addData(mAnswerBean.getWendaSubComments());
-            //todo:用户关系
 
             mTvThumb.setText(mAnswerBean.getThumbUp().toString());
         }
@@ -391,6 +409,43 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
             mTvThumb.setText((mAnswerBean.getThumbUp()+1)+"");
             CommonViewUtils.setThumbStyle(mTvThumb,true);
         }
+    }
+
+    @Override
+    public void setFollowState(FollowBean data) {
+        mBtnHeaderFollow.setVisibility(View.VISIBLE);
+        CommonViewUtils.setFollowState(mBtnHeaderFollow, data.getData());
+    }
+
+    @Override
+    public void setFollowStateError(FollowBean data) {
+        ToastUtils.showToast(data.getMessage());
+    }
+
+    @Override
+    public void setAddFollowMsg(String msg) {
+        mBtnHeaderFollow.setTag(2);
+        mBtnHeaderFollow.setText("已关注");
+        ToastUtils.showToast(msg);
+        mWendaAnswerPresenter.getUserFollowState(mAnswerBean.getUid());
+    }
+
+    @Override
+    public void setAddFollowMsgError(String message) {
+        ToastUtils.showToast(message);
+    }
+
+    @Override
+    public void setUnFollowMsg(String msg) {
+        mBtnHeaderFollow.setTag(0);
+        mBtnHeaderFollow.setText("+关注");
+        ToastUtils.showToast(msg);
+        mWendaAnswerPresenter.getUserFollowState(mAnswerBean.getUid());
+    }
+
+    @Override
+    public void setUnFollowMsgError(String msg) {
+
     }
 
     @Override

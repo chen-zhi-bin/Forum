@@ -13,4 +13,22 @@ public interface IWendaAnswerPresenter extends IBasePresenter<IWendaAnswerCallba
     void toWendaCommentThumb(String wendaCommentId);
 
     void toCommentPrise(String commentId,int value);
+
+    /**
+     * 得到与目标用户之间的关系
+     * @param userId    id
+     */
+    void getUserFollowState(String userId);
+
+    /**
+     * 添加关注
+     * @param userId    id
+     */
+    void addFollow(String userId);
+
+    /**
+     * 取消关注
+     * @param userId    id
+     */
+    void unFollow(String userId);
 }

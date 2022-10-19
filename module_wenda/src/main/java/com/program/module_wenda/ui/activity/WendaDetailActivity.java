@@ -1,9 +1,7 @@
 package com.program.module_wenda.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.CharacterPickerDialog;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
@@ -28,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
@@ -42,7 +39,6 @@ import com.program.module_wenda.adapter.WendaDetailAdapter;
 import com.program.module_wenda.callback.IWendaDetailCallback;
 import com.program.module_wenda.model.bean.Answer;
 import com.program.module_wenda.model.bean.AnswerBean;
-import com.program.module_wenda.model.bean.RelatedQuestionBean;
 import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.module_wenda.presenter.IWendaDetailPresenter;
@@ -65,7 +61,6 @@ import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
-import java.util.Iterator;
 import java.util.List;
 
 import kotlin.collections.CollectionsKt;
@@ -115,8 +110,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         mIsLogin = token != null && !token.equals("");
         initView();
-        intListener();
         initPresenter();
+        initListener();
     }
 
     @Override
@@ -138,7 +133,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         }
     }
 
-    private void intListener() {
+    private void initListener() {
         mIvBack.setOnClickListener(view -> finish());
         mTvInvite.setOnClickListener(view -> ToastUtils.showToast("开发中"));
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -186,6 +181,20 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
             public void onClick(View view) {
                 if (mTvThumb.getTag()==null){
                     mWendaDetailPresenter.toWendaThumb(mWendaId);
+                }
+            }
+        });
+        mTvHeaderFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getTag().equals(0) || view.getTag().equals(1)) {
+                    if (mWendaContent!=null){
+                        mWendaDetailPresenter.addFollow(mWendaContent.getUserId());
+                    }
+                } else {
+                  if (mWendaContent!=null){
+                      mWendaDetailPresenter.unFollow(mWendaContent.getUserId());
+                  }
                 }
             }
         });

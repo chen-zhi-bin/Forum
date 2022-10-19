@@ -12,7 +12,9 @@ import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
 import com.program.module_wenda.presenter.IWendaAnswerPresenter;
 import com.program.module_wenda.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
+import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -22,7 +24,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
-    private IWendaAnswerCallback mCalllback = null;
+    private IWendaAnswerCallback mCallback = null;
     private final SharedPreferencesUtils mSharedPreferencesUtils;
     private String mToken;
     private final WendaApi mApi;
@@ -33,6 +35,12 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     private static final int RETURN_THUMB = 2;
     private static final int RETURN_CLCIK_THUMB = 3;
     private static final int RETURN_PRISE = 4;
+    private static final int RETURN_FOLLOW = 5;
+    private static final int RETURN_FOLLOW_ERROR = 6;
+    private static final int RETURN_ADD_FOLLOW = 7;
+    private static final int RETURN_ADD_FOLLOW_ERROR = 8;
+    private static final int RETURN_UN_FOLLOW = 9;
+    private static final int RETURN_UN_FOLLOW_ERROR = 10;
 
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
@@ -40,22 +48,40 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
             super.handleMessage(msg);
             switch (msg.what) {
                 case ERROR:
-                    mCalllback.setRequestError("请稍后重试");
+                    mCallback.setRequestError("请稍后重试");
                     break;
                 case RETURN_ERROR:
-                    mCalllback.setRequestError("网络错误");
+                    mCallback.setRequestError("网络错误");
                     break;
                 case RETURN_REPLY:
-                    mCalllback.replyAnswerReturn((BaseResponseBean) msg.obj);
+                    mCallback.replyAnswerReturn((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_THUMB:
-                    mCalllback.setReturnThumbClick((BaseResponseBean) msg.obj);
+                    mCallback.setReturnThumbClick((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_CLCIK_THUMB:
-                    mCalllback.setReturnClickThumb((BaseResponseBean) msg.obj);
+                    mCallback.setReturnClickThumb((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_PRISE:
-                    mCalllback.setPriseResult((BaseResponseBean)msg.obj);
+                    mCallback.setPriseResult((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_FOLLOW:
+                    mCallback.setFollowState((FollowBean) msg.obj);
+                    break;
+                case RETURN_FOLLOW_ERROR:
+                    mCallback.setFollowStateError((FollowBean) msg.obj);
+                    break;
+                case RETURN_ADD_FOLLOW:
+                    mCallback.setAddFollowMsg(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_ADD_FOLLOW_ERROR:
+                    mCallback.setAddFollowMsgError(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_UN_FOLLOW:
+                    mCallback.setUnFollowMsg(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_UN_FOLLOW_ERROR:
+                    mCallback.setUnFollowMsgError(((AddOrUnFollowBean) msg.obj).getMessage());
                     break;
             }
         }
@@ -72,7 +98,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
         mApi.replyAnswer(data, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .compose(mCalllback.TobindToLifecycle())
+                .compose(mCallback.TobindToLifecycle())
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -106,7 +132,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
         mApi.commentThumbCheck(commentId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .compose(mCalllback.TobindToLifecycle())
+                .compose(mCallback.TobindToLifecycle())
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -139,7 +165,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
         mApi.commentThumbCheck(wendaCommentId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .compose(mCalllback.TobindToLifecycle())
+                .compose(mCallback.TobindToLifecycle())
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -172,7 +198,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
         mApi.commentPrise(commentId, value, false, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .compose(mCalllback.TobindToLifecycle())
+                .compose(mCallback.TobindToLifecycle())
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -199,6 +225,99 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                 });
     }
 
+    @Override
+    public void getUserFollowState(String userId) {
+        mApi.getFollowState(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<FollowBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull FollowBean followBean) {
+                        Message message = new Message();
+                        message.what = followBean.getCode() == Constants.SUCCESS ? RETURN_FOLLOW : RETURN_FOLLOW_ERROR;
+                        message.obj = followBean;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void addFollow(String userId) {
+        mApi.addFollow(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<AddOrUnFollowBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull AddOrUnFollowBean addFollowBean) {
+                        Message message = new Message();
+                        message.what = addFollowBean.getCode() == Constants.SUCCESS ? RETURN_ADD_FOLLOW : RETURN_ADD_FOLLOW_ERROR;
+                        message.obj = addFollowBean;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void unFollow(String userId) {
+        mApi.unFollow(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<AddOrUnFollowBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull AddOrUnFollowBean addOrUnFollowBean) {
+                        Message message = new Message();
+                        message.what = addOrUnFollowBean.getCode() == Constants.SUCCESS ? RETURN_UN_FOLLOW : RETURN_UN_FOLLOW_ERROR;
+                        message.obj = addOrUnFollowBean;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     private void requestFailed() {
         Message message = new Message();
         message.what = ERROR;
@@ -207,11 +326,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void registerViewCallback(IWendaAnswerCallback callback) {
-        this.mCalllback = callback;
+        this.mCallback = callback;
     }
 
     @Override
     public void unregisterViewCallback() {
-        mCalllback = null;
+        mCallback = null;
     }
 }
