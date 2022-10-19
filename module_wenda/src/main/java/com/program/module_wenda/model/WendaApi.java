@@ -87,6 +87,12 @@ public interface WendaApi {
             @Header("sob_token")String token);
 
     /**
+     * 设为最佳答案
+     */
+    @PUT("/ct/wenda/comment/best/{wendaId}/{wendaCommentId}")
+    Observable<BaseResponseBean> setBestAsComment(@Path("wendaId")String wendaId,@Path("wendaCommentId")String wendaCommentId,@Header("sob_token")String token);
+
+    /**
      * 查看受否关注
      * @param userId    对象id
      * @param token     自己token

@@ -41,6 +41,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     private static final int RETURN_ADD_FOLLOW_ERROR = 8;
     private static final int RETURN_UN_FOLLOW = 9;
     private static final int RETURN_UN_FOLLOW_ERROR = 10;
+    private static final int RETURN_SET_BESTAS = 11;
 
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
@@ -82,6 +83,9 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                     break;
                 case RETURN_UN_FOLLOW_ERROR:
                     mCallback.setUnFollowMsgError(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_SET_BESTAS:
+                    mCallback.setReturnBestasAnswer((BaseResponseBean)msg.obj);
                     break;
             }
         }
@@ -210,6 +214,38 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                         Message message = new Message();
                         message.what = RETURN_PRISE;
                         message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void setBestAsAnswer(String wendaId, String wendaCommentId) {
+        mApi.setBestAsComment(wendaId,wendaCommentId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what =RETURN_SET_BESTAS;
+                        message.obj=o;
                         mHandler.sendMessage(message);
                     }
 

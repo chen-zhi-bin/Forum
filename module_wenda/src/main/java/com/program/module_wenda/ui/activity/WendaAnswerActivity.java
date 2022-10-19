@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -88,6 +91,8 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     private Button mBtnHeaderFollow;
     private TextView mTvReply;
     private TextView mTvReward;
+    private ImageView mIvRight;
+    private SharedPreferencesUtils mSharedPreferencesUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         LogUtils.d("test", "mWendaContentBean = " + mWendaContentBean);
         LogUtils.d("test", "mAnswerBean = " + mAnswerBean);
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
+        mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(this);
         initView();
         initPresenter();
         initListener();
@@ -107,8 +113,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         mWendaAnswerPresenter.registerViewCallback(this);
         //检查是否点赞
         mWendaAnswerPresenter.isThumbCheck(mAnswerBean.getId());
-        SharedPreferencesUtils instance = SharedPreferencesUtils.getInstance(this);
-        String myID = instance.getString(SharedPreferencesUtils.USER_ID);
+        String myID = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_ID);
         if (mAnswerBean.getUid().equals(myID)){
             mBtnHeaderFollow.setVisibility(View.GONE);
         }else {
@@ -172,6 +177,33 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
                 showPriseDialog();
             }
         });
+        mIvRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(mIvRight);
+            }
+        });
+    }
+
+    private void showPopupMenu(ImageView view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.modulewenda_is_more,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.setBestAs) {
+                    mWendaAnswerPresenter.setBestAsAnswer(mWendaContentBean.getId(),mAnswerBean.getId());
+                }
+                return false;
+            }
+        });
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu popupMenu) {
+
+            }
+        });
+        popupMenu.show();
     }
 
     private void unfollow(String uid) {
@@ -287,6 +319,10 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         mTvReward = this.findViewById(R.id.tv_reward);
         includeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
         includeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
+        mIvRight = includeBar.findViewById(R.id.ivRight);
+        if (!mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_ID).equals(mWendaContentBean.getUserId())){
+            mIvRight.setVisibility(View.GONE);
+        }
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View inflate = inflater.inflate(R.layout.modulewenda_wenda_detail_header, null);
@@ -408,6 +444,15 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
             mTvThumb.setTag(true);
             mTvThumb.setText((mAnswerBean.getThumbUp()+1)+"");
             CommonViewUtils.setThumbStyle(mTvThumb,true);
+        }
+    }
+
+    @Override
+    public void setReturnBestasAnswer(BaseResponseBean data) {
+        if (data.getSuccess()){
+            ToastUtils.showToast("设置成功");
+        }else {
+            ToastUtils.showToast(data.getMessage());
         }
     }
 

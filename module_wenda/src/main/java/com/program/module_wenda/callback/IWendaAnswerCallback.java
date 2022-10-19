@@ -25,6 +25,8 @@ public interface IWendaAnswerCallback extends IBaseCallback {
      */
     void setReturnClickThumb(BaseResponseBean data);
 
+    void setReturnBestasAnswer(BaseResponseBean data);
+
     void setFollowState(FollowBean data);
 
     void setFollowStateError(FollowBean data);

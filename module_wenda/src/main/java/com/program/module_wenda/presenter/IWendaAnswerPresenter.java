@@ -14,6 +14,8 @@ public interface IWendaAnswerPresenter extends IBasePresenter<IWendaAnswerCallba
 
     void toCommentPrise(String commentId,int value);
 
+    void setBestAsAnswer(String wendaId,String wendaCommentId);
+
     /**
      * 得到与目标用户之间的关系
      * @param userId    id
