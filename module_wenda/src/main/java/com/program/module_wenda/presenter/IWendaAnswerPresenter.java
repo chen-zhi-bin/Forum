@@ -11,4 +11,6 @@ public interface IWendaAnswerPresenter extends IBasePresenter<IWendaAnswerCallba
     void isThumbCheck(String commentId);
 
     void toWendaCommentThumb(String wendaCommentId);
+
+    void toCommentPrise(String commentId,int value);
 }

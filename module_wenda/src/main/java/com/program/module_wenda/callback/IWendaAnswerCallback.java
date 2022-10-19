@@ -12,6 +12,8 @@ public interface IWendaAnswerCallback extends IBaseCallback {
 
     void setRequestError(String msg);
 
+    void setPriseResult(BaseResponseBean data);
+
     /**
      * 是否点赞
      */

@@ -32,12 +32,13 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     private static final int RETURN_REPLY = 1;
     private static final int RETURN_THUMB = 2;
     private static final int RETURN_CLCIK_THUMB = 3;
+    private static final int RETURN_PRISE = 4;
 
-    private final Handler mHandler = new Handler(Looper.myLooper()){
+    private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case ERROR:
                     mCalllback.setRequestError("请稍后重试");
                     break;
@@ -45,19 +46,22 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                     mCalllback.setRequestError("网络错误");
                     break;
                 case RETURN_REPLY:
-                    mCalllback.replyAnswerReturn((BaseResponseBean)msg.obj);
+                    mCalllback.replyAnswerReturn((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_THUMB:
-                    mCalllback.setReturnThumbClick((BaseResponseBean)msg.obj);
+                    mCalllback.setReturnThumbClick((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_CLCIK_THUMB:
-                    mCalllback.setReturnClickThumb((BaseResponseBean)msg.obj);
+                    mCalllback.setReturnClickThumb((BaseResponseBean) msg.obj);
+                    break;
+                case RETURN_PRISE:
+                    mCalllback.setPriseResult((BaseResponseBean)msg.obj);
                     break;
             }
         }
     };
 
-    public WendaAnswerPresenterImpl(){
+    public WendaAnswerPresenterImpl() {
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         mApi = RetrofitManager.getInstence().getApi();
@@ -65,7 +69,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void replyAnswer(WendaSubCommentInputBean data) {
-        mApi.replyAnswer(data,mToken)
+        mApi.replyAnswer(data, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(mCalllback.TobindToLifecycle())
@@ -77,10 +81,10 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
                     @Override
                     public void onNext(@NonNull Object o) {
-                        LogUtils.d("test","评论子评论 返回 = "+((BaseResponseBean)o).toString());
+                        LogUtils.d("test", "评论子评论 返回 = " + ((BaseResponseBean) o).toString());
                         Message message = new Message();
-                        message.what = ((BaseResponseBean)o).getCode()== Constants.SUCCESS?RETURN_REPLY:ERROR;
-                        message.obj=o;
+                        message.what = ((BaseResponseBean) o).getCode() == Constants.SUCCESS ? RETURN_REPLY : ERROR;
+                        message.obj = o;
                         mHandler.sendMessage(message);
                     }
 
@@ -99,7 +103,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     @Override
     public void isThumbCheck(String commentId) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
-        mApi.commentThumbCheck(commentId,mToken)
+        mApi.commentThumbCheck(commentId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(mCalllback.TobindToLifecycle())
@@ -112,7 +116,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
                     @Override
                     public void onNext(@NonNull Object o) {
                         Message message = new Message();
-                        message.what=RETURN_THUMB;
+                        message.what = RETURN_THUMB;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }
@@ -132,7 +136,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     @Override
     public void toWendaCommentThumb(String wendaCommentId) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
-        mApi.commentThumbCheck(wendaCommentId,mToken)
+        mApi.commentThumbCheck(wendaCommentId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(mCalllback.TobindToLifecycle())
@@ -144,9 +148,41 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
                     @Override
                     public void onNext(@NonNull Object o) {
-                        LogUtils.d("test","data thumb = "+((BaseResponseBean)o).toString());
+                        LogUtils.d("test", "data thumb = " + ((BaseResponseBean) o).toString());
                         Message message = new Message();
-                        message.what = ((BaseResponseBean)o).getCode()==Constants.SUCCESS?RETURN_CLCIK_THUMB:ERROR;
+                        message.what = ((BaseResponseBean) o).getCode() == Constants.SUCCESS ? RETURN_CLCIK_THUMB : ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void toCommentPrise(String commentId, int value) {
+        mApi.commentPrise(commentId, value, false, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCalllback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = RETURN_PRISE;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }

@@ -18,6 +18,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface WendaApi {
 
@@ -74,6 +75,16 @@ public interface WendaApi {
      */
     @GET("/ct/wenda/relative/{wendaId}/{size}")
     Observable<WendaBean> getRelatedQuestion(@Path("wendaId")String wendaId, @Path("size")int size);
+
+    /**
+     * 答案打赏
+     */
+    @PUT("/ct/wenda/comment/prise/{commentId}/{count}")
+    Observable<BaseResponseBean> commentPrise(
+            @Path("commentId")String commentId,
+            @Path("count") int count,
+            @Query("thumbUp")boolean thumbUp,
+            @Header("sob_token")String token);
 
     /**
      * 查看受否关注

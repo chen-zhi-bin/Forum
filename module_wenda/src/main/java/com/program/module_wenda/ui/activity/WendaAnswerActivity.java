@@ -3,6 +3,7 @@ package com.program.module_wenda.ui.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
@@ -40,7 +43,9 @@ import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
 import com.program.module_wenda.presenter.IWendaAnswerPresenter;
 import com.program.module_wenda.presenter.Impl.WendaAnswerPresenterImpl;
 import com.program.module_wenda.utils.PresenterManager;
+import com.program.moudle_base.adapter.CommPriseAdapter;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.PriseSobBean;
 import com.program.moudle_base.model.SubCommentBean;
 import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
@@ -55,6 +60,9 @@ import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
+
+import java.util.Iterator;
+import java.util.List;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -156,7 +164,51 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     }
 
     private void showPriseDialog() {
-//        if (mAnswerBean)
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View inflate = inflater.inflate(R.layout.modulebase_common_prise_dialog, null);
+        mBottomSheetDialog.setContentView(inflate);
+        mBottomSheetDialog.show();
+
+        RoundedImageView ivAvatar = inflate.findViewById(R.id.iv_avatar);
+        TextView tvNickName = inflate.findViewById(R.id.tv_nickname);
+        Glide.with(ivAvatar.getContext())
+                .load(mAnswerBean.getAvatar())
+                .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
+                .circleCrop()
+                .into(ivAvatar);
+        tvNickName.setText(mAnswerBean.getNickname());
+        inflate.findViewById(R.id.iv_close).setOnClickListener(view -> mBottomSheetDialog.dismiss());
+        RecyclerView rvSob = inflate.findViewById(R.id.rv_sob);
+        rvSob.setLayoutManager(new GridLayoutManager(this,3));
+        CommPriseAdapter commPriseAdapter = new CommPriseAdapter();
+        rvSob.setAdapter(commPriseAdapter);
+        PriseSobBean selectItem = new PriseSobBean("",20,true);
+        Button btnPrise = inflate.findViewById(R.id.btn_prise);
+        commPriseAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                Object item = adapter.getItem(position);
+                PriseSobBean data = (PriseSobBean) item;
+                selectItem.setLabel(data.getLabel());
+                selectItem.setValue(data.getValue());
+                selectItem.setChecked(data.isChecked());
+                List<PriseSobBean> beanList = commPriseAdapter.getData();
+                Iterator<PriseSobBean> iterator = beanList.iterator();
+                while (iterator.hasNext()) {
+                    PriseSobBean next = iterator.next();
+                    next.setChecked(selectItem.getValue()==next.getValue());
+                }
+                commPriseAdapter.notifyDataSetChanged();
+            }
+        });
+        btnPrise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mWendaAnswerPresenter.toCommentPrise(mAnswerBean.getId(),selectItem.getValue());
+                mBottomSheetDialog.dismiss();
+            }
+        });
+
     }
 
     private void showReplyDialog(SubCommentBean subComment) {
@@ -314,6 +366,13 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public void setPriseResult(BaseResponseBean data) {
+        if (data.getSuccess()){
+            ToastUtils.showToast("谢谢老板打赏");
+        }
     }
 
     @Override
