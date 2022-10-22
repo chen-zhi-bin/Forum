@@ -13,6 +13,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -101,6 +102,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "mWendaContentBean = " + mWendaContentBean);
         LogUtils.d("test", "mAnswerBean = " + mAnswerBean);
+        Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(this);
         initView();
@@ -402,6 +404,11 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
                     str.indexOf("@"),str.length()
             ));
         }
+    }
+
+    @JavascriptInterface
+    public void showBigImage(int index){
+        CommonViewUtils.showBigImage(this,mCodeView.getImageList(), index);
     }
 
     @Override

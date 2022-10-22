@@ -6,6 +6,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -105,6 +106,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         setContentView(R.layout.modulewenda_activity_wenda_detail);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "wendaId = " + mWendaId);
+        Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(this);
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
@@ -415,7 +417,10 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         Glide.with(this).load(wenda.getAvatar()).circleCrop().into(mIvHeaderAvatar);
     }
 
-
+    @JavascriptInterface
+    public void showBigImage(int index){
+        CommonViewUtils.showBigImage(this,mCodeView.getImageList(), index);
+    }
 
     @Override
     public void onError() {
