@@ -271,7 +271,7 @@ public class CommonViewUtils {
             case 0:
                 btn.setText("+ 关注");
                 btn.setTag(0);
-                btn.setTextColor(ContextCompat.getColor(btn.getContext(), R.color.white));
+                btn.setTextColor(ContextCompat.getColor(btn.getContext(), R.color.colorPrimary));
                 btn.setBackgroundResource(R.drawable.blue_hollow_btn_selector);
                 break;
             case 1:
@@ -291,6 +291,35 @@ public class CommonViewUtils {
                 btn.setTag(3);
                 btn.setTextColor(ContextCompat.getColor(btn.getContext(), R.color.white));
                 btn.setBackgroundResource(R.drawable.blue_solid_btn_selector);
+                break;
+        }
+    }
+
+    public static void setFollowState(TextView view, Integer data) {
+        switch (data){
+            case 0:
+                view.setText("+ 关注");
+                view.setTag(0);
+                view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
+                view.setBackgroundResource(R.drawable.blue_hollow_btn_selector);
+                break;
+            case 1:
+                view.setText("回粉");
+                view.setTag(1);
+                view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
+                view.setBackgroundResource(R.drawable.red_solid_btn_selector);
+                break;
+            case 2:
+                view.setText("已关注");
+                view.setTag(2);
+                view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
+                view.setBackgroundResource(R.drawable.green_solid_btn_selector);
+                break;
+            case 3:
+                view.setText("相互关注");
+                view.setTag(3);
+                view.setTextColor(ContextCompat.getColor(view.getContext(), R.color.white));
+                view.setBackgroundResource(R.drawable.blue_solid_btn_selector);
                 break;
         }
     }

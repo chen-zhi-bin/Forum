@@ -40,6 +40,7 @@ import com.program.module_home.model.bean.ArticleDetailBean;
 import com.program.module_home.presenter.IArticleDetailPresenter;
 import com.program.module_home.ui.adapter.HomeDetailAdapter;
 import com.program.module_home.utils.PresenterManager;
+import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.ToastUtils;
@@ -91,6 +92,8 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private ConstraintLayout mLayoutHeaderAvatar;
     private ConstraintLayout mLayoutHeader;
     private ArticleDetailActivity thisActivity = null;
+    private TextView mTvHeaderFollow;
+    private TextView mTvFollow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,27 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     }
 
     private void initListener() {
+        mTvFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getTag().equals(0) || view.getTag().equals(1)) {
+                    follow(mArticle.getUserId());
+                } else {
+                    unfollow(mArticle.getUserId());
+                }
+            }
+        });
+
+        mTvHeaderFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getTag().equals(0) || view.getTag().equals(1)) {
+                    follow(mArticle.getUserId());
+                } else {
+                    unfollow(mArticle.getUserId());
+                }
+            }
+        });
 
         mRvContent.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -158,6 +182,14 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         });
     }
 
+    private void unfollow(String userId) {
+        mArticleDetailPresenter.unFollow(userId);
+    }
+
+    private void follow(String userId) {
+        mArticleDetailPresenter.addFollow(userId);
+    }
+
     private void initView() {
         RelativeLayout includeBar = this.findViewById(R.id.include_bar);
         includeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
@@ -187,9 +219,11 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mIvQrUrl = mContentBinding.findViewById(R.id.iv_qrcUrl);
         mTvPriseTips = mContentBinding.findViewById(R.id.tv_prise_tips);
         mLayoutHeader = mContentBinding.findViewById(R.id.layout_header);
+        mTvFollow = mContentBinding.findViewById(R.id.tv_follow);
 
         mAdapter = new HomeDetailAdapter();
         mRvContent = this.findViewById(R.id.rv_content);
+        mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
         mRvContent.setHasFixedSize(true);
         mRvContent.setAdapter(mAdapter);
         mRvContent.setLayoutManager(new LinearLayoutManager(this));
@@ -267,6 +301,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
             mTvStarNum.setText(data.getThumbUp().toString());
         }
         mArticleDetailPresenter.getPriseQrCode(data.getUserId());
+        mArticleDetailPresenter.getUserFollowState(data.getUserId());
     }
 
     @Override
@@ -296,6 +331,55 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         //        BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
 //        return  RxLifecycle.bind(objectBehaviorSubject);
         return this.bindToLifecycle();
+    }
+
+    @Override
+    public void setFollowState(FollowBean data) {
+        LogUtils.d("test","data data = "+data.toString());
+        mTvHeaderFollow.setVisibility(View.VISIBLE);
+        if (data.isSuccess()){
+            CommonViewUtils.setFollowState(mTvFollow,data.getData());
+            CommonViewUtils.setFollowState(mTvHeaderFollow,data.getData());
+        }
+    }
+
+    @Override
+    public void setFollowStateError(FollowBean data) {
+        ToastUtils.showToast(data.getMessage());
+    }
+
+    @Override
+    public void setAddFollowMsg(String msg) {
+//        mTvHeaderFollow.setTag(2);
+//        mTvHeaderFollow.setText("已关注");
+        CommonViewUtils.setFollowState(mTvHeaderFollow,2);
+//        mTvFollow.setTag(2);
+//        mTvFollow.setText("已关注");
+        CommonViewUtils.setFollowState(mTvFollow,2);
+        ToastUtils.showToast(msg);
+        mArticleDetailPresenter.getUserFollowState(mArticle.getUserId());
+    }
+
+    @Override
+    public void setAddFollowMsgError(String message) {
+        ToastUtils.showToast(message);
+    }
+
+    @Override
+    public void setUnFollowMsg(String msg) {
+//        mTvHeaderFollow.setTag(0);
+//        mTvHeaderFollow.setText("+关注");
+//        mTvFollow.setTag(0);
+//        mTvFollow.setText("+关注");
+        CommonViewUtils.setFollowState(mTvHeaderFollow,0);
+        CommonViewUtils.setFollowState(mTvFollow,0);
+        ToastUtils.showToast(msg);
+        mArticleDetailPresenter.getUserFollowState(mArticle.getUserId());
+    }
+
+    @Override
+    public void setUnFollowMsgError(String msg) {
+        ToastUtils.showToast(msg);
     }
 
     @Override

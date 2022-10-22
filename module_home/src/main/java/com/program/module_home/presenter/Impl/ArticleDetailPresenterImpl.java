@@ -10,7 +10,11 @@ import com.program.module_home.model.HomeApi;
 import com.program.module_home.model.bean.ArticleDetailBean;
 import com.program.module_home.presenter.IArticleDetailPresenter;
 import com.program.module_home.utils.RetrofitManager;
+import com.program.moudle_base.base.BaseApplication;
+import com.program.moudle_base.model.AddOrUnFollowBean;
+import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
+import com.program.moudle_base.utils.SharedPreferencesUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -28,6 +32,12 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_ERROR = 0;    //错误
     private static final int RETURN_ARTICLE_DETAIL = 1;
     private static final int RETURN_QR_CODE = 2;
+    private static final int RETURN_FOLLOW = 3;
+    private static final int RETURN_FOLLOW_ERROR = 4;
+    private static final int RETURN_ADD_FOLLOW = 5;
+    private static final int RETURN_ADD_FOLLOW_ERROR = 6;
+    private static final int RETURN_UN_FOLLOW = 7;
+    private static final int RETURN_UN_FOLLOW_ERROR = 8;
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -48,12 +58,32 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                         mCallback.setRequestError(((PriseQrCodeBean)msg.obj).getMessage());
                     }
                     break;
+                case RETURN_FOLLOW:
+                    mCallback.setFollowState((FollowBean) msg.obj);
+                    break;
+                case RETURN_FOLLOW_ERROR:
+                    mCallback.setFollowStateError((FollowBean) msg.obj);
+                    break;
+                case RETURN_ADD_FOLLOW:
+                    mCallback.setAddFollowMsg(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_ADD_FOLLOW_ERROR:
+                    mCallback.setAddFollowMsgError(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_UN_FOLLOW:
+                    mCallback.setUnFollowMsg(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_UN_FOLLOW_ERROR:
+                    mCallback.setUnFollowMsgError(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
             }
         }
     };
+    private final String mToken;
 
     public ArticleDetailPresenterImpl() {
         mApi = RetrofitManager.getInstence().getApi();
+        mToken = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
     }
 
     @Override
@@ -105,6 +135,99 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                         Message message = new Message();
                         message.what = RETURN_QR_CODE;
                         message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getUserFollowState(String userId) {
+        mApi.getFollowState(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<FollowBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull FollowBean followBean) {
+                        Message message = new Message();
+                        message.what = followBean.getCode() == Constants.SUCCESS ? RETURN_FOLLOW : RETURN_FOLLOW_ERROR;
+                        message.obj = followBean;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void addFollow(String userId) {
+        mApi.addFollow(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<AddOrUnFollowBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull AddOrUnFollowBean addFollowBean) {
+                        Message message = new Message();
+                        message.what = addFollowBean.getCode() == Constants.SUCCESS ? RETURN_ADD_FOLLOW : RETURN_ADD_FOLLOW_ERROR;
+                        message.obj = addFollowBean;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void unFollow(String userId) {
+        mApi.unFollow(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<AddOrUnFollowBean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull AddOrUnFollowBean addOrUnFollowBean) {
+                        Message message = new Message();
+                        message.what = addOrUnFollowBean.getCode() == Constants.SUCCESS ? RETURN_UN_FOLLOW : RETURN_UN_FOLLOW_ERROR;
+                        message.obj = addOrUnFollowBean;
                         mHandler.sendMessage(message);
                     }
 
