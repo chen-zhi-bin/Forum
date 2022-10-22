@@ -23,6 +23,10 @@ public class UIUtils {
             return sMetrics != null ? sMetrics.widthPixels : 0;
         }
 
+    public static int getScreenHeeight(){
+        return sMetrics!=null?sMetrics.heightPixels:0;
+    }
+
     public static int dp2px(float dipValue) {
         final float scale = sMetrics != null ? sMetrics.density : 1;
         return (int) (dipValue * scale + 0.5f);

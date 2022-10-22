@@ -46,7 +46,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -93,7 +93,27 @@ dependencies {
     implementation rootProject.ext.dependencies.glide
     annotationProcessor rootProject.ext.dependencies.glide_compiler
 
+    implementation rootProject.ext.dependencies.refresh_layout
+    implementation rootProject.ext.dependencies.refresh_header
+    implementation rootProject.ext.dependencies.refresh_footer
 
+    implementation rootProject.ext.dependencies.roundedimageview
+    implementation rootProject.ext.dependencies.super_text_view
+
+    implementation rootProject.ext.dependencies.basequick_adapter
+
+    implementation rootProject.ext.dependencies.mojito_version
+    implementation rootProject.ext.dependencies.mojito_image_view_loader
+    //load with coil
+    implementation "com.github.mikaelzero.mojito:coilimageloader:1.8.5"
+//load with glide
+    implementation "com.github.mikaelzero.mojito:GlideImageLoader:1.8.5"
+//load with fresco
+    implementation "com.github.mikaelzero.mojito:FrescoImageLoader:1.8.5"
+    
+    implementation rootProject.ext.dependencies.banner
+    implementation rootProject.ext.dependencies.codeview
+    api 'com.tencent.tbs:tbssdk:44176'      //x5webview
 
     api project(':module_base')
     api project(":lib_base")

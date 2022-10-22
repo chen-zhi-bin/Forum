@@ -1,5 +1,6 @@
 package com.program.moudle_base.utils;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.text.Spanned;
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.HtmlImageGetter;
 import com.program.lib_common.service.home.wrap.HomeServiceWrap;
@@ -27,6 +29,7 @@ import net.mikaelzero.mojito.MojitoView;
 import net.mikaelzero.mojito.ext.MojitoViewExtKt;
 import net.mikaelzero.mojito.impl.DefaultPercentProgress;
 import net.mikaelzero.mojito.impl.NumIndicator;
+import net.mikaelzero.mojito.interfaces.IProgress;
 import net.mikaelzero.mojito.interfaces.OnMojitoListener;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +39,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function4;
 
 public class CommonViewUtils {
 
@@ -161,6 +166,73 @@ public class CommonViewUtils {
         });
     }
 
+    public static void showBigImage(Context context,List<String> pics,int position){
+        Mojito.Companion.start(context, new Function1<MojitoBuilder, Unit>() {
+            @Override
+            public Unit invoke(MojitoBuilder mojitoBuilder) {
+                mojitoBuilder.urls(pics);
+                mojitoBuilder.position(position);
+                mojitoBuilder.setOnMojitoListener(new OnMojitoListener() {
+                    @Override
+                    public void onStartAnim(int i) {
+
+                    }
+
+                    @Override
+                    public void onClick(@NotNull View view, float v, float v1, int i) {
+
+                    }
+
+                    @Override
+                    public void onLongClick(@Nullable FragmentActivity fragmentActivity, @NotNull View view, float v, float v1, int i) {
+
+                    }
+
+                    @Override
+                    public void onShowFinish(@NotNull MojitoView mojitoView, boolean b) {
+
+                    }
+
+                    @Override
+                    public void onMojitoViewFinish(int i) {
+
+                    }
+
+                    @Override
+                    public void onDrag(@NotNull MojitoView mojitoView, float v, float v1) {
+
+                    }
+
+                    @Override
+                    public void onLongImageMove(float v) {
+
+                    }
+
+                    @Override
+                    public void onViewPageSelected(int i) {
+
+                    }
+                });
+//                mojitoBuilder.mojitoListener(null, new Function4<View, Float, Float, Integer, Unit>() {
+//                    @Override
+//                    public Unit invoke(View view, Float aFloat, Float aFloat2, Integer integer) {
+//                        return null;
+//                    }
+//                },null,null,null,null,null
+//                ,null);
+                mojitoBuilder.progressLoader(new Function0<IProgress>() {
+                    @Override
+                    public IProgress invoke() {
+                        new DefaultPercentProgress();
+                        return null;
+                    }
+                });
+                mojitoBuilder.setIndicator(new NumIndicator());
+                return null;
+            }
+        });
+    }
+
 
     public static void setThumbStyle(TextView view,Boolean isThumb){
         if (isThumb){
@@ -227,14 +299,17 @@ public class CommonViewUtils {
 //        if (url.startsWith(Constants.WEBSITE_URL)){
 //            String[] split = url.split("/");
 //        }
-        if (url.startsWith(Constants.UCENTER_URL)){
+        if (url.startsWith(Constants.WEBSITE_URL)){
+            String[] split = url.split("/");
+            HomeServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[split.length-1],"");
+        } else if (url.startsWith(Constants.UCENTER_URL)){
             String[] split = url.split("/");
             UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[split.length-1]);
         }else if (url.startsWith(Constants.WENDA_URL)){
             String[] split = url.split("/");
             WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[split.length-1]);
         }else {
-
+            HomeServiceWrap.Singletion.INSTANCE.getHolder().launchWebView(url);
         }
     }
 }

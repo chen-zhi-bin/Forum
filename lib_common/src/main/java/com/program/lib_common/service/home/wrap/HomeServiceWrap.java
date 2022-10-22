@@ -26,13 +26,27 @@ public class HomeServiceWrap {
        return mService.getFragment();
    }
 
+   public void launchDetail(String id,String title){
+       ARouter.getInstance()
+               .build(RoutePath.Home.PAGE_ARTICLE)
+               .withString("articleId", id)
+               .withString("articleTitle", title)
+               .navigation();
+   }
+
+   public void launchWebView(String url){
+       ARouter.getInstance()
+               .build(RoutePath.Home.PAGE_WEBVIEW)
+               .withString("url", url)
+               .navigation();
+   }
+
+
    private HomeServiceWrap(){
-       Log.d("HomeServiceWrap","onCreate");
        ARouter.getInstance().inject(this);
        Object navigation = ARouter.getInstance().build(RoutePath.Home.SERVICE_HOME).navigation();
        mService = (IHomeService) navigation;
 //       mService = (IHomeService) ARouter.getInstance().build(RoutePath.Home.SERVICE_HOME).navigation();
-       Log.d("HomeServiceWrap","mService = "+mService);
    }
 
    public static final class Singletion{

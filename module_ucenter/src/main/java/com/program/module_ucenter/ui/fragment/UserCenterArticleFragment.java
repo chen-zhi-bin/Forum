@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
+import com.program.lib_common.service.home.wrap.HomeServiceWrap;
 import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.UserCenterArticleAdapter;
@@ -22,6 +24,7 @@ import com.program.module_ucenter.presenter.IUserCenterArticlePresenter;
 import com.program.module_ucenter.utils.PresenterManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
+import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -111,13 +114,19 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
             }
         });
 
-        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 if (adapter.getItem(position) instanceof UserWendaBean.DataBean.ContentBean){
                     UserWendaBean.DataBean.ContentBean wendaComment = (UserWendaBean.DataBean.ContentBean) adapter.getItem(position);
                     LogUtils.d("test"," asdasddata = "+wendaComment.getWendaComment().getWendaId());
                     WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(wendaComment.getWendaComment().getWendaId());
+                }else if (adapter.getItem(position) instanceof ShareBean.DataBean.ListBean){
+                    ShareBean.DataBean.ListBean shareItem = (ShareBean.DataBean.ListBean) adapter.getItem(position);
+                    CommonViewUtils.toWebView(shareItem.getUrl());
+                }else if (adapter.getItem(position) instanceof ArticleBean.DataBean.ListBean){
+                    ArticleBean.DataBean.ListBean item = (ArticleBean.DataBean.ListBean) adapter.getItem(position);
+                    HomeServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getId(),item.getTitle());
                 }
             }
         });

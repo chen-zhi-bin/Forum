@@ -1,4 +1,4 @@
-package com.program.module_home.fragment;
+package com.program.module_home.ui.fragment;
 
 import android.view.View;
 
