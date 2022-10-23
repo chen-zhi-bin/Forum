@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -117,7 +118,7 @@ public class HomeDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .placeholder(com.program.moudle_base.R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                         .circleCrop()       //圆角
                         .into(ivRecommendAvatar);
-                RoundedImageView ivCover = viewHolder.getView(R.id.iv_cover);
+                ImageView ivCover = viewHolder.getView(R.id.iv_cover);
                 BannerUtils.setBannerRound(ivCover,Float.parseFloat(w13dp+""));
                 if (!recommend.getCovers().isEmpty()) {
                     Glide.with(ivCover)

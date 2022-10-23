@@ -8,6 +8,8 @@ import com.program.lib_common.Constants;
 import com.program.module_home.callback.IArticleDetailCallback;
 import com.program.module_home.model.HomeApi;
 import com.program.module_home.model.bean.ArticleDetailBean;
+import com.program.module_home.model.bean.ArticleRecommendBean;
+import com.program.module_home.model.bean.CommentBean;
 import com.program.module_home.presenter.IArticleDetailPresenter;
 import com.program.module_home.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
@@ -38,6 +40,8 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_ADD_FOLLOW_ERROR = 6;
     private static final int RETURN_UN_FOLLOW = 7;
     private static final int RETURN_UN_FOLLOW_ERROR = 8;
+    private static final int RETURN_ARTICLE_COMMENT = 9;
+    private static final int RETURN_ARTICLE_RECOMMEND = 10;
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -75,6 +79,12 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     break;
                 case RETURN_UN_FOLLOW_ERROR:
                     mCallback.setUnFollowMsgError(((AddOrUnFollowBean) msg.obj).getMessage());
+                    break;
+                case RETURN_ARTICLE_COMMENT:
+                    mCallback.setArticleComment((CommentBean)msg.obj);
+                    break;
+                case RETURN_ARTICLE_RECOMMEND:
+                    mCallback.setArticleRecommend((ArticleRecommendBean)msg.obj);
                     break;
             }
         }
@@ -150,21 +160,89 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                 });
     }
 
+    private int page = 1;
+
     @Override
-    public void getUserFollowState(String userId) {
-        mApi.getFollowState(userId, mToken)
+    public void getArticleComment(String articleId) {
+        page = 1;
+        mApi.getArticleCommentList(articleId,page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<FollowBean>() {
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull FollowBean followBean) {
+                    public void onNext(@NonNull Object o) {
                         Message message = new Message();
-                        message.what = followBean.getCode() == Constants.SUCCESS ? RETURN_FOLLOW : RETURN_FOLLOW_ERROR;
+                        message.what = ((CommentBean)o).getCode()==Constants.SUCCESS?RETURN_ARTICLE_COMMENT:ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getArticleRecommend(String articleId) {
+        mApi.getArticleRecommend(articleId,10)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = ((ArticleRecommendBean)o).getCode()==Constants.SUCCESS?RETURN_ARTICLE_RECOMMEND:ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getUserFollowState(String userId) {
+        mApi.getFollowState(userId, mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object followBean) {
+                        Message message = new Message();
+                        message.what = ((FollowBean)followBean).getCode() == Constants.SUCCESS ? RETURN_FOLLOW : RETURN_FOLLOW_ERROR;
                         message.obj = followBean;
                         mHandler.sendMessage(message);
                     }
@@ -186,16 +264,17 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
         mApi.addFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<AddOrUnFollowBean>() {
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull AddOrUnFollowBean addFollowBean) {
+                    public void onNext(@NonNull Object addFollowBean) {
                         Message message = new Message();
-                        message.what = addFollowBean.getCode() == Constants.SUCCESS ? RETURN_ADD_FOLLOW : RETURN_ADD_FOLLOW_ERROR;
+                        message.what = ((AddOrUnFollowBean)addFollowBean).getCode() == Constants.SUCCESS ? RETURN_ADD_FOLLOW : RETURN_ADD_FOLLOW_ERROR;
                         message.obj = addFollowBean;
                         mHandler.sendMessage(message);
                     }
@@ -217,16 +296,17 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
         mApi.unFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<AddOrUnFollowBean>() {
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(@NonNull AddOrUnFollowBean addOrUnFollowBean) {
+                    public void onNext(@NonNull Object addOrUnFollowBean) {
                         Message message = new Message();
-                        message.what = addOrUnFollowBean.getCode() == Constants.SUCCESS ? RETURN_UN_FOLLOW : RETURN_UN_FOLLOW_ERROR;
+                        message.what = ((AddOrUnFollowBean)addOrUnFollowBean).getCode() == Constants.SUCCESS ? RETURN_UN_FOLLOW : RETURN_UN_FOLLOW_ERROR;
                         message.obj = addOrUnFollowBean;
                         mHandler.sendMessage(message);
                     }

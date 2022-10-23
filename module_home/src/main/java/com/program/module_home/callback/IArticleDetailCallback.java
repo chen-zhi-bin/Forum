@@ -1,6 +1,8 @@
 package com.program.module_home.callback;
 
 import com.program.module_home.model.bean.ArticleDetailBean;
+import com.program.module_home.model.bean.ArticleRecommendBean;
+import com.program.module_home.model.bean.CommentBean;
 import com.program.moudle_base.base.IBaseCallback;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
@@ -13,6 +15,11 @@ public interface IArticleDetailCallback extends IBaseCallback {
     void setRequestError(String msg);
 
     void setPriseQrCode(PriseQrCodeBean data);
+
+    void setArticleComment(CommentBean data);
+
+    void setArticleRecommend(ArticleRecommendBean data);
+
 
     LifecycleTransformer<Object> TobindToLifecycle();
 

@@ -28,6 +28,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
@@ -37,11 +38,14 @@ import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_home.R;
 import com.program.module_home.callback.IArticleDetailCallback;
 import com.program.module_home.model.bean.ArticleDetailBean;
+import com.program.module_home.model.bean.ArticleRecommendBean;
+import com.program.module_home.model.bean.CommentBean;
 import com.program.module_home.presenter.IArticleDetailPresenter;
 import com.program.module_home.ui.adapter.HomeDetailAdapter;
 import com.program.module_home.utils.PresenterManager;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
+import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
@@ -53,6 +57,11 @@ import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
+
+import java.util.List;
+
+import kotlin.collections.CollectionsKt;
+import kotlin.jvm.internal.markers.KMutableList;
 
 @Route(path = RoutePath.Home.PAGE_ARTICLE)
 public class ArticleDetailActivity extends RxAppCompatActivity implements IArticleDetailCallback {
@@ -94,6 +103,8 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private ArticleDetailActivity thisActivity = null;
     private TextView mTvHeaderFollow;
     private TextView mTvFollow;
+
+    private  List<MultiItemEntity> mCommentList = CollectionsKt.mutableListOf();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,7 +287,6 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
                 .into(mIvAvatar);
 
         mTvNickname.setText(data.getNickname());
-        //todo:关注
         mIvAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -302,6 +312,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         }
         mArticleDetailPresenter.getPriseQrCode(data.getUserId());
         mArticleDetailPresenter.getUserFollowState(data.getUserId());
+        mArticleDetailPresenter.getArticleComment(data.getId());
     }
 
     @Override
@@ -324,6 +335,33 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         } else {
             mIvQrUrl.setVisibility(View.GONE);
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void setArticleComment(CommentBean data) {
+        mAdapter.getData().clear();
+        mCommentList.clear();
+        mCommentList.add(new TitleMultiBean("文章评论"));
+        List<CommentBean.DataBean.ContentBean> content = data.getData().getContent();
+        for (CommentBean.DataBean.ContentBean contentBean : content) {
+            mCommentList.add(contentBean);
+            mCommentList.addAll(contentBean.getSubComments());
+        }
+        mAdapter.addData(0,mCommentList);
+        if (mAdapter.getData().size()>mCommentList.size()){
+            mAdapter.notifyItemChanged(mCommentList.size()+1);
+        }
+        mTvReplyNum.setVisibility(View.VISIBLE);
+        mTvReplyNum.setText(data.getData().getContent().size()+"");
+        mArticleDetailPresenter.getArticleRecommend(mArticleId);
+    }
+
+    @Override
+    public void setArticleRecommend(ArticleRecommendBean data) {
+        List<ArticleRecommendBean.DataBean> list = data.getData();
+        mAdapter.addData(new TitleMultiBean("相关推荐"));
+        mAdapter.addData(list);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.program.module_home.model;
 
 import com.program.module_home.model.bean.ArticleDetailBean;
+import com.program.module_home.model.bean.ArticleRecommendBean;
+import com.program.module_home.model.bean.CommentBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
@@ -22,6 +24,18 @@ public interface HomeApi {
      */
     @GET("ast/prise-qr-code/{userId}")
     Observable<PriseQrCodeBean> getPriseQrCode(@Path("userId")String userId);
+
+    /**
+     * 评论列表
+     */
+    @GET("/ct/article/comment/{articleId}/{page}")
+    Observable<CommentBean> getArticleCommentList(@Path("articleId")String articleId,@Path("page")int page);
+
+    /**
+     *获取文章的相关推荐
+     */
+    @GET("/ct/article/recommend/{articleId}/{size}")
+    Observable<ArticleRecommendBean> getArticleRecommend(@Path("articleId")String articleId, @Path("size")int size);
 
     /**
      * 查看受否关注

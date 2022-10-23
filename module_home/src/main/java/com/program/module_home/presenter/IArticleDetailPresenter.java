@@ -9,6 +9,10 @@ public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCa
 
     void getPriseQrCode(String userId);
 
+    void getArticleComment(String articleId);
+
+    void getArticleRecommend(String articleId);
+
     /**
      * 得到与目标用户之间的关系
      * @param userId    id
