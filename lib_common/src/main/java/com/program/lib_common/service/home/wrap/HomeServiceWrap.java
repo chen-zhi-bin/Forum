@@ -9,6 +9,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.home.IHomeService;
 
+import java.util.function.LongUnaryOperator;
+
 public class HomeServiceWrap {
 
    @Autowired(name = RoutePath.Home.SERVICE_HOME)
@@ -38,6 +40,13 @@ public class HomeServiceWrap {
        ARouter.getInstance()
                .build(RoutePath.Home.PAGE_WEBVIEW)
                .withString("url", url)
+               .navigation();
+   }
+
+   public void launchPriseActivityList(String articleId){
+       ARouter.getInstance()
+               .build(RoutePath.Home.PAGE_PRISE_LIST)
+               .withString(RoutePath.Home.ARTICLE_ID,articleId)
                .navigation();
    }
 

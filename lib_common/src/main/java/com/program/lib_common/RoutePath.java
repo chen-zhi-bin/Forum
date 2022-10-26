@@ -8,9 +8,11 @@ public class RoutePath {
     }
 
     public static class Home{
+        public static final String ARTICLE_ID="articleId";
         public static final String SERVICE_HOME="/home/SERVICE_HOME";
         public static final String PAGE_ARTICLE = "/home/ArticleDetailActivity";
         public static final String PAGE_WEBVIEW = "/home/WebViewActivity";
+        public static final String PAGE_PRISE_LIST = "/home/PriseListActivity";
     }
 
     public static class Moyu{

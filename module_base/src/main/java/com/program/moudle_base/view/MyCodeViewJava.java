@@ -1,5 +1,6 @@
 package com.program.moudle_base.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -39,6 +40,7 @@ public class MyCodeViewJava extends CodeView {
         super(context, attrs);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         getParent().getParent().requestDisallowInterceptTouchEvent(true);
@@ -100,7 +102,8 @@ public class MyCodeViewJava extends CodeView {
         });
 
         for (Element element : allHTag) {
-            String id = element.tag().getName() + (int) Math.random();
+            Random random = new Random();
+            String id = element.tag().getName() + random.nextInt();
             id = id.replace("-","");
             element.attr("id",id);
             switch (element.tag().getName().toLowerCase()){
@@ -125,7 +128,7 @@ public class MyCodeViewJava extends CodeView {
         for(Iterator var4 = ((Iterable)imgs).iterator(); var4.hasNext(); ++index) {
             Element element = (Element)var4.next();
             element.attr("style", "max-width:100%;height:auto;-webkit-backface-visibility: hidden;");
-            element.attr("onclick", "javascript:native.showBigImage(" + index + ')');
+            element.attr("onclick", "javascript:native.showBigImage(" + index + ")");
             List list = this.imageList;
             String s = element.attr("src");
             Intrinsics.checkNotNullExpressionValue(s, "element.attr(\"src\")");

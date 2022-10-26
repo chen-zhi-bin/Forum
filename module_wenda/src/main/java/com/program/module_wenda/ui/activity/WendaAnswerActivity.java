@@ -44,7 +44,7 @@ import com.program.module_wenda.model.bean.WendaContentBean;
 import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
 import com.program.module_wenda.presenter.IWendaAnswerPresenter;
 import com.program.module_wenda.utils.PresenterManager;
-import com.program.moudle_base.adapter.CommPriseAdapter;
+import com.program.moudle_base.adapter.CommonPriseAdapter;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseSobBean;
@@ -233,7 +233,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         inflate.findViewById(R.id.iv_close).setOnClickListener(view -> mBottomSheetDialog.dismiss());
         RecyclerView rvSob = inflate.findViewById(R.id.rv_sob);
         rvSob.setLayoutManager(new GridLayoutManager(this,3));
-        CommPriseAdapter commPriseAdapter = new CommPriseAdapter();
+        CommonPriseAdapter commPriseAdapter = new CommonPriseAdapter();
         rvSob.setAdapter(commPriseAdapter);
         PriseSobBean selectItem = new PriseSobBean("",20,true);
         Button btnPrise = inflate.findViewById(R.id.btn_prise);

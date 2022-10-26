@@ -8,8 +8,8 @@ import com.program.moudle_base.model.PriseSobBean;
 
 import org.jetbrains.annotations.NotNull;
 
-public class CommPriseAdapter extends BaseQuickAdapter<PriseSobBean, BaseViewHolder> {
-    public CommPriseAdapter() {
+public class CommonPriseAdapter extends BaseQuickAdapter<PriseSobBean, BaseViewHolder> {
+    public CommonPriseAdapter() {
         super(R.layout.modulebase_common_adapter_prise);
         for (int i = 1; i <=6; i++) {
             if (i<=3){

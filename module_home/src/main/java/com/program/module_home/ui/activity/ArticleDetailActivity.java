@@ -1,26 +1,24 @@
 package com.program.module_home.ui.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.media.tv.TvContentRating;
 import android.os.Bundle;
-import android.util.DebugUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,25 +26,38 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
+import com.program.lib_common.service.home.wrap.HomeServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_home.R;
 import com.program.module_home.callback.IArticleDetailCallback;
 import com.program.module_home.model.bean.ArticleDetailBean;
 import com.program.module_home.model.bean.ArticleRecommendBean;
 import com.program.module_home.model.bean.CommentBean;
+import com.program.module_home.model.bean.CommentInputBean;
+import com.program.module_home.model.bean.PriseArticleInputBean;
+import com.program.module_home.model.bean.SubCommentInputBean;
 import com.program.module_home.presenter.IArticleDetailPresenter;
 import com.program.module_home.ui.adapter.HomeDetailAdapter;
 import com.program.module_home.utils.PresenterManager;
+import com.program.moudle_base.adapter.CommonPriseAdapter;
+import com.program.moudle_base.model.ArticleTitleBean;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
+import com.program.moudle_base.model.PriseSobBean;
 import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
+import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
 import com.program.moudle_base.view.MyCodeViewJava;
@@ -58,10 +69,12 @@ import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 import java.util.List;
 
 import kotlin.collections.CollectionsKt;
-import kotlin.jvm.internal.markers.KMutableList;
 
 @Route(path = RoutePath.Home.PAGE_ARTICLE)
 public class ArticleDetailActivity extends RxAppCompatActivity implements IArticleDetailCallback {
@@ -105,6 +118,13 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private TextView mTvFollow;
 
     private  List<MultiItemEntity> mCommentList = CollectionsKt.mutableListOf();
+    private TextView mTvReply;
+    private String mToken;
+    private ImageView mIvStar;
+    private ImageView mIvList;
+    private TextView mTvReward;
+
+    //todo:收藏
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +134,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         LogUtils.d("test", "id =" + mArticleId);
         LogUtils.d("test", "title =" + mArticleTitle);
+        mToken = SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         thisActivity = this;
         initView();
         initPresenter();
@@ -124,9 +145,69 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mArticleDetailPresenter = PresenterManager.getInstance().getArticleDetailPresenter();
         mArticleDetailPresenter.registerViewCallback(this);
         mArticleDetailPresenter.getArticleDetail(mArticleId);
+        mArticleDetailPresenter.getArticleThumbUpState(mArticleId);
     }
 
     private void initListener() {
+        mTvPriseList.setOnClickListener(view -> HomeServiceWrap.Singletion.INSTANCE.getHolder().launchPriseActivityList(mArticleId));
+        mTvReward.setOnClickListener(view -> showPriseDialog());
+        mIvSwitch.setOnClickListener(view -> {
+            int tag = (int) mIvSwitch.getTag();
+            if (tag == 1){
+                mIvSwitch.setImageResource(R.mipmap.ic_detail_reply);
+                mRvContent.scrollToPosition(0);
+                mTvReplyNum.setVisibility(View.VISIBLE);
+                mIvSwitch.setTag(0);
+            }else {
+                switchScrollY = scrollY;
+                mIvSwitch.setImageResource(R.mipmap.ic_detail_back);
+                mRvContent.scrollToPosition(2);
+                mTvReplyNum.setVisibility(View.GONE);
+                mIvSwitch.setTag(1);
+            }
+        });
+        mIvList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showContentList();
+            }
+        });
+
+        mIvStar.setOnClickListener(view -> {
+//            Object tag = mTvStarNum.getTag();
+//            if (tag.equals("yes")){
+//                return;
+//            }
+            thumbUp();
+        });
+
+        mIvHeaderAvatar.setOnClickListener(view -> {
+            if (mArticle != null) {
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(mArticle.getUserId());
+            }
+        });
+
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                int id = view.getId();
+                if (id == R.id.tv_related_nickname || id == R.id.iv_related_avatar) {
+                    ArticleRecommendBean.DataBean recommend = (ArticleRecommendBean.DataBean) adapter.getItem(position);
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(recommend.getUserId());
+                }else if (id==R.id.tv_comment_nickname||id==R.id.iv_comment_avatar){
+                    CommentBean.DataBean.ContentBean comment = (CommentBean.DataBean.ContentBean) adapter.getItem(position);
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(comment.getUserId());
+                }else if (id==R.id.iv_comment_reply){
+                    CommentBean.DataBean.ContentBean comment = (CommentBean.DataBean.ContentBean) adapter.getItem(position);
+                    showReplyDialog(comment);
+                }
+            }
+        });
+
+        mTvReply.setOnClickListener(view -> {
+            showReplyDialog(null);
+        });
+
         mTvFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,6 +274,151 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         });
     }
 
+    private void showPriseDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View inflate = inflater.inflate(R.layout.modulebase_common_prise_dialog, null);
+        mBottomSheetDialog.setContentView(inflate);
+        mBottomSheetDialog.show();
+
+        ImageView ivAvatar = inflate.findViewById(R.id.iv_avatar);
+        Button btnPrise = inflate.findViewById(R.id.btn_prise);
+        Glide.with(ivAvatar.getContext())
+                .load(mArticle.getAvatar())
+                .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
+                .circleCrop()
+                .into(ivAvatar);
+        TextView tvNickname = inflate.findViewById(R.id.tv_nickname);
+        tvNickname.setText(mArticle.getNickname());
+        inflate.findViewById(R.id.iv_close).setOnClickListener(view -> mBottomSheetDialog.dismiss());
+        RecyclerView rvSob = inflate.findViewById(R.id.rv_sob);
+        rvSob.setLayoutManager(new GridLayoutManager(this,3));
+        CommonPriseAdapter priseAdapter = new CommonPriseAdapter();
+        rvSob.setAdapter(priseAdapter);
+        PriseSobBean selectItem = new PriseSobBean("",20,true);
+        priseAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                Object item = adapter.getItem(position);
+                PriseSobBean data = (PriseSobBean) item;
+                selectItem.setLabel(data.getLabel());
+                selectItem.setValue(data.getValue());
+                selectItem.setChecked(data.isChecked());
+                List<PriseSobBean> beanList = priseAdapter.getData();
+                Iterator<PriseSobBean> iterator = beanList.iterator();
+                while (iterator.hasNext()) {
+                    PriseSobBean next = iterator.next();
+                    next.setChecked(selectItem.getValue()==next.getValue());
+                }
+                priseAdapter.notifyDataSetChanged();
+            }
+        });
+        btnPrise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mArticleDetailPresenter.priseArticle(new PriseArticleInputBean(mArticleId,selectItem.getValue()));
+                mBottomSheetDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 显示目录
+     */
+    @SuppressLint("SetJavaScriptEnabled")
+    private void showContentList() {
+        mCodeView.getSettings().setJavaScriptEnabled(true);
+        List<ArticleTitleBean> titleList = mCodeView.getTitleList();
+        LogUtils.d("ArticleDetailActivity","titleList = "+titleList.toString());
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View inflate = inflater.inflate(R.layout.modulehome_dialog_content_list, null);
+        inflate.findViewById(R.id.iv_close).setOnClickListener(view -> finish());
+        RecyclerView rvList = inflate.findViewById(R.id.rv_list);
+        rvList.setLayoutManager(new LinearLayoutManager(this));
+        BaseQuickAdapter<ArticleTitleBean, BaseViewHolder> adapter = new BaseQuickAdapter<ArticleTitleBean, BaseViewHolder>(
+                R.layout.modulehome_dialog_adapter_content,titleList
+        ) {
+            @Override
+            protected void convert(@NotNull BaseViewHolder viewHolder, ArticleTitleBean articleTitleBean) {
+                if (articleTitleBean != null) {
+                    TextView tvTitle = viewHolder.getView(R.id.tv_title);
+                    tvTitle.setText(articleTitleBean.getTitle());
+                    switch (articleTitleBean.getLevel()) {
+                        case 2:
+                            tvTitle.setPadding(UIUtils.dp2px(8f),0,0,0);
+                            break;
+                        case 3:
+                            tvTitle.setPadding(UIUtils.dp2px(28f),0,0,0);
+                            tvTitle.setTextSize(13f);
+                            break;
+                        case 4:
+                            tvTitle.setPadding(UIUtils.dp2px(48f),0,0,0);
+                            tvTitle.setTextSize(12f);
+                            break;
+                    }
+                }
+            }
+        };
+        rvList.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+               ArticleTitleBean item = (ArticleTitleBean) adapter.getItem(position);
+                String id = item.getElementId() + "";
+                String js = "javascript:getElementTop("+"'"+id+"'"+")";
+                LogUtils.d("test","js == "+js);
+                mCodeView.evaluateJavascript(js, (ValueCallback<String>) s -> {
+                    if (s!=null&&!s.equals("null")) {
+                        // 从js中获取到offsetTop 要dp2px转一下，不知道为啥？？？
+                        mRvContent.scrollBy(0, UIUtils.dp2px(Float.parseFloat(s)) - scrollY);
+                    }
+                });
+                mBottomSheetDialog.dismiss();
+            }
+        });
+        mBottomSheetDialog.setContentView(inflate);
+        mBottomSheetDialog.show();
+    }
+
+    private void thumbUp() {
+        if (mToken!=null&& !mToken.equals("")){
+            mArticleDetailPresenter.addArticleThumbUp(mArticleId);
+        }
+    }
+
+    private void showReplyDialog(CommentBean.DataBean.ContentBean comment) {
+        mReplyDialog.show();
+        if (comment!=null){
+            mReplyDialog.setReplyTitle("回复"+comment.getNickname());
+        }
+        mReplyDialog.sendListener(v -> {
+           if (comment ==null){
+               //评论文章
+               commentArticle(v);
+           }else {
+               //评论回复
+               replyComment(comment,v);
+           }
+        });
+    }
+
+    private void replyComment(CommentBean.DataBean.ContentBean comment, String v) {
+        ToastUtils.showToast("v ="+v);
+        mArticleDetailPresenter.replyComment(
+                new SubCommentInputBean(
+                       mArticleId,
+                        comment.getId(),
+                        comment.getUserId(),
+                        comment.getNickname(),
+                        v
+                )
+        );
+    }
+
+    private void commentArticle(String str) {
+        CommentInputBean commentInputBean = new CommentInputBean(mArticleId, str);
+        mArticleDetailPresenter.commentArticle(commentInputBean);
+    }
+
     private void unfollow(String userId) {
         mArticleDetailPresenter.unFollow(userId);
     }
@@ -217,6 +443,10 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvHeaderNickname = this.findViewById(R.id.tv_header_nickname);
         mLayoutHeaderAvatar = this.findViewById(R.id.layout_header_avatar);
+        mTvReply = this.findViewById(R.id.tv_reply);
+        mIvStar = this.findViewById(R.id.iv_star);
+        mIvList = this.findViewById(R.id.iv_list);
+        mTvReward = this.findViewById(R.id.tv_reward);
 
         LayoutInflater inflater = LayoutInflater.from(this);
         mContentBinding = inflater.inflate(R.layout.modulehome_home_detail_content_layout, null);
@@ -362,6 +592,62 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         List<ArticleRecommendBean.DataBean> list = data.getData();
         mAdapter.addData(new TitleMultiBean("相关推荐"));
         mAdapter.addData(list);
+    }
+
+    @Override
+    public void setReturnCommentArticle(BaseResponseBean data) {
+        if (data.getSuccess()) {
+            ToastUtils.showToast("评论成功");
+            mArticleDetailPresenter.getArticleComment(mArticleId);
+        }else {
+            ToastUtils.showToast(data.getMessage());
+        }
+        mReplyDialog.dismiss();
+    }
+
+    @Override
+    public void setReturnSubCommentArticle(BaseResponseBean data) {
+        if (data.getSuccess()) {
+            ToastUtils.showToast("评论成功");
+            mArticleDetailPresenter.getArticleComment(mArticleId);
+        }else {
+            ToastUtils.showToast(data.getMessage());
+        }
+        mReplyDialog.dismiss();
+    }
+
+    @Override
+    public void setArticleThumbUpState(BaseResponseBean data) {
+        if (data.getSuccess()) {
+            setStarStyle();
+        }
+    }
+
+    private void setStarStyle() {
+        mTvStarNum.setTextColor(ContextCompat.getColor(this,R.color.colorAccent));
+        mTvStarNum.setVisibility(View.VISIBLE);
+        mTvStarNum.setTag("yes");
+        mIvStar.setImageResource(R.mipmap.ic_detail_likes_checked);
+    }
+
+    @Override
+    public void setArticleThumbUp(BaseResponseBean data) {
+        if (data.getSuccess()) {
+            mTvStarNum.setVisibility(View.VISIBLE);
+            mTvStarNum.setText(data.getData().toString());
+            setStarStyle();
+        }else {
+            ToastUtils.showToast(data.getMessage());
+        }
+    }
+
+    @Override
+    public void setReturnPriseArticle(BaseResponseBean data) {
+        if (data.getSuccess()){
+            ToastUtils.showToast("谢谢老板打赏!!!!!");
+        }else {
+            ToastUtils.showToast(data.getMessage());
+        }
     }
 
     @Override
