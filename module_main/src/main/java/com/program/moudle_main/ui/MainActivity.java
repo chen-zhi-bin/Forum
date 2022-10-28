@@ -21,7 +21,6 @@ import com.program.moudle_base.base.BaseActivity;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
-import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_main.R;
 import com.program.moudle_main.R2;
 
@@ -35,7 +34,7 @@ public class MainActivity extends BaseActivity {
     public BottomNavigationView mNavigationView;
 
     private FragmentManager mFm;
-    private BaseFragment mRecommendFragment=null;
+    private BaseFragment mHomeFragment =null;
     private WendaFragment mSystemFragment;
 //    private UserFragment mUserFragment;
     private BaseFragment mUserFragment = null;
@@ -70,16 +69,15 @@ public class MainActivity extends BaseActivity {
 
     private void initFragments() {
         mFm = getSupportFragmentManager();
-        if (mRecommendFragment == null){
-            mRecommendFragment = (BaseFragment) HomeServiceWrap.Singletion.INSTANCE.getHolder().getFragment();
+        if (mHomeFragment == null){
+            mHomeFragment = (BaseFragment) HomeServiceWrap.Singletion.INSTANCE.getHolder().getFragment();
         }
 //        mRecommendFragment = new RecommendFragment();
 
         mSystemFragment = new WendaFragment();
 //        mUserFragment = new UserFragment();
         //默认选中推荐，不然会出现空白页
-
-        switchFragment(mRecommendFragment);
+        switchFragment(mHomeFragment);
     }
 
 
@@ -94,7 +92,7 @@ public class MainActivity extends BaseActivity {
                 if (item.getItemId()==R.id.home){
                     LogUtils.d(MainActivity.this,"切换到首页");
 //                        mRecommendFragment = new RecommendFragment();
-                    switchFragment(mRecommendFragment);
+                    switchFragment(mHomeFragment);
                     return true;
                 }else if (item.getItemId()==R.id.system){
                     LogUtils.d(MainActivity.this,"切换到体系");
@@ -182,7 +180,7 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 //        LogUtils.d("onActivityResult","requestCode ="+requestCode+",resultCode="+resultCode+",data = "+data.toString());
         if (resultCode == Constants.RETURN_TO_HMOE){
-            switchFragment(mRecommendFragment);
+            switchFragment(mHomeFragment);
             mNavigationView.setSelectedItemId(mNavigationView.getMenu().getItem(Constants.NAVIGATION_VIEW_MENU_RECOMMEND_ITEM_ID_INDEX).getItemId());
         }else if (resultCode==Constants.RETURN_TO_USER){
 

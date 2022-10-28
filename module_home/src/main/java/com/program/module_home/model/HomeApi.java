@@ -2,6 +2,7 @@ package com.program.module_home.model;
 
 import com.program.module_home.model.bean.ArticleDetailBean;
 import com.program.module_home.model.bean.ArticleRecommendBean;
+import com.program.module_home.model.bean.CategoryBean;
 import com.program.module_home.model.bean.CommentBean;
 import com.program.module_home.model.bean.CommentInputBean;
 import com.program.module_home.model.bean.PriseArticleBean;
@@ -24,6 +25,9 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface HomeApi {
+
+    @GET("/ct/category/list")
+    Observable<CategoryBean> getCategoryList();
 
     @GET("/ct/article/detail/{articleId}")
     Observable<ArticleDetailBean> geetArticleDetail(@Path("articleId")String articleId);

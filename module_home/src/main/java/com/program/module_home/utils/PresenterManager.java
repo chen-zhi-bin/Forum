@@ -1,14 +1,17 @@
 package com.program.module_home.utils;
 
 import com.program.module_home.presenter.IArticleDetailPresenter;
+import com.program.module_home.presenter.IHomeMainFragmentPresenter;
 import com.program.module_home.presenter.IPriseListActivityPresenter;
 import com.program.module_home.presenter.Impl.ArticleDetailPresenterImpl;
+import com.program.module_home.presenter.Impl.HomeMainFragmentPresenterImpl;
 import com.program.module_home.presenter.Impl.PriseListActivityPresenterImpl;
 
 public class PresenterManager {
     private static final PresenterManager ourInstance = new PresenterManager();
     private final IArticleDetailPresenter mArticleDetailPresenter;
     private final IPriseListActivityPresenter mPriseListActivityPresenter;
+    private final IHomeMainFragmentPresenter mHomeMainFragmentPresenter;
 
 
     public static PresenterManager getInstance(){
@@ -23,8 +26,13 @@ public class PresenterManager {
         return mPriseListActivityPresenter;
     }
 
+    public IHomeMainFragmentPresenter getHomeMainFragmentPresenter() {
+        return mHomeMainFragmentPresenter;
+    }
+
     private PresenterManager(){
         mArticleDetailPresenter = new ArticleDetailPresenterImpl();
         mPriseListActivityPresenter = new PriseListActivityPresenterImpl();
+        mHomeMainFragmentPresenter = new HomeMainFragmentPresenterImpl();
     }
 }

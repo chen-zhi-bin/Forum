@@ -1,6 +1,14 @@
 package com.program.module_home;
 
+import com.program.lib_base.LogUtils;
+import com.program.module_home.db.ChannelBaseHelper;
+import com.program.module_home.db.ChannelDao;
+import com.program.module_home.db.ChannelDatabase;
+import com.program.module_home.model.bean.CategoryDB;
+
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 

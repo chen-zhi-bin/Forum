@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.program.lib_base.LogUtils;
 import com.program.moudle_base.R;
 
 import butterknife.ButterKnife;
