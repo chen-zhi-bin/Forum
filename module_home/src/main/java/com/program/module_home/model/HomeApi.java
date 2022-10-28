@@ -2,9 +2,11 @@ package com.program.module_home.model;
 
 import com.program.module_home.model.bean.ArticleDetailBean;
 import com.program.module_home.model.bean.ArticleRecommendBean;
+import com.program.module_home.model.bean.BannerBean;
 import com.program.module_home.model.bean.CategoryBean;
 import com.program.module_home.model.bean.CommentBean;
 import com.program.module_home.model.bean.CommentInputBean;
+import com.program.module_home.model.bean.HomeItemBean;
 import com.program.module_home.model.bean.PriseArticleBean;
 import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
@@ -26,8 +28,31 @@ import retrofit2.http.Path;
 
 public interface HomeApi {
 
+    /**
+     * 首页分类列表
+     */
     @GET("/ct/category/list")
     Observable<CategoryBean> getCategoryList();
+
+    /**
+     * 获取轮播图
+     */
+    @GET("/ast/home/loop/list")
+    Observable<BannerBean> getBanner();
+
+    static final String RECOMMEND_URL = "/ct/content/home/recommend";
+
+    /**
+     * 获取推荐
+     */
+    @GET(RECOMMEND_URL+"/{page}")
+    Observable<HomeItemBean> getRecommend(@Path("page")int page);
+
+    /**
+     * 根据类获取推荐内容
+     */
+    @GET(RECOMMEND_URL+"/{categoryId}/{page}")
+    Observable<HomeItemBean> getRecommendByCategoryId(@Path("categoryId")String categoryId,@Path("page")int page);
 
     @GET("/ct/article/detail/{articleId}")
     Observable<ArticleDetailBean> geetArticleDetail(@Path("articleId")String articleId);

@@ -1,5 +1,6 @@
 package com.program.module_home.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -20,6 +21,7 @@ import com.program.module_home.model.bean.CategoryDB;
 import com.program.module_home.presenter.IHomeMainFragmentPresenter;
 import com.program.module_home.utils.PresenterManager;
 import com.program.moudle_base.base.BaseFragment;
+import com.program.moudle_base.utils.ToastUtils;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
 
@@ -109,7 +111,7 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
 
     @Override
     public void setRequestError(String msg) {
-
+        ToastUtils.showToast(msg);
     }
 
     @Override
