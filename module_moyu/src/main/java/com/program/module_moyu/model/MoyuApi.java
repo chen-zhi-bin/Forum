@@ -3,7 +3,9 @@ package com.program.module_moyu.model;
 import com.program.module_moyu.model.bean.MomentComment;
 import com.program.module_moyu.model.bean.MomentCommentBean;
 import com.program.module_moyu.model.bean.MomentSubComment;
+import com.program.module_moyu.model.bean.MoyuListBean;
 import com.program.module_moyu.model.bean.MoyuRequestBean;
+import com.program.module_moyu.model.bean.TopicIndexReturnBean;
 import com.program.moudle_base.model.BaseResponseBean;
 
 import io.reactivex.rxjava3.core.Observable;
@@ -17,6 +19,30 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MoyuApi {
+
+    /**
+     *获取猿村分类
+     */
+    @GET("/ct/moyu/topic/index")
+    Observable<TopicIndexReturnBean> getTopicIndex();
+
+    /**
+     *获取猿村推荐列表
+     */
+    @GET("/ct/moyu/list/recommend/{page}")
+    Observable<MoyuListBean> getRecommendList(@Path("page")int page);
+
+    /**
+     *获取猿村关注列表
+     */
+    @GET("/ct/moyu/list/follow/{page}")
+    Observable<MoyuListBean> getFollowList(@Path("page")int page,@Header("sob_token")String token);
+
+    /**
+     *通过分类获取猿村列表
+     */
+    @GET("/ct/moyu/list/{topicId}/{page}")
+    Observable<MoyuListBean> getList(@Path("topicId")String topicId,@Path("page")int page);
 
     @GET("/ct/moyu/{moyuId}")
     Observable<MoyuRequestBean> getMoyuDetail(@Path("moyuId")String id,@Header("sob_token")String token);

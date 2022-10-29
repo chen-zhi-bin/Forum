@@ -7,9 +7,9 @@
         android:icon="@mipmap/home"
         android:title="首页" />
     <item
-        android:id="@+id/system"
-        android:icon="@mipmap/system"
-        android:title="体系" />
+        android:id="@+id/moyu"
+        android:icon="@mipmap/ic_tab_moyu"
+        android:title="猿村" />
     <item
         android:id="@+id/user"
         android:icon="@mipmap/user"
