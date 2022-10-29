@@ -28,6 +28,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
     private static final int RETURN_ERROR = 0;  //请求错误
     private static final int RETURN_HOME_ITEM_BEAN = 1;
     private static final int RETURN_BANNER = 2;
+    private static final int RETURN_HOME_ITEM_BEAN_MORE = 3;
 
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
@@ -41,10 +42,14 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                     mCallback.onError();
                     break;
                 case RETURN_HOME_ITEM_BEAN:
+                    page++;
                     mCallback.setHomeItem((HomeItemBean) msg.obj);
                     break;
                 case RETURN_BANNER:
                     mCallback.setBanner((BannerBean)msg.obj);
+                    break;
+                case RETURN_HOME_ITEM_BEAN_MORE:
+                    mCallback.setHomeItemMore((HomeItemBean)msg.obj);
                     break;
             }
 
@@ -149,6 +154,69 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                         }
                     });
 
+        }
+    }
+
+    @Override
+    public void getRecommendMore(String id) {
+        if (id.equals("1")){
+            mApi.getRecommend(page)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .compose(mCallback.TobindToLifecycle())
+                    .subscribe(new Observer<Object>() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                            Message message = new Message();
+                            message.what = ((HomeItemBean)o).getCode()==Constants.SUCCESS?RETURN_HOME_ITEM_BEAN_MORE:ERROR;
+                            message.obj = o;
+                            mHandler.sendMessage(message);
+                        }
+
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                            requestFailed();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }else {
+            mApi.getRecommendByCategoryId(id,page)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .compose(mCallback.TobindToLifecycle())
+                    .subscribe(new Observer<Object>() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                            Message message = new Message();
+                            message.what = ((HomeItemBean)o).getCode()==Constants.SUCCESS?RETURN_HOME_ITEM_BEAN_MORE:ERROR;
+                            message.obj = o;
+                            mHandler.sendMessage(message);
+                        }
+
+                        @Override
+                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                            requestFailed();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
         }
     }
 

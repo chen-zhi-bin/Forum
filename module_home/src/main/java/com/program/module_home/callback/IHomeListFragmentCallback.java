@@ -11,6 +11,8 @@ public interface IHomeListFragmentCallback extends IBaseCallback {
 
     void setHomeItem(HomeItemBean data);
 
+    void setHomeItemMore(HomeItemBean data);
+
     void setRequestError(String msg);
 
     LifecycleTransformer<Object> TobindToLifecycle();
