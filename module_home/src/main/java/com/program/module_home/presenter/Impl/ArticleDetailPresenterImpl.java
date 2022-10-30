@@ -123,7 +123,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
     @Override
     public void getArticleDetail(String articleId) {
-        mApi.geetArticleDetail(articleId)
+        mApi.getArticleDetail(articleId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(mCallback.TobindToLifecycle())

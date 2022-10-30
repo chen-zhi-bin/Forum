@@ -90,12 +90,12 @@ public class MoyuAdapter extends BaseQuickAdapter<MoyuItemBean, BaseViewHolder> 
         }else {
             tvTopicName.setVisibility(View.GONE);
         }
-        viewHolder.setText(R.id.tv_star,moyuItemBean.getThumbUpList().size()+"");
+        viewHolder.setText(R.id.tv_star,(moyuItemBean.getThumbUpCount()>=moyuItemBean.getThumbUpList().size()?moyuItemBean.getThumbUpCount():moyuItemBean.getThumbUpList().size())+"");
         viewHolder.setText(R.id.tv_reply,moyuItemBean.getCommentCount().toString());
 
         //是否点赞
         String id = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).getString(SharedPreferencesUtils.USER_ID,"");
-        CommonViewUtils.setThumbStyle(viewHolder.getView(R.id.tv_star),moyuItemBean.getThumbUpList().contains(id));
+        CommonViewUtils.setThumbStyle(viewHolder.getView(R.id.tv_star),moyuItemBean.getThumbUpList().contains(id)||moyuItemBean.getHasThumbUp());
     }
 
     private int width2 = UIUtils.getScreenWidth() - UIUtils.dp2px(44f) / 2;

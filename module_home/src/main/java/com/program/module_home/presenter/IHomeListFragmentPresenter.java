@@ -5,6 +5,8 @@ import com.program.moudle_base.base.IBasePresenter;
 
 public interface IHomeListFragmentPresenter extends IBasePresenter<IHomeListFragmentCallback> {
 
+    void getUpdateArticleInfo(String id);
+
     void getRecommend(String id);
 
     void getRecommendMore(String id);

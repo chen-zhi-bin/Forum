@@ -115,6 +115,7 @@ dependencies {
     implementation rootProject.ext.dependencies.banner
     implementation rootProject.ext.dependencies.codeview
     api 'com.tencent.tbs:tbssdk:44176'      //x5webview
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     api project(':module_base')
     api project(":lib_base")

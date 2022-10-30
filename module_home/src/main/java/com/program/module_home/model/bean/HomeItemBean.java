@@ -200,6 +200,50 @@ public class HomeItemBean implements Serializable {
                 return covers;
             }
 
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public void setCreateTime(String createTime) {
+                this.createTime = createTime;
+            }
+
+            public void setThumbUp(Integer thumbUp) {
+                this.thumbUp = thumbUp;
+            }
+
+            public void setViewCount(Integer viewCount) {
+                this.viewCount = viewCount;
+            }
+
+            public void setType(Double type) {
+                this.type = type;
+            }
+
+            public void setNickName(String nickName) {
+                this.nickName = nickName;
+            }
+
+            public void setAvatar(String avatar) {
+                this.avatar = avatar;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public void setUserId(String userId) {
+                this.userId = userId;
+            }
+
+            public void setVip(Boolean vip) {
+                isVip = vip;
+            }
+
+            public void setCovers(List<String> covers) {
+                this.covers = covers;
+            }
+
             @Override
             public String toString() {
                 return "ListBean{" +

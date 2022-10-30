@@ -146,12 +146,11 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     private void initListener() {
         mTvDetailStar.setOnClickListener(view ->{
             mMoyuDetailPresenter.getThumbUp(mId);
-            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
+//            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
         });
 
         mTvReply.setOnClickListener(view -> {
             showReplyDialog(null);
-            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
         });
 
         mTvShare.setOnClickListener(view -> ToastUtils.showToast("分享"));
@@ -348,6 +347,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
      * @param hasThumbUp 是否点赞
      */
     private void setThumbStyle(Boolean hasThumbUp) {
+        EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
         // 已经点赞后 标记tvDetailStar的tag为true
         mTvDetailStar.setTag(hasThumbUp);
         CommonViewUtils.setThumbStyle(mTvDetailStar, hasThumbUp);
@@ -429,6 +429,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
 
     @Override
     public void returnComment(BaseResponseBean data) {
+        EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
         ToastUtils.showToast(data.getMessage());
         mMoyuDetailPresenter.getMoyuComment(mMoyuInfo.getId());
     }

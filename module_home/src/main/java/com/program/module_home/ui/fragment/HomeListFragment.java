@@ -10,13 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.program.lib_base.LogUtils;
+import com.program.lib_common.event.UpdateItemEvent;
 import com.program.lib_common.service.home.wrap.HomeServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_home.R;
 import com.program.module_home.callback.IHomeListFragmentCallback;
+import com.program.module_home.model.bean.ArticleDetailBean;
 import com.program.module_home.model.bean.BannerBean;
 import com.program.module_home.model.bean.HomeItemBean;
 import com.program.module_home.presenter.Impl.HomeListFragmentPresenterImpl;
@@ -26,6 +29,7 @@ import com.program.module_home.utils.PresenterManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.utils.CommonViewUtils;
+import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.ClassicsHeader;
@@ -46,6 +50,9 @@ import com.youth.banner.listener.OnBannerListener;
 import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -85,9 +92,13 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
         return R.layout.modulehome_fragment_home_list;
     }
 
+    @Subscribe
     @Override
     protected void initView(View rootView) {
         setupState(State.LOADING);
+        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.register(this);
+        }
         mCategoryId = requireArguments().getString("categoryId", "1");
         LogUtils.d(HomeListFragment.class,"categoryId = "+ mCategoryId);
         Mojito.initialize(GlideImageLoader.Companion.with(BaseApplication.getAppContext()), new SketchImageLoadFactory()); //初始化
@@ -190,6 +201,48 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
         mAdapter.addData(list);
     }
 
+    @Override
+    public void setArticleUpdateInfo(ArticleDetailBean data) {
+        ArticleDetailBean.DataBean bean = data.getData();
+        if (bean != null) {
+            List<MultiItemEntity> data1 = mAdapter.getData();
+            HomeItemBean.DataBean.ListBean item = null;
+            int index = -1;
+            for (MultiItemEntity multiItemEntity : data1) {
+                if (multiItemEntity != null) {
+                    HomeItemBean.DataBean.ListBean itemEntity = (HomeItemBean.DataBean.ListBean) multiItemEntity;
+                    if (bean.getId().equals(itemEntity.getId())){
+                        index = data1.indexOf(multiItemEntity);
+                        item = itemEntity;
+                    }
+                }
+            }
+            LogUtils.d("test","index = "+index);
+            MultiItemEntity itemEntity = mAdapter.getData().get(index);
+            HomeItemBean.DataBean.ListBean articleItem = (HomeItemBean.DataBean.ListBean) itemEntity;
+            LogUtils.d("test","3333 title = "+bean.getTitle());
+            LogUtils.d("test","3333 title = "+bean.getThumbUp());
+            articleItem.setThumbUp(bean.getThumbUp());
+            articleItem.setViewCount(bean.getViewCount());
+            mAdapter.notifyItemChanged(index+1);        //+1是因为这个adapter有个HeaderView(下标为0的位置被占用)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateItem(UpdateItemEvent event){
+        String event1 = event.getEvent();
+        LogUtils.d("test","event = "+event1.toString());
+
+        if (event1.equals(UpdateItemEvent.Event.UPDATE_ARTICLE)){
+            updateItem(event.getId());
+        }
+    }
+
+    private void updateItem(String id) {
+        LogUtils.d("test","event id = "+id);
+        mHomeListFragmentPresenter.getUpdateArticleInfo(id);
+    }
+
     private void finishLoadMore() {
         if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
@@ -205,6 +258,14 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
     @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        super.onDestroy();
     }
 
     @Override

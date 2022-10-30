@@ -55,7 +55,7 @@ public interface HomeApi {
     Observable<HomeItemBean> getRecommendByCategoryId(@Path("categoryId")String categoryId,@Path("page")int page);
 
     @GET("/ct/article/detail/{articleId}")
-    Observable<ArticleDetailBean> geetArticleDetail(@Path("articleId")String articleId);
+    Observable<ArticleDetailBean> getArticleDetail(@Path("articleId")String articleId);
 
     /**
      * 得到打赏二维码

@@ -159,7 +159,7 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
 
     @Override
     public void setMoyuUpdate(MoyuRequestBean.DataBean moyu) {
-        LogUtils.d("test","moyu data = "+moyu.toString());
+        LogUtils.d("test","moyu +++data = "+moyu.toString());
         if (moyu != null) {
 //            int index = mAdapter.getData().indexOf(moyu);
 //            MoyuItemBean item = mAdapter.getItem(index);
@@ -175,10 +175,11 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
                 }
             }
             MoyuItemBean moyuItemBean = mAdapter.getData().get(index);
-            moyuItemBean.setCommentCount(item!=null?item.getCommentCount():moyu.getCommentCount());
-            moyuItemBean.setThumbUpCount(item!=null?item.getThumbUpCount():moyu.getThumbUpCount());
-            moyuItemBean.setHasThumbUp(item!=null?item.getHasThumbUp():moyu.getHasThumbUp());
+            moyuItemBean.setCommentCount(moyu.getCommentCount());
+            moyuItemBean.setThumbUpCount(moyu.getThumbUpCount());
+            moyuItemBean.setHasThumbUp(moyu.getHasThumbUp());
             mAdapter.notifyItemChanged(index);
+//            mAdapter.notifyItemChanged(index);
         }
     }
 

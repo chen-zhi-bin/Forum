@@ -1,5 +1,7 @@
 package com.program.lib_common.event;
 
+import androidx.annotation.NonNull;
+
 import org.jetbrains.annotations.NotNull;
 
 public final class UpdateItemEvent {
@@ -28,6 +30,8 @@ public final class UpdateItemEvent {
     }
 
     public static final class Event{
+        @NotNull
+        public static final String UPDATE_ARTICLE="update_article";
         @NotNull
         public static final String UPDATE_MOYU = "update_moyu";
         @NotNull

@@ -36,6 +36,7 @@ import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
+import com.program.lib_common.event.UpdateItemEvent;
 import com.program.lib_common.service.home.wrap.HomeServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_home.R;
@@ -57,6 +58,7 @@ import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.model.PriseSobBean;
 import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
+import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
@@ -69,6 +71,7 @@ import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -126,14 +129,18 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 
     //todo:收藏
 
+    @Subscribe
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulehome_activity_article_detail);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
-        LogUtils.d("test", "id =" + mArticleId);
-        LogUtils.d("test", "title =" + mArticleTitle);
+        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.register(this);
+        }
+        LogUtils.d(ArticleDetailActivity.class, "id =" + mArticleId);
+        LogUtils.d(ArticleDetailActivity.class, "title =" + mArticleTitle);
         mToken = SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         thisActivity = this;
         initView();
@@ -180,7 +187,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 //            }
             thumbUp();
         });
-
+//        EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_ARTICLE,mArticleId));
         mIvHeaderAvatar.setOnClickListener(view -> {
             if (mArticle != null) {
                 UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(mArticle.getUserId());
@@ -632,6 +639,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 
     @Override
     public void setArticleThumbUp(BaseResponseBean data) {
+        EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_ARTICLE,mArticleId));
         if (data.getSuccess()) {
             mTvStarNum.setVisibility(View.VISIBLE);
             mTvStarNum.setText(data.getData().toString());
@@ -704,6 +712,14 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     @Override
     public void setUnFollowMsgError(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        super.onDestroy();
     }
 
     @Override
