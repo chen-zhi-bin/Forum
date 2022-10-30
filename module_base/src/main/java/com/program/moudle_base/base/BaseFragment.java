@@ -12,10 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.program.lib_base.LogUtils;
+import com.program.lib_common.event.UpdateItemEvent;
 import com.program.moudle_base.R;
+import com.program.moudle_base.utils.EventBusUtils;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import kotlin.jvm.JvmClassMappingKt;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -63,8 +68,8 @@ public abstract class BaseFragment extends Fragment {
     }
 
     /*
-    如果子类需要设置相关的事件就覆写
-     */
+        如果子类需要设置相关的事件就覆写
+         */
     protected void initListener(){
 
     }

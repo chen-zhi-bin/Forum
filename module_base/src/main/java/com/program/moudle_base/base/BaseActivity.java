@@ -5,6 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.program.moudle_base.utils.EventBusUtils;
+
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -13,10 +17,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Unbinder mBind;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-
         //把app变灰    <==>
 //        ColorMatrix  cm = new ColorMatrix();
 //        cm.setSaturation(0);        //设置饱和度
@@ -48,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBusUtils.INSTANCE.unRegister(this);
         if (mBind != null) {
             mBind.unbind();
         }

@@ -89,6 +89,7 @@ dependencies {
     implementation rootProject.ext.dependencies.mojito_image_view_loader
     implementation rootProject.ext.dependencies.codeview
     implementation rootProject.ext.dependencies.jsoup
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     api project(":lib_base")
     api project(":lib_common")

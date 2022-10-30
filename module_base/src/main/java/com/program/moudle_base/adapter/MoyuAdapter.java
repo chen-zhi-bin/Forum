@@ -38,6 +38,7 @@ public class MoyuAdapter extends BaseQuickAdapter<MoyuItemBean, BaseViewHolder> 
      */
     public MoyuAdapter(int layoutResId) {
         super(R.layout.modulebase_common_moyu_adapter,null);
+        addChildClickViewIds(R.id.iv_avatar,R.id.tv_nickname,R.id.tv_link);
     }
 
     @Override

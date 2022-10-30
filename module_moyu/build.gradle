@@ -106,6 +106,8 @@ dependencies {
 //load with fresco
     implementation "com.github.mikaelzero.mojito:FrescoImageLoader:1.8.5"
 
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
     api project(":lib_common")
     api project(':module_base')
     api project(":lib_base")

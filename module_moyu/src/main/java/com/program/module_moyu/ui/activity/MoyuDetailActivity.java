@@ -32,6 +32,7 @@ import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
+import com.program.lib_common.event.UpdateItemEvent;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_moyu.R;
 import com.program.module_moyu.adapter.CommentAdapter;
@@ -46,6 +47,7 @@ import com.program.module_moyu.utils.PresenterManager;
 import com.program.moudle_base.adapter.ImageAdapter;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.CommonViewUtils;
+import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
@@ -64,6 +66,9 @@ import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -110,8 +115,10 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
         });
     }
 
+
+    @Subscribe
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulemoyu_activity_moyu_detail);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
@@ -119,6 +126,9 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
 //        mId="1574789341320843265";    //没图
 //        mId = "1572926596656926721"; //一张图
 //        LogUtils.d("MoyuDetailActivity","loading dialog = "+mLoadingDialog);
+        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.register(this);
+        }
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         mMyId = SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_ID);
         initView();
@@ -134,9 +144,15 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     }
 
     private void initListener() {
-        mTvDetailStar.setOnClickListener(view -> mMoyuDetailPresenter.getThumbUp(mId));
+        mTvDetailStar.setOnClickListener(view ->{
+            mMoyuDetailPresenter.getThumbUp(mId);
+            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
+        });
 
-        mTvReply.setOnClickListener(view -> showReplyDialog(null));
+        mTvReply.setOnClickListener(view -> {
+            showReplyDialog(null);
+            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
+        });
 
         mTvShare.setOnClickListener(view -> ToastUtils.showToast("分享"));
 
@@ -421,5 +437,13 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     public void returnSubComment(BaseResponseBean data) {
         ToastUtils.showToast(data.getMessage());
         mMoyuDetailPresenter.getMoyuComment(mMoyuInfo.getId());
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        super.onDestroy();
     }
 }

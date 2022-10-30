@@ -10,6 +10,7 @@ import com.program.lib_common.Constants;
 import com.program.module_moyu.callback.IMoyuListFragmentCallback;
 import com.program.module_moyu.model.MoyuApi;
 import com.program.module_moyu.model.bean.MoyuListBean;
+import com.program.module_moyu.model.bean.MoyuRequestBean;
 import com.program.module_moyu.presenter.IMoyuListFragmentPresenter;
 import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
@@ -27,7 +28,9 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
 
     private static final int ERROR = -1;
     private static final int RETURN_ERROR = 0;
-    private static final int RETURN_RECOMMEND_LIST = 1;
+    private static final int RETURN_LIST = 1;
+    private static final int RETURN_UPDATE_MOYU = 2;
+    private static final int RETURN_LIST_MORE = 3;
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -39,9 +42,16 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
                 case RETURN_ERROR:
                     mCallback.setErrorMsg(((MoyuListBean)msg.obj).getMessage());
                     break;
-                case RETURN_RECOMMEND_LIST:
+                case RETURN_LIST:
+                    page++;
                     mCallback.setList(((MoyuListBean) msg.obj).getData().getList());
                     break;
+                case RETURN_UPDATE_MOYU:
+                    mCallback.setMoyuUpdate(((MoyuRequestBean)msg.obj).getData());
+                    break;
+                case RETURN_LIST_MORE:
+                    page++;
+                    mCallback.setListMore(((MoyuListBean)msg.obj).getData().getList());
             }
         }
     };
@@ -70,7 +80,39 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                         Message message = new Message();
-                        message.what = ((MoyuListBean) o).getCode() == Constants.SUCCESS ? RETURN_RECOMMEND_LIST : RETURN_ERROR;
+                        message.what = ((MoyuListBean) o).getCode() == Constants.SUCCESS ? RETURN_LIST : RETURN_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        responseError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getRecommendListMore() {
+        mApi.getRecommendList(page)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        Message message = new Message();
+                        message.what=((MoyuListBean)o).getCode()==Constants.SUCCESS? RETURN_LIST_MORE :RETURN_ERROR;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }
@@ -102,7 +144,39 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                         Message message = new Message();
-                        message.what = ((MoyuListBean) o).getCode() == Constants.SUCCESS ? RETURN_RECOMMEND_LIST : RETURN_ERROR;
+                        message.what = ((MoyuListBean) o).getCode() == Constants.SUCCESS ? RETURN_LIST : RETURN_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        responseError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getFollowListMore() {
+        mApi.getFollowList(page,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        Message message = new Message();
+                        message.what=((MoyuListBean)o).getCode()==Constants.SUCCESS?RETURN_LIST_MORE:RETURN_ERROR;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }
@@ -134,7 +208,71 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                         Message message = new Message();
-                        message.what = ((MoyuListBean)o).getCode()==Constants.SUCCESS?RETURN_RECOMMEND_LIST:RETURN_ERROR;
+                        message.what = ((MoyuListBean)o).getCode()==Constants.SUCCESS? RETURN_LIST :RETURN_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        responseError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getListMore(String topicId) {
+        mApi.getList(topicId,page)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        Message message = new Message();
+                        message.what = ((MoyuListBean)o).getCode()==Constants.SUCCESS?RETURN_LIST_MORE:RETURN_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        responseError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getUpdateMoyuInfo(String moyuid) {
+        mApi.getMoyuDetail(moyuid,mToken!=null?mToken:"")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        Message message = new Message();
+                        message.what=((MoyuRequestBean)o).getCode()==Constants.SUCCESS?RETURN_UPDATE_MOYU:RETURN_ERROR;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }

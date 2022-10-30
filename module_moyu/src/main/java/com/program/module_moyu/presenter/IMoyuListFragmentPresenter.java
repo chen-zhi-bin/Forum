@@ -7,8 +7,16 @@ public interface IMoyuListFragmentPresenter extends IBasePresenter<IMoyuListFrag
 
     void getRecommendList();
 
+    void getRecommendListMore();
+
     void getFollowList();
 
+    void getFollowListMore();
+
     void getList(String topicId);
+
+    void getListMore(String topicId);
+
+    void getUpdateMoyuInfo(String moyuid);
 
 }

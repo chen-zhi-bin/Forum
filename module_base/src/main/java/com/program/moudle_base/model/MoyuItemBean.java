@@ -118,6 +118,82 @@ public class MoyuItemBean {
         return thumbUpList;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setLinkCover(String linkCover) {
+        this.linkCover = linkCover;
+    }
+
+    public void setLinkTitle(String linkTitle) {
+        this.linkTitle = linkTitle;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public void setThumbUpCount(Integer thumbUpCount) {
+        this.thumbUpCount = thumbUpCount;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setHasThumbUp(Boolean hasThumbUp) {
+        this.hasThumbUp = hasThumbUp;
+    }
+
+    public void setVip(Boolean vip) {
+        this.vip = vip;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public void setThumbUpList(List<String> thumbUpList) {
+        this.thumbUpList = thumbUpList;
+    }
+
     @Override
     public String toString() {
         return "MoyuItemBean{" +
