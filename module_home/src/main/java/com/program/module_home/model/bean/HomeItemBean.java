@@ -138,9 +138,9 @@ public class HomeItemBean implements Serializable {
             @SerializedName("createTime")
             private String createTime;
             @SerializedName("thumbUp")
-            private Double thumbUp;
+            private Integer thumbUp;
             @SerializedName("viewCount")
-            private Double viewCount;
+            private Integer viewCount;
             @SerializedName("type")
             private Double type;
             @SerializedName("nickName")
@@ -164,11 +164,11 @@ public class HomeItemBean implements Serializable {
                 return createTime;
             }
 
-            public Double getThumbUp() {
+            public Integer getThumbUp() {
                 return thumbUp;
             }
 
-            public Double getViewCount() {
+            public Integer getViewCount() {
                 return viewCount;
             }
 

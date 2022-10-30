@@ -83,7 +83,7 @@ public class ArticleRecommendBean implements Serializable {
         @SerializedName("vip")
         private Boolean vip;
         @SerializedName("thumbUp")
-        private Double thumbUp;
+        private Integer thumbUp;
         @SerializedName("labels")
         private List<String> labels;
         @SerializedName("covers")
@@ -121,7 +121,7 @@ public class ArticleRecommendBean implements Serializable {
             return vip;
         }
 
-        public Double getThumbUp() {
+        public Integer getThumbUp() {
             return thumbUp;
         }
 

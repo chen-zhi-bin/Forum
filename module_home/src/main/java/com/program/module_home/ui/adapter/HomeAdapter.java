@@ -41,8 +41,8 @@ public class HomeAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, Base
             HomeItemBean.DataBean.ListBean bean = (HomeItemBean.DataBean.ListBean) multiItemEntity;
             viewHolder.setText(R.id.tv_content, bean.getTitle());
             viewHolder.setText(R.id.tv_nickName, bean.getNickName());
-            viewHolder.setText(R.id.tv_viewCount, bean.getViewCount().toString());
-            viewHolder.setText(R.id.tv_star, bean.getThumbUp().toString());
+            viewHolder.setText(R.id.tv_viewCount, bean.getViewCount()+"");
+            viewHolder.setText(R.id.tv_star, bean.getThumbUp()+"");
             viewHolder.setText(R.id.tv_time, DateUtils.timeFormat(bean.getCreateTime()));
             ImageView ivAvatar = viewHolder.getView(R.id.iv_avatar);
             Glide.with(ivAvatar.getContext())

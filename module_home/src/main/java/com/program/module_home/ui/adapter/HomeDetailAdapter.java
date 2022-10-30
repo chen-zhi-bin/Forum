@@ -130,6 +130,8 @@ public class HomeDetailAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                 }
                 viewHolder.setText(R.id.tv_content,recommend.getTitle());
                 viewHolder.setText(R.id.tv_related_nickname,recommend.getNickname());
+                viewHolder.setText(R.id.tv_viewCount,recommend.getViewCount()+"");
+                viewHolder.setText(R.id.tv_star,recommend.getThumbUp()+"");
                 break;
         }
     }
