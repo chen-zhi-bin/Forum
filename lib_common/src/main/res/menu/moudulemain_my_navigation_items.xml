@@ -5,13 +5,17 @@
     <item
         android:id="@+id/home"
         android:icon="@mipmap/home"
-        android:title="首页" />
+        android:title="@string/MAIN_HOME" />
     <item
         android:id="@+id/moyu"
         android:icon="@mipmap/ic_tab_moyu"
-        android:title="猿村" />
+        android:title="@string/MAIN_MOYU" />
+    <item
+        android:id="@+id/wenda"
+        android:icon="@mipmap/ic_tab_wenda"
+        android:title="@string/MAIN_WENDA"/>
     <item
         android:id="@+id/user"
         android:icon="@mipmap/user"
-        android:title="个人" />
+        android:title="@string/MAIN_USER" />
 </menu>

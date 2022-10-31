@@ -21,6 +21,15 @@ public class Constants {
     public static final String DATA_TPTE_SHARA = "share";
     public static final String DATA_TPTE_WENDA = "wenda";
 
+    public class Wenda{
+        public static final String WENDA_TYPE = "wenda_type";   //类型
+
+        public static final String WENDA_LASTEST = "lastest";   //新推荐
+
+        public static final String WENDA_HOT = "hot";           //热门推荐
+
+    }
+
     public class Ucenter{
 
         public static final String PAGE_TYPE = "page_type";

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MAIN_HOME">首页</string>
+    <string name="MAIN_MOYU">猿村</string>
+    <string name="MAIN_WENDA">问答</string>
+    <string name="MAIN_USER">个人</string>
+</resources>

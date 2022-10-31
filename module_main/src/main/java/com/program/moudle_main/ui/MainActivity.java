@@ -18,6 +18,7 @@ import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.home.wrap.HomeServiceWrap;
 import com.program.lib_common.service.moyu.wrap.MoyuServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
+import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.moudle_base.base.BaseActivity;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
@@ -36,7 +37,7 @@ public class MainActivity extends BaseActivity {
     private FragmentManager mFm;
     private BaseFragment mHomeFragment =null;
     private BaseFragment mMoyuFragment =null;
-//    private UserFragment mUserFragment;
+    private BaseFragment mWendaFragment =null;
     private BaseFragment mUserFragment = null;
     private boolean isLogin = false;            //是否登录
     private boolean isNeedtoFragmentUser=false;
@@ -76,6 +77,9 @@ public class MainActivity extends BaseActivity {
         if (mMoyuFragment==null){
             mMoyuFragment = (BaseFragment) MoyuServiceWrap.Singletion.INSTANCE.getHolder().getFragment();
         }
+        if (mWendaFragment==null){
+            mWendaFragment = (BaseFragment) WendaServiceWrap.Singletion.INSTANCE.getHolder().getFragment();
+        }
 //        mUserFragment = new UserFragment();
         //默认选中推荐，不然会出现空白页
         switchFragment(mHomeFragment);
@@ -99,7 +103,10 @@ public class MainActivity extends BaseActivity {
                     LogUtils.d(MainActivity.this,"切换到动态");
                     switchFragment(mMoyuFragment);
                     return true;
-                }else if (item.getItemId()==R.id.user){
+                }else if (item.getItemId()==R.id.wenda){
+                    switchFragment(mWendaFragment);
+                    return true;
+                } else if (item.getItemId()==R.id.user){
                     LogUtils.d(MainActivity.this,"切换到个人");
                     if (isLogin){
 //                        LogUtils.d("test",UcenterServiceWrap.Singletion.INSTANCE.getHolder().getFragment().toString()+"");
@@ -122,23 +129,6 @@ public class MainActivity extends BaseActivity {
 
 
                 }
-//                switch (item.getItemId()){
-//
-//                    case R.id.home:
-//                        LogUtils.d(MainActivity.this,"切换到首页");
-////                        mRecommendFragment = new RecommendFragment();
-//                        switchFragment(mRecommendFragment);
-//                        break;
-//                    case R.id.system:
-//                        LogUtils.d(MainActivity.this,"切换到体系");
-//                        switchFragment(mSystemFragment);
-//                        break;
-//                    case R.id.user:
-//                        LogUtils.d(MainActivity.this,"切换到个人");
-//                        switchFragment(mUserFragment);
-//                        break;
-//
-//                }
                 return true;
             }
         });
