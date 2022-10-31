@@ -10,7 +10,7 @@ import com.program.lib_common.Constants;
 import com.program.module_moyu.callback.IMoyuListFragmentCallback;
 import com.program.module_moyu.model.MoyuApi;
 import com.program.module_moyu.model.bean.MoyuListBean;
-import com.program.module_moyu.model.bean.MoyuRequestBean;
+import com.program.moudle_base.model.MoyuRequestBean;
 import com.program.module_moyu.presenter.IMoyuListFragmentPresenter;
 import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;

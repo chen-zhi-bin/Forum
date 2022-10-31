@@ -1,4 +1,4 @@
-package com.program.module_moyu.model.bean;
+package com.program.moudle_base.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.program.moudle_base.model.MoyuItemBean;

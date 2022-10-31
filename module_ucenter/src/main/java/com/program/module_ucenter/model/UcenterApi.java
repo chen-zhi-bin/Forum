@@ -15,6 +15,7 @@ import com.program.module_ucenter.model.domain.UnreadMsgBean;
 import com.program.module_ucenter.model.domain.UserInfoBean;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 import com.program.module_ucenter.model.domain.UserWendaBean;
+import com.program.moudle_base.model.MoyuRequestBean;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.DELETE;
@@ -24,6 +25,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface UcenterApi {
+
+    @GET("/ct/moyu/{moyuId}")
+    Observable<MoyuRequestBean> getMoyuDetail(@Path("moyuId")String id, @Header("sob_token")String token);
 
     @GET("/uc/user/avatar/{phoneNum}")
     Observable<AvaTarBean> getAvatar(@Path("phoneNum") String phoneNum);

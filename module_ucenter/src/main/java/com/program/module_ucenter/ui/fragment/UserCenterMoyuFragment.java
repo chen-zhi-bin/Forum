@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.program.lib_base.LogUtils;
+import com.program.lib_common.event.UpdateItemEvent;
 import com.program.lib_common.service.moyu.wrap.MoyuServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.IMoyuCallback;
@@ -18,6 +20,8 @@ import com.program.moudle_base.adapter.MoyuAdapter;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.model.MoyuItemBean;
+import com.program.moudle_base.model.MoyuRequestBean;
+import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -27,6 +31,9 @@ import com.trello.rxlifecycle3.LifecycleProvider;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -48,9 +55,22 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
         return R.layout.moduleucenter_fragment_ucenter_list;
     }
 
+    @Subscribe
     @Override
-    protected void initView(View rootView) {
+    public void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void initView(View rootView) {
         setupState(State.LOADING);
+
+        if (!EventBusUtils.INSTANCE.isRegistered(this)) {
+            EventBusUtils.INSTANCE.register(this);
+        }
 
         mUserId = requireArguments().getString("userId");
 
@@ -94,6 +114,37 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
         mMoyuPreseenter.registerViewCallback(this);
         mMoyuPreseenter.getMoyuList(mUserId);
 
+    }
+
+    /**
+     * 更新单个item
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateItem(UpdateItemEvent event){
+        LogUtils.d("test","event = "+event.getEvent()+" id = "+event.getId());
+        mMoyuPreseenter.getMoyuYpdateInfo(event.getId());
+    }
+
+
+    @Override
+    public void setMoyuUpdate(MoyuRequestBean.DataBean data) {
+        LogUtils.d(UserCenterMoyuFragment.class,"data = "+data.toString());
+        if (data!=null){
+            MoyuItemBean item =null;
+            int index = -1;
+            for (MoyuItemBean datum : mMoyuAdapter.getData()) {
+                if (data.getId().equals(datum.getId())){
+                    item = datum;
+                    index = mMoyuAdapter.getData().indexOf(datum);
+                    break;
+                }
+            }
+            MoyuItemBean moyuItemBean = mMoyuAdapter.getData().get(index);
+            moyuItemBean.setCommentCount(data.getCommentCount()!=null?data.getCommentCount():moyuItemBean.getCommentCount());
+            moyuItemBean.setThumbUpCount(data.getThumbUpCount()!=null?data.getThumbUpCount():moyuItemBean.getThumbUpCount());
+            moyuItemBean.setHasThumbUp(data.getHasThumbUp()!=null?data.getHasThumbUp():moyuItemBean.getHasThumbUp());
+            mMoyuAdapter.notifyItemChanged(index);
+        }
     }
 
     @Override

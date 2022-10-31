@@ -1,7 +1,7 @@
 package com.program.module_moyu.callback;
 
 import com.program.module_moyu.model.bean.MomentCommentBean;
-import com.program.module_moyu.model.bean.MoyuRequestBean;
+import com.program.moudle_base.model.MoyuRequestBean;
 import com.program.moudle_base.base.IBaseCallback;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.trello.rxlifecycle4.LifecycleTransformer;

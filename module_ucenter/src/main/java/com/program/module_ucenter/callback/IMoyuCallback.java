@@ -2,6 +2,7 @@ package com.program.module_ucenter.callback;
 
 import com.program.moudle_base.base.IBaseCallback;
 import com.program.moudle_base.model.MoyuItemBean;
+import com.program.moudle_base.model.MoyuRequestBean;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface IMoyuCallback extends IBaseCallback {
     void setMoyuListMore(List<MoyuItemBean> data);
     void setErrorMsg(String msg);
 
+    void setMoyuUpdate(MoyuRequestBean.DataBean data);
 
     LifecycleTransformer<Object> TobindToLifecycle();
 }

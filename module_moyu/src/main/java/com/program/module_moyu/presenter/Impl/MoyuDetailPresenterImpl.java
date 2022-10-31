@@ -11,7 +11,7 @@ import com.program.module_moyu.model.bean.MomentComment;
 import com.program.module_moyu.model.MoyuApi;
 import com.program.module_moyu.model.bean.MomentCommentBean;
 import com.program.module_moyu.model.bean.MomentSubComment;
-import com.program.module_moyu.model.bean.MoyuRequestBean;
+import com.program.moudle_base.model.MoyuRequestBean;
 import com.program.module_moyu.presenter.IMoyuDetailPresenter;
 import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;

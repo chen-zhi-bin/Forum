@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -40,8 +39,7 @@ import com.program.module_moyu.callback.IMoyuDetailCallback;
 import com.program.module_moyu.model.bean.MomentComment;
 import com.program.module_moyu.model.bean.MomentCommentBean;
 import com.program.module_moyu.model.bean.MomentSubComment;
-import com.program.module_moyu.model.bean.MomentSubCommentBean;
-import com.program.module_moyu.model.bean.MoyuRequestBean;
+import com.program.moudle_base.model.MoyuRequestBean;
 import com.program.module_moyu.presenter.IMoyuDetailPresenter;
 import com.program.module_moyu.utils.PresenterManager;
 import com.program.moudle_base.adapter.ImageAdapter;
@@ -52,13 +50,10 @@ import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
-import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshFooter;
-import com.scwang.smart.refresh.layout.api.RefreshHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.DefaultRefreshFooterCreator;
-import com.scwang.smart.refresh.layout.listener.DefaultRefreshHeaderCreator;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
@@ -67,7 +62,6 @@ import net.mikaelzero.mojito.Mojito;
 import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
@@ -146,7 +140,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     private void initListener() {
         mTvDetailStar.setOnClickListener(view ->{
             mMoyuDetailPresenter.getThumbUp(mId);
-//            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
+            EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
         });
 
         mTvReply.setOnClickListener(view -> {

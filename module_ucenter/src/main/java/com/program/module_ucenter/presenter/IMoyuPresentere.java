@@ -6,6 +6,8 @@ import com.program.moudle_base.base.IBasePresenter;
 
 public interface IMoyuPresentere extends IBasePresenter<IMoyuCallback> {
 
+    void getMoyuYpdateInfo(String moyuId);
+
     void getMoyuList(String userId);
 
     void getMoyuListMore();
