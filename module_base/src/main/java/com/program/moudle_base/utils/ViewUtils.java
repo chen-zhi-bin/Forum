@@ -4,12 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-public class ImageUtils {
+public class ViewUtils {
 
     /**
      * 设置View的高度
      */
-    public static View setViewWidth(ImageView view,int width){
+    public static View setViewWidth(View view,int width){
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         if (layoutParams==null){
             layoutParams = new ViewGroup.LayoutParams(
@@ -25,7 +25,7 @@ public class ImageUtils {
     /**
      * 设置View的宽度
      */
-    public static View setViewHeight(ImageView view, int width) {
+    public static View setViewHeight(View view, int width) {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         if (layoutParams==null){
             layoutParams = new ViewGroup.LayoutParams(

@@ -5,6 +5,8 @@ import com.program.module_wenda.model.bean.AnswerBean;
 import com.program.module_wenda.model.bean.RelatedQuestionBean;
 import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaContentBean;
+import com.program.module_wenda.model.bean.WendaListBean;
+import com.program.module_wenda.model.bean.WendaRankingBean;
 import com.program.module_wenda.model.bean.WendaSubCommentInputBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
@@ -21,6 +23,19 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface WendaApi {
+
+    /**
+     *周排行榜
+     */
+    @GET("/ast/rank/answer-count/{size}")
+    Observable<WendaRankingBean> getWendaRankingList(@Path("size")int size);
+
+    @GET("/ct/wenda/list")
+    Observable<WendaListBean> getWendaList(
+            @Query("page") int page,
+            @Query("state")String state,
+            @Query("category")int category
+            );
 
     @GET("/ct/wenda/{wendaId}")
     Observable<WendaContentBean> getWendaDetail(@Path("wendaId") String wendaId);

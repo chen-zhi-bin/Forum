@@ -1,7 +1,5 @@
 package com.program.moudle_base.adapter;
 
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -9,11 +7,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.program.moudle_base.R;
 import com.program.moudle_base.base.BaseApplication;
-import com.program.moudle_base.utils.ImageUtils;
+import com.program.moudle_base.utils.ViewUtils;
 import com.youth.banner.util.BannerUtils;
 import com.youth.banner.util.LogUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
@@ -29,8 +26,8 @@ public class ImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         if (s != null) {
             LogUtils.d("ImageAdapter,loading");
             ImageView ivImage = viewHolder.getView(R.id.iv_image);
-            ivImage = (ImageView) ImageUtils.setViewWidth(ivImage, width-10);
-            ivImage = (ImageView) ImageUtils.setViewHeight(ivImage,width-10);
+            ivImage = (ImageView) ViewUtils.setViewWidth(ivImage, width-10);
+            ivImage = (ImageView) ViewUtils.setViewHeight(ivImage,width-10);
             BannerUtils.setBannerRound(ivImage, 10f);
             Glide.with(BaseApplication.getAppContext())
                     .load(s)
