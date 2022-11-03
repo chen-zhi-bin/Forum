@@ -41,6 +41,10 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
         super(layoutResId, data);
     }
 
+    {
+        addChildClickViewIds(R.id.iv_avatar,R.id.tv_nickname,R.id.tv_reply_value);
+    }
+
     @Override
     protected void convert(BaseViewHolder baseViewHolder, MsgBean msgBean) {
         if (msgBean instanceof MsgAtBean.DataBean.ContentBean){

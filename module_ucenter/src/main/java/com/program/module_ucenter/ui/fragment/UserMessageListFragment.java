@@ -10,6 +10,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
+import com.program.lib_common.service.home.wrap.HomeServiceWrap;
+import com.program.lib_common.service.moyu.wrap.MoyuServiceWrap;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
+import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.MsgListAdapter;
 import com.program.module_ucenter.callback.IMsgListCallback;
@@ -113,16 +117,59 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
         mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                if (view.getId() == R.id.iv_avatar) {
+                int id = view.getId();
+                Object item = adapter.getItem(position);
+                if (id == R.id.iv_avatar || id == R.id.tv_nickname) {
                     String uId;
-                    Object item = adapter.getItem(position);
                     if (item instanceof MsgAtBean.DataBean.ContentBean) {
                         uId = ((MsgAtBean.DataBean.ContentBean) item).getUid();
-                        ToastUtils.showToast(uId);
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(uId);
+                    } else if (item instanceof MsgThumbBean.DataBean.ContentBean) {
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgThumbBean.DataBean.ContentBean) item).getUid());
+                    } else if (item instanceof MsgMomentBean.DataBean.ContentBean) {
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgMomentBean.DataBean.ContentBean) item).getUid());
+                    } else if (item instanceof MsgArticleBean.DataBean.ContentBean) {
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgArticleBean.DataBean.ContentBean) item).getUid());
+                    } else if (item instanceof MsgWendaBean.DataBean.ContentBean) {
+                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgWendaBean.DataBean.ContentBean) item).getUid());
                     }
+                } else if (id == R.id.tv_reply_value) {
+                    toDetail(item);
                 }
             }
         });
+    }
+
+    private void toDetail(Object item) {
+        if (item instanceof MsgAtBean.DataBean.ContentBean) {
+            MsgAtBean.DataBean.ContentBean itemAt = (MsgAtBean.DataBean.ContentBean) item;
+            String type = itemAt.getType();
+            switch (type) {
+                case "moment":
+                    MoyuServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(itemAt.getExId());
+                    break;
+                case "article":
+                    HomeServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(itemAt.getExId(), "");
+                    break;
+                case "wenda":
+                    WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(itemAt.getExId());
+                    break;
+            }
+        } else if (item instanceof MsgThumbBean.DataBean.ContentBean) {
+            String[] split = ((MsgThumbBean.DataBean.ContentBean) item).getUrl().split("/");
+            String[] split1 = split[2].split("#");
+            if (split[1].equals("m") && split.length == 3) {
+                MoyuServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[2]);
+            } else if (split[1].equals("qa") && split.length == 3&&split1.length==1){
+                WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(split[2]);
+            }
+        }else if (item instanceof MsgMomentBean.DataBean.ContentBean){
+            MoyuServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgMomentBean.DataBean.ContentBean)item).getMomentId());
+        }else if (item instanceof MsgArticleBean.DataBean.ContentBean){
+            HomeServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgArticleBean.DataBean.ContentBean)item).getArticleId(),((MsgArticleBean.DataBean.ContentBean)item).getTitle());
+        }else if (item instanceof MsgWendaBean.DataBean.ContentBean){
+            WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MsgWendaBean.DataBean.ContentBean)item).getWendaId());
+        }
     }
 
     @Override
@@ -281,7 +328,7 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
 
     @Override
     public void setMoreMsgWendaList(MsgWendaBean data) {
-        LogUtils.d("test","data = "+data.toString());
+        LogUtils.d("test", "data = " + data.toString());
         finishLoadMore();
         List<MsgWendaBean.DataBean.ContentBean> content = data.getData().getContent();
         if (content.size() == 0 || content == null) {
