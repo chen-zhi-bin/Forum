@@ -1,6 +1,10 @@
 package com.program.module_ucenter.model;
 
 import com.program.module_ucenter.model.domain.AchievementBean;
+import com.program.module_ucenter.model.domain.MsgArticleBean;
+import com.program.module_ucenter.model.domain.MsgMomentBean;
+import com.program.module_ucenter.model.domain.MsgThumbBean;
+import com.program.module_ucenter.model.domain.MsgWendaBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
@@ -57,6 +61,22 @@ public interface UcenterApi {
 
     @GET("/ct/ucenter/message/at/{page}")
     Observable<MsgAtBean> getMsgAtList(@Path("page")int page,@Header("sob_token")String token);
+
+    //文章回复列表
+    @GET("/ct/ucenter/message/article/{page}")
+    Observable<MsgArticleBean> getMsgArticleList(@Path("page")int page, @Header("sob_token")String token);
+
+    //猿村回复列表
+    @GET("/ct/ucenter/message/moment/{page}")
+    Observable<MsgMomentBean> getMsgMomentList(@Path("page")int page,@Header("sob_token")String token);
+
+    //点赞列表
+    @GET("/ct/ucenter/message/thumb/{page}")
+    Observable<MsgThumbBean> getMsgThumb(@Path("page")int page,@Header("sob_token")String token);
+
+    //文问题回答列表
+    @GET("/ct/ucenter/message/wenda/{page}")
+    Observable<MsgWendaBean> getMsgWenda(@Path("page")int page,@Header("sob_token")String token);
 
     /**
      *  得到摸鱼列表

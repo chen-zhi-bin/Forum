@@ -13,8 +13,12 @@ import com.program.lib_common.Constants;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.MsgListAdapter;
 import com.program.module_ucenter.callback.IMsgListCallback;
+import com.program.module_ucenter.model.domain.MsgArticleBean;
 import com.program.module_ucenter.model.domain.MsgAtBean;
 import com.program.module_ucenter.model.domain.MsgBean;
+import com.program.module_ucenter.model.domain.MsgMomentBean;
+import com.program.module_ucenter.model.domain.MsgThumbBean;
+import com.program.module_ucenter.model.domain.MsgWendaBean;
 import com.program.module_ucenter.presenter.IMsgListPresenter;
 import com.program.module_ucenter.utils.PresenterManager;
 import com.program.moudle_base.base.BaseApplication;
@@ -62,9 +66,21 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                switch (pageType){
+                switch (pageType) {
                     case Constants.Ucenter.PAGE_MSG_AT:
                         mMsgListPresenter.getMsgListAt();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_STAR:
+                        mMsgListPresenter.getMsgThumbList();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_DYNAMIC:
+                        mMsgListPresenter.getMsgMomentList();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_ARTICLE:
+                        mMsgListPresenter.getMsgArticleList();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_WENDA:
+                        mMsgListPresenter.getMsgWendaList();
                         break;
                 }
             }
@@ -73,9 +89,21 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                switch (pageType){
+                switch (pageType) {
                     case Constants.Ucenter.PAGE_MSG_AT:
                         mMsgListPresenter.getMoreMsgListAt();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_STAR:
+                        mMsgListPresenter.getMoreMsgThumbList();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_DYNAMIC:
+                        mMsgListPresenter.getMoreMsgMomentList();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_ARTICLE:
+                        mMsgListPresenter.getMoreMsgArticleList();
+                        break;
+                    case Constants.Ucenter.PAGE_MSG_WENDA:
+                        mMsgListPresenter.getMoreMsgWendaList();
                         break;
                 }
             }
@@ -85,10 +113,10 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
         mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                if (view.getId() == R.id.iv_avatar){
+                if (view.getId() == R.id.iv_avatar) {
                     String uId;
                     Object item = adapter.getItem(position);
-                    if (item instanceof MsgAtBean.DataBean.ContentBean){
+                    if (item instanceof MsgAtBean.DataBean.ContentBean) {
                         uId = ((MsgAtBean.DataBean.ContentBean) item).getUid();
                         ToastUtils.showToast(uId);
                     }
@@ -101,24 +129,35 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
     protected void initPresenter() {
         mMsgListPresenter = PresenterManager.getInstance().getMsgListPresenter();
         mMsgListPresenter.registerViewCallback(this);
-        switch (pageType){
+        switch (pageType) {
             case Constants.Ucenter.PAGE_MSG_AT:
-                    mMsgListPresenter.getMsgListAt();
+                mMsgListPresenter.getMsgListAt();
+                break;
+            case Constants.Ucenter.PAGE_MSG_STAR:
+                mMsgListPresenter.getMsgThumbList();
+                break;
+            case Constants.Ucenter.PAGE_MSG_DYNAMIC:
+                mMsgListPresenter.getMsgMomentList();
+                break;
+            case Constants.Ucenter.PAGE_MSG_ARTICLE:
+                mMsgListPresenter.getMsgArticleList();
+                break;
+            case Constants.Ucenter.PAGE_MSG_WENDA:
+                mMsgListPresenter.getMsgWendaList();
                 break;
         }
     }
 
     @Override
     public void setMsgAtList(MsgAtBean data) {
-        if (mRefreshLayout.isRefreshing()){
+        if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.finishRefresh();
         }
-        LogUtils.d("test","data size = "+data.getData().getContent().size());
         mMsgAtList.clear();
         mMsgAtList.addAll(data.getData().getContent());
-       mAdapter.addData(mMsgAtList);
-       mAdapter.notifyDataSetChanged();
-       
+        mAdapter.addData(mMsgAtList);
+        mAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -126,10 +165,10 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
         List<MsgBean> msgBeanList = new ArrayList<>();
         msgBeanList.addAll(data.getData().getContent());
         mAdapter.addData(msgBeanList);
-        if (mRefreshLayout.isLoading()){
+        if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
         }
-        if (mRefreshLayout.isRefreshing()){
+        if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.finishRefresh();
         }
     }
@@ -137,9 +176,119 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
     @Override
     public void setNotMore(String msg) {
         ToastUtils.showToast(msg);
-        if (mRefreshLayout.isLoading()){
+        if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
         }
+    }
+
+    private void finishRefresh() {
+        if (mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.finishRefresh();
+        }
+    }
+
+    private void finishLoadMore() {
+        if (mRefreshLayout.isLoading()) {
+            mRefreshLayout.finishLoadMore();
+        }
+    }
+
+    @Override
+    public void setMsgThumbList(MsgThumbBean data) {
+        finishRefresh();
+        List<MsgThumbBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            setupState(State.EMPTY);
+//            ToastUtils.showToast(data.getMessage());
+            return;
+        }
+        mAdapter.getData().clear();
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMoreMsgThumbList(MsgThumbBean data) {
+        finishLoadMore();
+        List<MsgThumbBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            ToastUtils.showToast("暂无更多");
+            return;
+        }
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMsgMomentList(MsgMomentBean data) {
+        finishRefresh();
+        List<MsgMomentBean.DataBean.ContentBean> content = data.getData().getContent();
+        LogUtils.d("test", "content dat = " + content.toString());
+        if (content.size() == 0 || content == null) {
+            setupState(State.EMPTY);
+//            ToastUtils.showToast(data.getMessage());
+            return;
+        }
+        mAdapter.getData().clear();
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMoreMsgMomentList(MsgMomentBean data) {
+        finishLoadMore();
+        List<MsgMomentBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            ToastUtils.showToast("暂无更多");
+            return;
+        }
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMsgArticleList(MsgArticleBean data) {
+        finishRefresh();
+        List<MsgArticleBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            setupState(State.EMPTY);
+//            ToastUtils.showToast(data.getMessage());
+            return;
+        }
+        mAdapter.getData().clear();
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMoreMsgArticleList(MsgArticleBean data) {
+        finishLoadMore();
+        List<MsgArticleBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            ToastUtils.showToast("暂无更多");
+            return;
+        }
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMsgWendaList(MsgWendaBean data) {
+        finishRefresh();
+        List<MsgWendaBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            setupState(State.EMPTY);
+//            ToastUtils.showToast(data.getMessage());
+            return;
+        }
+        mAdapter.getData().clear();
+        mAdapter.addData(content);
+    }
+
+    @Override
+    public void setMoreMsgWendaList(MsgWendaBean data) {
+        LogUtils.d("test","data = "+data.toString());
+        finishLoadMore();
+        List<MsgWendaBean.DataBean.ContentBean> content = data.getData().getContent();
+        if (content.size() == 0 || content == null) {
+            ToastUtils.showToast("暂无更多");
+            return;
+        }
+        mAdapter.addData(content);
     }
 
     @Override
@@ -150,10 +299,10 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
     @Override
     public void setError(String s) {
         ToastUtils.showToast(s);
-        if (mRefreshLayout.isLoading()){
+        if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
         }
-        if (mRefreshLayout.isRefreshing()){
+        if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.finishRefresh();
         }
     }
@@ -173,7 +322,7 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
 
     }
 
-    public interface onMessageListListener{
+    public interface onMessageListListener {
         LifecycleTransformer<Object> getBindLifecycle();
     }
 }

@@ -34,6 +34,18 @@ public class Constants {
 
         public static final String PAGE_TYPE = "page_type";
 
+        //消息-问答
+        public static final int PAGE_MSG_WENDA = 7;
+
+        //消息-文章
+        public static final int PAGE_MSG_ARTICLE = 8;
+
+        //消息-动态
+        public static final int PAGE_MSG_DYNAMIC = 9;
+
+        //消息-给朕点赞
+        public static final int PAGE_MSG_STAR = 10;
+
         //消息-@我
         public static final int PAGE_MSG_AT =11;
         //消息-系统消息

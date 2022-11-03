@@ -8,4 +8,20 @@ public interface IMsgListPresenter extends IBasePresenter<IMsgListCallback> {
     void getMsgListAt();
 
     void getMoreMsgListAt();
+
+    void getMsgThumbList();
+
+    void getMoreMsgThumbList();
+
+    void getMsgMomentList();
+
+    void getMoreMsgMomentList();
+
+    void getMsgArticleList();
+
+    void getMoreMsgArticleList();
+
+    void getMsgWendaList();
+
+    void getMoreMsgWendaList();
 }

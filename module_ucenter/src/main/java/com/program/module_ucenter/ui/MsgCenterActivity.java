@@ -90,6 +90,34 @@ public class MsgCenterActivity extends RxAppCompatActivity implements IMsgCenter
     }
 
     private void initListener() {
+        mTvWenda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //问答回答
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_WENDA,"问答回答");
+            }
+        });
+        mTvArticle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //文章评论
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_ARTICLE,"文章评论");
+            }
+        });
+        mTvDynamic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //动态评论
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_DYNAMIC,"动态评论");
+            }
+        });
+        mTvStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //点赞
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchMsgList(Constants.Ucenter.PAGE_MSG_STAR,"给朕点赞");
+            }
+        });
         mIvBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
