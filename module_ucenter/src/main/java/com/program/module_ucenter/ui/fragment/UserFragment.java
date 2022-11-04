@@ -146,6 +146,17 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
                 }
             }
         });
+        mTvCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (data.getData()!=null){
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchUcenterList(
+                            Constants.Ucenter.PAGE_COLLOCATION,
+                            data.getData().getUserId()
+                    );
+                }
+            }
+        });
     }
 
     @Override

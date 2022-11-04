@@ -34,6 +34,9 @@ public class Constants {
 
         public static final String PAGE_TYPE = "page_type";
 
+        //收藏集
+        public static final int PAGE_COLLOCATION = 1;
+
         //关注列表
         public static final int PAGE_FOLLOW = 2;
 

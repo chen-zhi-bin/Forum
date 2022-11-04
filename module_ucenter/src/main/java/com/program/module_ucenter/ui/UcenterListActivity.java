@@ -14,6 +14,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
+import com.program.module_ucenter.ui.fragment.UserCollectionFragment;
 import com.program.module_ucenter.ui.fragment.UserFollowFragment;
 import com.program.module_ucenter.ui.fragment.UserRankingFragment;
 import com.program.moudle_base.utils.ToastUtils;
@@ -44,6 +45,14 @@ public class UcenterListActivity extends AppCompatActivity {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (pageType) {
+            case Constants.Ucenter.PAGE_COLLOCATION:
+                tvTitle.setText("收藏集");
+                mFragment = new UserCollectionFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("userId",userId);
+                mFragment.setArguments(bundle1);
+                transaction.add(R.id.fl_content,mFragment).commit();
+                break;
             case Constants.Ucenter.PAGE_FOLLOW:
             case Constants.Ucenter.PAGE_FANS:
                 tvTitle.setText(pageType == Constants.Ucenter.PAGE_FOLLOW ? "关注列表" : "粉丝列表");
