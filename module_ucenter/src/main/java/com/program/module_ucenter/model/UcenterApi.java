@@ -1,6 +1,7 @@
 package com.program.module_ucenter.model;
 
 import com.program.module_ucenter.model.domain.AchievementBean;
+import com.program.module_ucenter.model.domain.FollowListBean;
 import com.program.module_ucenter.model.domain.MsgArticleBean;
 import com.program.module_ucenter.model.domain.MsgMomentBean;
 import com.program.module_ucenter.model.domain.MsgThumbBean;
@@ -95,6 +96,13 @@ public interface UcenterApi {
      */
     @GET("/uc/user-info/{userId}")
     Observable<UserInfoBean> getUserInfo(@Path("userId")String userId);
+
+
+    /**
+     *关注列表
+     */
+    @GET("/uc/follow/list/{userId}/{page}")
+    Observable<FollowListBean> getFollowList(@Path("userId")String userId,@Path("page")int page,@Header("sob_token")String token);
 
     /**
      * 查看受否关注

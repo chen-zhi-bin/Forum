@@ -58,6 +58,13 @@ public class UcenterServiceWrap{
                 .navigation();
     }
 
+    public void launchUcenterList(int pageFollow, String userId) {
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_UCENTER_LIST)
+                .withInt(Constants.Ucenter.PAGE_TYPE, pageFollow)
+                .withString("userId", userId)
+                .navigation();
+    }
 
 
     public static final class Singletion{

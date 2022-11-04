@@ -34,6 +34,12 @@ public class Constants {
 
         public static final String PAGE_TYPE = "page_type";
 
+        //关注列表
+        public static final int PAGE_FOLLOW = 2;
+
+        //粉丝列表
+        public static final int PAGE_FANS = 3;
+
         //消息-问答
         public static final int PAGE_MSG_WENDA = 7;
 

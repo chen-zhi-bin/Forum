@@ -124,6 +124,11 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
             UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(data.getData().getUserId());
 //                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail("1382711465131241472");
         });
+        mTvFollow.setOnClickListener(view ->
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchUcenterList(
+                            Constants.Ucenter.PAGE_FOLLOW,data.getData().getUserId()
+                    )
+        );
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.program.module_ucenter.utils;
 
-import com.program.module_ucenter.callback.IMsgSystemCallback;
 import com.program.module_ucenter.presenter.IMoyuPresentere;
 import com.program.module_ucenter.presenter.IMsgCenterPresenter;
 import com.program.module_ucenter.presenter.IMsgListPresenter;
@@ -8,6 +7,7 @@ import com.program.module_ucenter.presenter.IMsgSystemPresenter;
 import com.program.module_ucenter.presenter.ISettingPresenter;
 import com.program.module_ucenter.presenter.IUserCenterArticlePresenter;
 import com.program.module_ucenter.presenter.IUserCenterPresenter;
+import com.program.module_ucenter.presenter.IUserFollowFragmentPresenter;
 import com.program.module_ucenter.presenter.IUserFragmentPresenter;
 import com.program.module_ucenter.presenter.Impl.MoyuPreseenterImpl;
 import com.program.module_ucenter.presenter.Impl.MsgCenterPresenterImpl;
@@ -17,6 +17,7 @@ import com.program.module_ucenter.presenter.Impl.SettingPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.UserCenterArticlePresenterImpl;
 import com.program.module_ucenter.presenter.Impl.UserCenterPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.UserFragmentPresenterImpl;
+import com.program.module_ucenter.presenter.Impl.UsrFollowFragmentPresenterImpl;
 
 public class PresenterManager {
     private static final PresenterManager ourInstance = new PresenterManager();
@@ -28,6 +29,7 @@ public class PresenterManager {
     private final IMoyuPresentere mMoyuPreseenter;
     private final IUserCenterPresenter mUserCenterPresenter;
     private final IUserCenterArticlePresenter mUserCenterArticlePresenter;
+    private final IUserFollowFragmentPresenter mUsrFollowFragmentPresenter;
 
     public static PresenterManager getInstance(){
         return ourInstance;
@@ -65,6 +67,10 @@ public class PresenterManager {
         return mUserCenterArticlePresenter;
     }
 
+    public IUserFollowFragmentPresenter getUsrFollowFragmentPresenter() {
+        return mUsrFollowFragmentPresenter;
+    }
+
     private PresenterManager(){
         mUserFragmentPresenter = new UserFragmentPresenterImpl();
         mSettingPresenter = new SettingPresenterImpl();
@@ -74,5 +80,6 @@ public class PresenterManager {
         mMoyuPreseenter = new MoyuPreseenterImpl();
         mUserCenterPresenter = new UserCenterPresenterImpl();
         mUserCenterArticlePresenter = new UserCenterArticlePresenterImpl();
+        mUsrFollowFragmentPresenter = new UsrFollowFragmentPresenterImpl();
     }
 }
