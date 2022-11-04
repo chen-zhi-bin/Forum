@@ -40,6 +40,9 @@ public class Constants {
         //粉丝列表
         public static final int PAGE_FANS = 3;
 
+        //富豪榜
+        public static final int PAGE_RANKING = 5;
+
         //消息-问答
         public static final int PAGE_MSG_WENDA = 7;
 

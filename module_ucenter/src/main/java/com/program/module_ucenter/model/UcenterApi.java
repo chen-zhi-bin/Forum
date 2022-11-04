@@ -6,6 +6,7 @@ import com.program.module_ucenter.model.domain.MsgArticleBean;
 import com.program.module_ucenter.model.domain.MsgMomentBean;
 import com.program.module_ucenter.model.domain.MsgThumbBean;
 import com.program.module_ucenter.model.domain.MsgWendaBean;
+import com.program.module_ucenter.model.domain.RankingSobBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
@@ -109,6 +110,9 @@ public interface UcenterApi {
      */
     @GET("/uc/fans/list/{userId}/{page}")
     Observable<FollowListBean> getFansList(@Path("userId")String userId,@Path("page")int page,@Header("sob_token")String token);
+
+    @GET("/ast/rank/sob/{count}")
+    Observable<RankingSobBean> getRankingSob(@Path("count")int count);
 
     /**
      * 查看受否关注

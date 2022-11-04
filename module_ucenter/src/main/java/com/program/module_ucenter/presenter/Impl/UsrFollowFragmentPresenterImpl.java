@@ -75,7 +75,7 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
         pageFollow = 1;
         mApi.getFollowList(userId,pageFollow,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .compose(mCallback.getBindLifecycle())
                 .subscribe(new Observer<Object>() {
                     @Override
@@ -106,7 +106,7 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
     @Override
     public void getMoreFollowList(String userId) {
         mApi.getFollowList(userId,pageFollow,mToken)
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .compose(mCallback.getBindLifecycle())
                 .subscribe(new Observer<Object>() {
@@ -140,7 +140,7 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
     public void getFansList(String userId) {
         pageFan = 1;
         mApi.getFansList(userId,pageFan,mToken)
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .compose(mCallback.getBindLifecycle())
                 .subscribe(new Observer<Object>() {
@@ -172,7 +172,7 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
     @Override
     public void getMoreFansList(String userId) {
         mApi.getFansList(userId,pageFan,mToken)
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .compose(mCallback.getBindLifecycle())
                 .subscribe(new Observer<Object>() {

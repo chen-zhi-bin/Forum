@@ -75,6 +75,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     private TextView mTvNotifyNum;
     private ImageView mIvNotify;
     private AchievementBean data;
+    private SuperTextView mTvRanking;
 
     @Override
     protected int getRootViewResId() {
@@ -91,6 +92,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         mTvFollow = rootView.findViewById(R.id.tv_follow);
         mTvCollection = rootView.findViewById(R.id.tv_collection);
         mTvFans = rootView.findViewById(R.id.tv_fans);
+        mTvRanking = rootView.findViewById(R.id.tv_ranking);
 
         mTvViewNum = rootView.findViewById(R.id.tv_view_num);
         mTvViewDx = rootView.findViewById(R.id.tv_view_dx);
@@ -134,9 +136,16 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
                 UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchUcenterList(
                     Constants.Ucenter.PAGE_FANS,data.getData().getUserId()
                 );
-
             }
-    });
+        });
+        mTvRanking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (data.getData() != null) {
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchUcenterList(Constants.Ucenter.PAGE_RANKING,data.getData().getUserId());
+                }
+            }
+        });
     }
 
     @Override

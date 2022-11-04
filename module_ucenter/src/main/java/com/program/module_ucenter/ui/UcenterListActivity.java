@@ -15,6 +15,7 @@ import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.ui.fragment.UserFollowFragment;
+import com.program.module_ucenter.ui.fragment.UserRankingFragment;
 import com.program.moudle_base.utils.ToastUtils;
 
 @Route(path = RoutePath.Ucenter.PAGE_UCENTER_LIST)
@@ -51,6 +52,11 @@ public class UcenterListActivity extends AppCompatActivity {
                 bundle.putInt(Constants.Ucenter.PAGE_TYPE,pageType);
                 bundle.putString("userId",userId);
                 mFragment.setArguments(bundle);
+                transaction.add(R.id.fl_content,mFragment).commit();
+                break;
+            case Constants.Ucenter.PAGE_RANKING:
+                tvTitle.setText("富豪榜");
+                mFragment = new UserRankingFragment();
                 transaction.add(R.id.fl_content,mFragment).commit();
                 break;
         }

@@ -9,6 +9,7 @@ import com.program.module_ucenter.presenter.IUserCenterArticlePresenter;
 import com.program.module_ucenter.presenter.IUserCenterPresenter;
 import com.program.module_ucenter.presenter.IUserFollowFragmentPresenter;
 import com.program.module_ucenter.presenter.IUserFragmentPresenter;
+import com.program.module_ucenter.presenter.IUserRankingFragmentPresenter;
 import com.program.module_ucenter.presenter.Impl.MoyuPreseenterImpl;
 import com.program.module_ucenter.presenter.Impl.MsgCenterPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.MsgListPresenterImpl;
@@ -17,6 +18,7 @@ import com.program.module_ucenter.presenter.Impl.SettingPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.UserCenterArticlePresenterImpl;
 import com.program.module_ucenter.presenter.Impl.UserCenterPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.UserFragmentPresenterImpl;
+import com.program.module_ucenter.presenter.Impl.UserRankingFragmentPresentereImpl;
 import com.program.module_ucenter.presenter.Impl.UsrFollowFragmentPresenterImpl;
 
 public class PresenterManager {
@@ -30,6 +32,7 @@ public class PresenterManager {
     private final IUserCenterPresenter mUserCenterPresenter;
     private final IUserCenterArticlePresenter mUserCenterArticlePresenter;
     private final IUserFollowFragmentPresenter mUsrFollowFragmentPresenter;
+    private final IUserRankingFragmentPresenter mUserRankingFragment;
 
     public static PresenterManager getInstance(){
         return ourInstance;
@@ -71,6 +74,10 @@ public class PresenterManager {
         return mUsrFollowFragmentPresenter;
     }
 
+    public IUserRankingFragmentPresenter getUserRankingFragment() {
+        return mUserRankingFragment;
+    }
+
     private PresenterManager(){
         mUserFragmentPresenter = new UserFragmentPresenterImpl();
         mSettingPresenter = new SettingPresenterImpl();
@@ -81,5 +88,6 @@ public class PresenterManager {
         mUserCenterPresenter = new UserCenterPresenterImpl();
         mUserCenterArticlePresenter = new UserCenterArticlePresenterImpl();
         mUsrFollowFragmentPresenter = new UsrFollowFragmentPresenterImpl();
+        mUserRankingFragment = new UserRankingFragmentPresentereImpl();
     }
 }
