@@ -29,6 +29,8 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
     private static final int RETURN_ERROR = 0;
     private static final int RETURN_FOLLOW_LIST=1;
     private static final int RETURN_MORE_FOLLOW_LIST=2;
+    private static final int RETURN_FAN_LIST=3;
+    private static final int RETURN_MORE_FAN_LIST=4;
     private Handler mHandler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -49,7 +51,14 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
                     pageFollow++;
                     mCallback.setMoreFollowList((FollowListBean)msg.obj);
                     break;
-
+                case RETURN_FAN_LIST:
+                    pageFan++;
+                    mCallback.setFansList((FollowListBean)msg.obj);
+                    break;
+                case RETURN_MORE_FAN_LIST:
+                    pageFan++;
+                    mCallback.setMoreFansList((FollowListBean)msg.obj);
+                    break;
             }
         }
     };
@@ -110,6 +119,72 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                         Message message = new Message();
                         message.what = ((FollowListBean)o).getCode()==Constants.SUCCESS?RETURN_MORE_FOLLOW_LIST:RETURN_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private int pageFan = -1;
+    @Override
+    public void getFansList(String userId) {
+        pageFan = 1;
+        mApi.getFansList(userId,pageFan,mToken)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.getBindLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        Message message = new Message();
+                        message.what=((FollowListBean)o).getCode()==Constants.SUCCESS?RETURN_FAN_LIST:RETURN_ERROR;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getMoreFansList(String userId) {
+        mApi.getFansList(userId,pageFan,mToken)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.getBindLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        Message message = new Message();
+                        message.what=((FollowListBean)o).getCode()==Constants.SUCCESS?RETURN_MORE_FAN_LIST:RETURN_ERROR;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }

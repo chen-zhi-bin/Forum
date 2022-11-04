@@ -129,6 +129,14 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
                             Constants.Ucenter.PAGE_FOLLOW,data.getData().getUserId()
                     )
         );
+        mTvFans.setOnClickListener(view -> {
+            if (data != null) {
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchUcenterList(
+                    Constants.Ucenter.PAGE_FANS,data.getData().getUserId()
+                );
+
+            }
+    });
     }
 
     @Override

@@ -105,6 +105,12 @@ public interface UcenterApi {
     Observable<FollowListBean> getFollowList(@Path("userId")String userId,@Path("page")int page,@Header("sob_token")String token);
 
     /**
+     * 获取粉丝列表
+     */
+    @GET("/uc/fans/list/{userId}/{page}")
+    Observable<FollowListBean> getFansList(@Path("userId")String userId,@Path("page")int page,@Header("sob_token")String token);
+
+    /**
      * 查看受否关注
      * @param userId    对象id
      * @param token     自己token

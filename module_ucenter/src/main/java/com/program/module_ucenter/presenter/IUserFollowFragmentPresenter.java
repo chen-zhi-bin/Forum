@@ -9,4 +9,8 @@ public interface IUserFollowFragmentPresenter extends IBasePresenter<IUserFollow
 
     void getMoreFollowList(String userId);
 
+    void getFansList(String userId);
+
+    void getMoreFansList(String userId);
+
 }

@@ -10,6 +10,10 @@ public interface IUserFollowFragmentCallback extends IBaseCallback {
 
     void setMoreFollowList(FollowListBean data);
 
+    void setFansList(FollowListBean data);
+
+    void setMoreFansList(FollowListBean data);
+
     void onMsgError(String error);
 
     LifecycleTransformer<Object> getBindLifecycle();

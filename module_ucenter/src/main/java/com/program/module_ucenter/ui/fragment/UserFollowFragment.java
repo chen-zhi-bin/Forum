@@ -64,7 +64,14 @@ public class UserFollowFragment extends BaseFragment implements IUserFollowFragm
     protected void initPresenter() {
         mUsrFollowFragmentPresenter = PresenterManager.getInstance().getUsrFollowFragmentPresenter();
         mUsrFollowFragmentPresenter.registerViewCallback(this);
-        mUsrFollowFragmentPresenter.getFollowList(mUserId);
+        switch (mPageType){
+            case Constants.Ucenter.PAGE_FOLLOW:
+                mUsrFollowFragmentPresenter.getFollowList(mUserId);
+                break;
+            case Constants.Ucenter.PAGE_FANS:
+                mUsrFollowFragmentPresenter.getFansList(mUserId);
+                break;
+        }
     }
 
     @Override
@@ -85,6 +92,9 @@ public class UserFollowFragment extends BaseFragment implements IUserFollowFragm
                     case Constants.Ucenter.PAGE_FOLLOW:
                         mUsrFollowFragmentPresenter.getFollowList(mUserId);
                         break;
+                    case Constants.Ucenter.PAGE_FANS:
+                        mUsrFollowFragmentPresenter.getFansList(mUserId);
+                        break;
                 }
             }
         });
@@ -95,6 +105,9 @@ public class UserFollowFragment extends BaseFragment implements IUserFollowFragm
                     case Constants.Ucenter.PAGE_FOLLOW:
                         mUsrFollowFragmentPresenter.getMoreFollowList(mUserId);
                         break;
+                        case Constants.Ucenter.PAGE_FANS:
+                            mUsrFollowFragmentPresenter.getMoreFansList(mUserId);
+                            break;
                 }
             }
         });
@@ -134,6 +147,31 @@ public class UserFollowFragment extends BaseFragment implements IUserFollowFragm
             mAdapter.addData(list);
         }else {
             ToastUtils.showToast("暂无数据");
+        }
+    }
+
+    @Override
+    public void setFansList(FollowListBean data) {
+        setupState(State.SUCCESS);
+        finishRefresh();
+        List<FollowListBean.DataBean.ListBean> list = data.getData().getList();
+        if (list != null) {
+            mAdapter.getData().clear();
+            mAdapter.addData(list);
+        }
+        if (!data.getData().getHasNext()) {
+            mRefreshLayout.setEnableLoadMore(false);
+        }
+    }
+
+    @Override
+    public void setMoreFansList(FollowListBean data) {
+        finishLoadMore();
+        List<FollowListBean.DataBean.ListBean> list = data.getData().getList();
+        if (list != null) {
+            mAdapter.addData(list);
+        }else {
+            ToastUtils.showToast("暂无更多");
         }
     }
 
