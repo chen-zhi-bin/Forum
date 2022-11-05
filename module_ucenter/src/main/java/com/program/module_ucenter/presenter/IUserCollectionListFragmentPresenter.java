@@ -5,4 +5,7 @@ import com.program.moudle_base.base.IBasePresenter;
 
 public interface IUserCollectionListFragmentPresenter extends IBasePresenter<IUserCollectionListFragmentCallback> {
 
+    void getCollectionList();
+
+    void getMoreCollectionList();
 }

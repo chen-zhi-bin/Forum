@@ -10,6 +10,7 @@ import com.program.module_ucenter.model.domain.RankingSobBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
+import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.module_ucenter.model.domain.LoginoutBean;
 import com.program.module_ucenter.model.domain.MoyuBean;
@@ -98,6 +99,11 @@ public interface UcenterApi {
     @GET("/uc/user-info/{userId}")
     Observable<UserInfoBean> getUserInfo(@Path("userId")String userId);
 
+    /**
+     * 获取收藏夹
+     */
+    @GET("ct/collection/list/{page}")
+    Observable<CollectionBean> getCollectionList(@Path("page") int page,@Header("sob_token") String token);
 
     /**
      *关注列表
