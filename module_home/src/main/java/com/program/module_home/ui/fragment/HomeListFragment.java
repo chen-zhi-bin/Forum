@@ -203,6 +203,9 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
 
     @Override
     public void setArticleUpdateInfo(ArticleDetailBean data) {
+        if (mAdapter==null||mAdapter.getData().size()==0){
+            return;
+        }
         ArticleDetailBean.DataBean bean = data.getData();
         if (bean != null) {
             List<MultiItemEntity> data1 = mAdapter.getData();
@@ -218,6 +221,9 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
                 }
             }
             LogUtils.d("test","index = "+index);
+            if (index==-1){
+                return;
+            }
             MultiItemEntity itemEntity = mAdapter.getData().get(index);
             HomeItemBean.DataBean.ListBean articleItem = (HomeItemBean.DataBean.ListBean) itemEntity;
             LogUtils.d("test","3333 title = "+bean.getTitle());
