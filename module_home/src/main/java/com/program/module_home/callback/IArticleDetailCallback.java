@@ -31,6 +31,7 @@ public interface IArticleDetailCallback extends IBaseCallback {
 
     void setReturnPriseArticle(BaseResponseBean data);
 
+    void setCheckCollectionState(BaseResponseBean data);
 
     LifecycleTransformer<Object> TobindToLifecycle();
 

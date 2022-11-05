@@ -42,6 +42,11 @@ public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCa
     void priseArticle(PriseArticleInputBean data);
 
     /**
+     * 查看文章是否收藏
+     */
+    void getCheckCollectionState(String articleId);
+
+    /**
      * 得到与目标用户之间的关系
      * @param userId    id
      */

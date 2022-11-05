@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -126,6 +127,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private ImageView mIvStar;
     private ImageView mIvList;
     private TextView mTvReward;
+    private ImageView mIvCollection;
 
     //todo:收藏
 
@@ -153,6 +155,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mArticleDetailPresenter.registerViewCallback(this);
         mArticleDetailPresenter.getArticleDetail(mArticleId);
         mArticleDetailPresenter.getArticleThumbUpState(mArticleId);
+        mArticleDetailPresenter.getCheckCollectionState(mArticleId);
     }
 
     private void initListener() {
@@ -446,6 +449,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mTvStarNum = this.findViewById(R.id.tv_star_num);
         mTvReplyNum.setVisibility(View.GONE);
         mTvStarNum.setVisibility(View.GONE);
+        mIvCollection = this.findViewById(R.id.iv_collection);
 
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvHeaderNickname = this.findViewById(R.id.tv_header_nickname);
@@ -656,6 +660,18 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         }else {
             ToastUtils.showToast(data.getMessage());
         }
+    }
+
+    @Override
+    public void setCheckCollectionState(BaseResponseBean data) {
+        if (data.getSuccess()&&(!TextUtils.isEmpty(data.getData().toString()))&&(!data.getData().equals("0"))) {
+            setCollectStyle(true,data.getData().toString());
+        }
+    }
+
+    private void setCollectStyle(boolean isCollect, String favoriteId) {
+        mIvCollection.setTag(favoriteId);
+        mIvCollection.setImageResource(isCollect?R.mipmap.ic_detail_collect_checked:R.mipmap.ic_detail_collect);
     }
 
     @Override

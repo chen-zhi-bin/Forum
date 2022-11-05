@@ -17,6 +17,8 @@ import com.program.moudle_base.model.PriseQrCodeBean;
 
 import org.jsoup.Connection;
 
+import java.util.logging.Handler;
+
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -25,6 +27,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface HomeApi {
 
@@ -86,6 +89,12 @@ public interface HomeApi {
      */
     @POST("/ct/article/sub-comment")
     Observable<BaseResponseBean> replyComment(@Body SubCommentInputBean comment,@Header("sob_token") String token);
+
+    /**
+     * 是否收藏   返回值：{"success":true,"code":10000,"message":"操作成功","data":"972137212613230592"}  data="0" 未收藏
+     */
+    @GET("/ct/favorite/checkCollected")
+    Observable<BaseResponseBean> checkCollected(@Query("url")String url,@Header("sob_token")String token);
 
     /**
      * 文章是否点赞

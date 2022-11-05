@@ -52,6 +52,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_ARTICLE_THUMB_STATE = 13;   //文章是否点赞
     private static final int RETURN_ARTICLE_ADD_THUMB = 14;   //文章点赞
     private static final int RETURN_ARTICLE_PRISE = 15;   //打赏文章
+    private static final int RETURN_ARTICLE_COLLECTION_STATE = 16;   //文章是否收藏
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -110,6 +111,9 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     break;
                 case RETURN_ARTICLE_PRISE:
                     mCallback.setReturnPriseArticle((BaseResponseBean) msg.obj);
+                    break;
+                case RETURN_ARTICLE_COLLECTION_STATE:
+                    mCallback.setCheckCollectionState((BaseResponseBean) msg.obj);
                     break;
             }
         }
@@ -399,6 +403,38 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     public void onNext(@NonNull Object o) {
                         Message message = new Message();
                         message.what = RETURN_ARTICLE_PRISE;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getCheckCollectionState(String articleId) {
+        mApi.checkCollected(Constants.WEBSITE_URL + articleId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = RETURN_ARTICLE_COLLECTION_STATE;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }
