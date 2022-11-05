@@ -154,4 +154,10 @@ public interface HomeApi {
      */
     @POST("/ct/favorite")
     Observable<BaseResponseBean> favorite(@Body CollectInputBean body,@Header("sob_token")String token);
+
+    /**
+     *取消收藏
+     */
+    @DELETE("/ct/favorite/{favoriteId}")
+    Observable<BaseResponseBean> unFavorite(@Path("favoriteId")String favoriteId,@Header("sob_token")String token);
 }

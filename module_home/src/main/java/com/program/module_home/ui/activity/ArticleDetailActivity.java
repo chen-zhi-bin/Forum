@@ -170,6 +170,11 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
                 if (TextUtils.isEmpty(mArticleId) || TextUtils.isEmpty(mArticleTitle)){
                     return;
                 }
+                Object tag = mIvCollection.getTag();
+                if (tag instanceof String &&(!TextUtils.isEmpty(tag.toString()))){
+                    unFavorite(tag.toString());
+                    return;
+                }
                 getCollectFolder();
             }
         });
@@ -349,6 +354,13 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
      */
     private void favorite(CollectInputBean data) {
         mArticleDetailPresenter.favorite(data);
+    }
+
+    /**
+     * 取消收藏
+     */
+    private void unFavorite(String favoriteId) {
+        mArticleDetailPresenter.unFavorite(favoriteId);
     }
 
     private void showPriseDialog() {
@@ -809,6 +821,12 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 
     @Override
     public void setFavorite(BaseResponseBean data) {
+        ToastUtils.showToast(data.getMessage());
+        mArticleDetailPresenter.getCheckCollectionState(mArticleId);
+    }
+
+    @Override
+    public void setUnFavorite(BaseResponseBean data) {
         ToastUtils.showToast(data.getMessage());
         mArticleDetailPresenter.getCheckCollectionState(mArticleId);
     }

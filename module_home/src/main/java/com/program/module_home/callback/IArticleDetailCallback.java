@@ -51,4 +51,6 @@ public interface IArticleDetailCallback extends IBaseCallback {
     void setCollectionList(CollectionBean data);
 
     void setFavorite(BaseResponseBean data);
+
+    void setUnFavorite(BaseResponseBean data);
 }

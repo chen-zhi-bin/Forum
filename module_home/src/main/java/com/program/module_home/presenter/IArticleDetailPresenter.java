@@ -74,4 +74,9 @@ public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCa
      * 收藏
      */
     void favorite(CollectInputBean data);
+
+    /**
+     * 取消收藏
+     */
+    void unFavorite(String favoriteId);
 }

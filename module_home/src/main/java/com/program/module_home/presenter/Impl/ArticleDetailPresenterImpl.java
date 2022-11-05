@@ -56,7 +56,8 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_ARTICLE_PRISE = 15;   //打赏文章
     private static final int RETURN_ARTICLE_COLLECTION_STATE = 16;   //文章是否收藏
     private static final int RETURN_COLLECTION_LIST = 17;   //收藏列表
-    private static final int RETURN_COLLECTION = 18;   //收藏
+    private static final int RETURN_FAVORITE = 18;   //添加收藏
+    private static final int RETURN_UN_FAVORITE = 19;   //取消收藏
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -122,10 +123,12 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                 case RETURN_COLLECTION_LIST:
                     mCallback.setCollectionList((CollectionBean)msg.obj);
                     break;
-                case RETURN_COLLECTION:
+                case RETURN_FAVORITE:
                     mCallback.setFavorite((BaseResponseBean)msg.obj);
                     break;
-
+                case RETURN_UN_FAVORITE:
+                    mCallback.setUnFavorite((BaseResponseBean)msg.obj);
+                    break;
             }
         }
     };
@@ -607,13 +610,46 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     @Override
                     public void onNext(@NonNull Object o) {
                         Message message = new Message();
-                        message.what = RETURN_COLLECTION;
+                        message.what = RETURN_FAVORITE;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void unFavorite(String favoriteId) {
+        mApi.unFavorite(favoriteId,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = RETURN_UN_FAVORITE;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        LogUtils.d("test","test = "+e.getMessage().toString());
                         requestFailed();
                     }
 
