@@ -7,4 +7,6 @@ public interface IFavoriteListPresenter extends IBasePresenter<IFavoriteListCall
 
     void getFavoriteList(String collectionId);
 
+    void getMoreFavoriteList(String collectionId);
+
 }

@@ -106,8 +106,13 @@ public interface UcenterApi {
     @GET("ct/collection/list/{page}")
     Observable<CollectionBean> getCollectionList(@Path("page") int page,@Header("sob_token") String token);
 
-    /*
-     *获取到收藏夹里的内容列表 {collectionId}/{page}/{order}  order：排序方式 0 表示降序，1表示升序，按添加时间
+    /**
+     * 获取到收藏夹里的内容列表
+     * @param collectionId  id
+     * @param page  page
+     * @param order 排序方式 0 表示降序，1表示升序，按添加时间
+     * @param token token
+     * @return  FavoriteBean
      */
     @GET("/ct/ucenter/favorite/list/{collectionId}/{page}/{order}")
     Observable<FavoriteBean> getFavoriteList(
