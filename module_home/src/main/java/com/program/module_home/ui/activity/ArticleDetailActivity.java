@@ -34,6 +34,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_common.Constants;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
@@ -49,11 +50,13 @@ import com.program.module_home.model.bean.CommentInputBean;
 import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
 import com.program.module_home.presenter.IArticleDetailPresenter;
+import com.program.module_home.ui.adapter.CollectFolderAdapter;
 import com.program.module_home.ui.adapter.HomeDetailAdapter;
 import com.program.module_home.utils.PresenterManager;
 import com.program.moudle_base.adapter.CommonPriseAdapter;
 import com.program.moudle_base.model.ArticleTitleBean;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.model.PriseSobBean;
@@ -128,6 +131,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private ImageView mIvList;
     private TextView mTvReward;
     private ImageView mIvCollection;
+    private CollectFolderAdapter mCollectFolderAdapter = null;
 
     //todo:收藏
 
@@ -159,6 +163,15 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     }
 
     private void initListener() {
+        mIvCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(mArticleId) || TextUtils.isEmpty(mArticleTitle)){
+                    return;
+                }
+                getCollectFolder();
+            }
+        });
         mTvPriseList.setOnClickListener(view -> HomeServiceWrap.Singletion.INSTANCE.getHolder().launchPriseActivityList(mArticleId));
         mTvReward.setOnClickListener(view -> showPriseDialog());
         mIvSwitch.setOnClickListener(view -> {
@@ -282,6 +295,44 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 
             }
         });
+    }
+
+    /**
+     * 获取收藏夹
+     */
+    private void getCollectFolder() {
+        showCollectionFolder();
+        mCollectFolderAdapter = showCollectionFolder();
+        mArticleDetailPresenter.getCollectionList();
+        //todo:presenterimpl,callback,api?
+    }
+
+    private CollectFolderAdapter showCollectionFolder() {
+        if (mToken == null||mToken.equals("")){
+            ARouter.getInstance()
+                    .build(RoutePath.Login.PATH_lOGIN)
+                    .navigation();
+            return null;
+        }
+        LayoutInflater from = LayoutInflater.from(this);
+        View inflate = from.inflate(R.layout.modulehome_home_dialog_collection_folder, null);
+        RecyclerView rvFolder = inflate.findViewById(R.id.rv_folder);
+        rvFolder.setLayoutManager(new LinearLayoutManager(this));
+        CollectFolderAdapter adapter = new CollectFolderAdapter();
+        rvFolder.setAdapter(adapter);
+        adapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                int id = view.getId();
+                if (id == R.id.tv_collect) {
+                    //todo:收藏d逻辑
+                    ToastUtils.showToast("收藏");
+                }
+            }
+        });
+        mBottomSheetDialog.setContentView(inflate);
+        mBottomSheetDialog.show();
+        return adapter;
     }
 
     private void showPriseDialog() {
@@ -666,6 +717,8 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     public void setCheckCollectionState(BaseResponseBean data) {
         if (data.getSuccess()&&(!TextUtils.isEmpty(data.getData().toString()))&&(!data.getData().equals("0"))) {
             setCollectStyle(true,data.getData().toString());
+        }else {
+            setCollectStyle(false,"");
         }
     }
 
@@ -728,6 +781,14 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     @Override
     public void setUnFollowMsgError(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public void setCollectionList(CollectionBean data) {
+        if (mCollectFolderAdapter != null) {
+            mCollectFolderAdapter.getData().clear();
+            mCollectFolderAdapter.setNewData(data.getData().getContent());
+        }
     }
 
     @Override

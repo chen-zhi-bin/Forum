@@ -5,6 +5,7 @@ import com.program.module_home.model.bean.ArticleRecommendBean;
 import com.program.module_home.model.bean.CommentBean;
 import com.program.moudle_base.base.IBaseCallback;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.model.PriseSobBean;
@@ -46,4 +47,6 @@ public interface IArticleDetailCallback extends IBaseCallback {
     void setUnFollowMsg(String msg);
 
     void setUnFollowMsgError(String msg);
+
+    void setCollectionList(CollectionBean data);
 }

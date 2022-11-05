@@ -19,6 +19,7 @@ import com.program.module_home.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
@@ -53,6 +54,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_ARTICLE_ADD_THUMB = 14;   //文章点赞
     private static final int RETURN_ARTICLE_PRISE = 15;   //打赏文章
     private static final int RETURN_ARTICLE_COLLECTION_STATE = 16;   //文章是否收藏
+    private static final int RETURN_COLLECTION_LIST = 17;   //收藏列表
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -114,6 +116,9 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     break;
                 case RETURN_ARTICLE_COLLECTION_STATE:
                     mCallback.setCheckCollectionState((BaseResponseBean) msg.obj);
+                    break;
+                case RETURN_COLLECTION_LIST:
+                    mCallback.setCollectionList((CollectionBean)msg.obj);
                     break;
             }
         }
@@ -532,6 +537,40 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                         Message message = new Message();
                         message.what = ((AddOrUnFollowBean) addOrUnFollowBean).getCode() == Constants.SUCCESS ? RETURN_UN_FOLLOW : RETURN_UN_FOLLOW_ERROR;
                         message.obj = addOrUnFollowBean;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private int pageCollection = -1;
+    @Override
+    public void getCollectionList() {
+        pageCollection = 1;
+        mApi.getCollectionList(pageCollection,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what= RETURN_COLLECTION_LIST;
+                        message.obj = o;
                         mHandler.sendMessage(message);
                     }
 

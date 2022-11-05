@@ -12,6 +12,7 @@ import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
 
@@ -140,5 +141,11 @@ public interface HomeApi {
 
     @DELETE("/uc/fans/{userId}")
     Observable<AddOrUnFollowBean> unFollow(@Path("userId")String userId, @Header("sob_token")String token);
+
+    /**
+     * 获取收藏夹
+     */
+    @GET("ct/collection/list/{page}")
+    Observable<CollectionBean> getCollectionList(@Path("page") int page, @Header("sob_token") String token);
 
 }

@@ -63,4 +63,9 @@ public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCa
      * @param userId    id
      */
     void unFollow(String userId);
+
+    /**
+     * 得到收藏列表
+     */
+    void getCollectionList();
 }
