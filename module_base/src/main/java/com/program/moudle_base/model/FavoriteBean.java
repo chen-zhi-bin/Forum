@@ -1,20 +1,17 @@
 package com.program.moudle_base.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class CollectionBean implements Serializable {
+public class FavoriteBean implements Serializable {
 
     /**
      * success : true
      * code : 10000
      * message : 查询成功.
-     * data : {"content":[{"_id":"1019644039198146560","userId":"1499922423573647361","userName":null,"avatar":null,"cover":"https://images.sunofbeaches.com/content/2022_09_14/1019643983925608448.png","name":"api","permission":"1","description":"test","createTime":"2022-09-14 16:21","followCount":0,"favoriteCount":1}],"pageable":{"sort":{"sorted":true,"unsorted":false},"pageSize":10,"pageNumber":0,"offset":0,"paged":true,"unpaged":false},"totalPages":1,"totalElements":1,"last":true,"number":0,"size":10,"numberOfElements":1,"sort":{"sorted":true,"unsorted":false},"first":true}
+     * data : {"content":[{"_id":"1019644078045790208","userId":"1499922423573647361","avatar":null,"userName":null,"collectionId":"1019644039198146560","title":"阳光沙滩API文档","url":"https://www.sunofbeach.net/a/1403262826952323074","type":"0","addTime":"2022-09-14 16:21","cover":""}],"pageable":{"sort":{"sorted":true,"unsorted":false},"pageSize":30,"pageNumber":0,"offset":0,"paged":true,"unpaged":false},"totalPages":1,"totalElements":1,"last":true,"number":0,"size":30,"numberOfElements":1,"sort":{"sorted":true,"unsorted":false},"first":true}
      */
 
     @SerializedName("success")
@@ -44,7 +41,7 @@ public class CollectionBean implements Serializable {
 
     @Override
     public String toString() {
-        return "CollectionBean{" +
+        return "FavoriteBean{" +
                 "success=" + success +
                 ", code=" + code +
                 ", message='" + message + '\'' +
@@ -52,16 +49,15 @@ public class CollectionBean implements Serializable {
                 '}';
     }
 
-
     public static class DataBean implements Serializable {
         /**
-         * content : [{"_id":"1019644039198146560","userId":"1499922423573647361","userName":null,"avatar":null,"cover":"https://images.sunofbeaches.com/content/2022_09_14/1019643983925608448.png","name":"api","permission":"1","description":"test","createTime":"2022-09-14 16:21","followCount":0,"favoriteCount":1}]
-         * pageable : {"sort":{"sorted":true,"unsorted":false},"pageSize":10,"pageNumber":0,"offset":0,"paged":true,"unpaged":false}
+         * content : [{"_id":"1019644078045790208","userId":"1499922423573647361","avatar":null,"userName":null,"collectionId":"1019644039198146560","title":"阳光沙滩API文档","url":"https://www.sunofbeach.net/a/1403262826952323074","type":"0","addTime":"2022-09-14 16:21","cover":""}]
+         * pageable : {"sort":{"sorted":true,"unsorted":false},"pageSize":30,"pageNumber":0,"offset":0,"paged":true,"unpaged":false}
          * totalPages : 1
          * totalElements : 1
          * last : true
          * number : 0
-         * size : 10
+         * size : 30
          * numberOfElements : 1
          * sort : {"sorted":true,"unsorted":false}
          * first : true
@@ -147,7 +143,7 @@ public class CollectionBean implements Serializable {
         public static class PageableBean implements Serializable {
             /**
              * sort : {"sorted":true,"unsorted":false}
-             * pageSize : 10
+             * pageSize : 30
              * pageNumber : 0
              * offset : 0
              * paged : true
@@ -260,43 +256,40 @@ public class CollectionBean implements Serializable {
             }
         }
 
-        public static class ContentBean implements Serializable, Parcelable {
+        public static class ContentBean implements Serializable {
             /**
-             * _id : 1019644039198146560
+             * _id : 1019644078045790208
              * userId : 1499922423573647361
-             * userName : null
              * avatar : null
-             * cover : https://images.sunofbeaches.com/content/2022_09_14/1019643983925608448.png
-             * name : api
-             * permission : 1
-             * description : test
-             * createTime : 2022-09-14 16:21
-             * followCount : 0
-             * favoriteCount : 1
+             * userName : null
+             * collectionId : 1019644039198146560
+             * title : 阳光沙滩API文档
+             * url : https://www.sunofbeach.net/a/1403262826952323074
+             * type : 0
+             * addTime : 2022-09-14 16:21
+             * cover :
              */
 
             @SerializedName("_id")
             private String id;
             @SerializedName("userId")
             private String userId;
-            @SerializedName("userName")
-            private String userName;
             @SerializedName("avatar")
-            private String avatar;
+            private Object avatar;
+            @SerializedName("userName")
+            private Object userName;
+            @SerializedName("collectionId")
+            private String collectionId;
+            @SerializedName("title")
+            private String title;
+            @SerializedName("url")
+            private String url;
+            @SerializedName("type")
+            private String type;
+            @SerializedName("addTime")
+            private String addTime;
             @SerializedName("cover")
             private String cover;
-            @SerializedName("name")
-            private String name;
-            @SerializedName("permission")
-            private String permission;
-            @SerializedName("description")
-            private String description;
-            @SerializedName("createTime")
-            private String createTime;
-            @SerializedName("followCount")
-            private Integer followCount;
-            @SerializedName("favoriteCount")
-            private Integer favoriteCount;
 
             public String getId() {
                 return id;
@@ -306,40 +299,36 @@ public class CollectionBean implements Serializable {
                 return userId;
             }
 
-            public String  getUserName() {
+            public Object getAvatar() {
+                return avatar;
+            }
+
+            public Object getUserName() {
                 return userName;
             }
 
-            public String getAvatar() {
-                return avatar;
+            public String getCollectionId() {
+                return collectionId;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public String getAddTime() {
+                return addTime;
             }
 
             public String getCover() {
                 return cover;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public String getPermission() {
-                return permission;
-            }
-
-            public String getDescription() {
-                return description;
-            }
-
-            public String getCreateTime() {
-                return createTime;
-            }
-
-            public Integer getFollowCount() {
-                return followCount;
-            }
-
-            public Integer getFavoriteCount() {
-                return favoriteCount;
             }
 
             @Override
@@ -347,80 +336,16 @@ public class CollectionBean implements Serializable {
                 return "ContentBean{" +
                         "id='" + id + '\'' +
                         ", userId='" + userId + '\'' +
-                        ", userName=" + userName +
                         ", avatar=" + avatar +
+                        ", userName=" + userName +
+                        ", collectionId='" + collectionId + '\'' +
+                        ", title='" + title + '\'' +
+                        ", url='" + url + '\'' +
+                        ", type='" + type + '\'' +
+                        ", addTime='" + addTime + '\'' +
                         ", cover='" + cover + '\'' +
-                        ", name='" + name + '\'' +
-                        ", permission='" + permission + '\'' +
-                        ", description='" + description + '\'' +
-                        ", createTime='" + createTime + '\'' +
-                        ", followCount=" + followCount +
-                        ", favoriteCount=" + favoriteCount +
                         '}';
             }
-
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-                dest.writeString(this.id);
-                dest.writeString(this.userId);
-                dest.writeString(this.userName);
-                dest.writeString(this.avatar);
-                dest.writeString(this.cover);
-                dest.writeString(this.name);
-                dest.writeString(this.permission);
-                dest.writeString(this.description);
-                dest.writeString(this.createTime);
-                dest.writeValue(this.followCount);
-                dest.writeValue(this.favoriteCount);
-            }
-
-            public void readFromParcel(Parcel source) {
-                this.id = source.readString();
-                this.userId = source.readString();
-                this.userName = source.readParcelable(Object.class.getClassLoader());
-                this.avatar = source.readParcelable(Object.class.getClassLoader());
-                this.cover = source.readString();
-                this.name = source.readString();
-                this.permission = source.readString();
-                this.description = source.readString();
-                this.createTime = source.readString();
-                this.followCount = (Integer) source.readValue(Integer.class.getClassLoader());
-                this.favoriteCount = (Integer) source.readValue(Integer.class.getClassLoader());
-            }
-
-            public ContentBean() {
-            }
-
-            protected ContentBean(Parcel in) {
-                this.id = in.readString();
-                this.userId = in.readString();
-                this.userName = in.readParcelable(Object.class.getClassLoader());
-                this.avatar = in.readParcelable(Object.class.getClassLoader());
-                this.cover = in.readString();
-                this.name = in.readString();
-                this.permission = in.readString();
-                this.description = in.readString();
-                this.createTime = in.readString();
-                this.followCount = (Integer) in.readValue(Integer.class.getClassLoader());
-                this.favoriteCount = (Integer) in.readValue(Integer.class.getClassLoader());
-            }
-
-            public static final Creator<ContentBean> CREATOR = new Creator<ContentBean>() {
-                @Override
-                public ContentBean createFromParcel(Parcel source) {
-                    return new ContentBean(source);
-                }
-
-                @Override
-                public ContentBean[] newArray(int size) {
-                    return new ContentBean[size];
-                }
-            };
         }
     }
 }

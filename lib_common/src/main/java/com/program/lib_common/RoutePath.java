@@ -41,5 +41,6 @@ public class RoutePath {
         public static final String PAGE_MSG_LIST="/ucenter/MessageListActivity";
         public static final String PAGE_UCENTER="/ucenter/UserCenterActivity";
         public static final String PAGE_UCENTER_LIST="/ucenter/UcenterListActivity";
+        public static final String PAGE_FAVORITE_LIST="/ucenter/FavoriteListActivity";
     }
 }

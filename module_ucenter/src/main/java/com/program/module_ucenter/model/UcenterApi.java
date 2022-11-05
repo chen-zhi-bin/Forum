@@ -11,6 +11,7 @@ import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
 import com.program.moudle_base.model.CollectionBean;
+import com.program.moudle_base.model.FavoriteBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.module_ucenter.model.domain.LoginoutBean;
 import com.program.module_ucenter.model.domain.MoyuBean;
@@ -104,6 +105,17 @@ public interface UcenterApi {
      */
     @GET("ct/collection/list/{page}")
     Observable<CollectionBean> getCollectionList(@Path("page") int page,@Header("sob_token") String token);
+
+    /*
+     *获取到收藏夹里的内容列表 {collectionId}/{page}/{order}  order：排序方式 0 表示降序，1表示升序，按添加时间
+     */
+    @GET("/ct/ucenter/favorite/list/{collectionId}/{page}/{order}")
+    Observable<FavoriteBean> getFavoriteList(
+            @Path("collectionId")String collectionId,
+            @Path("page")int page,
+            @Path("order")int order,
+            @Header("sob_token")String token
+    );
 
     /**
      *关注列表

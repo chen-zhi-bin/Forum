@@ -1,5 +1,6 @@
 package com.program.lib_common.service.ucenter.wrap;
 
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
@@ -63,6 +64,13 @@ public class UcenterServiceWrap{
                 .build(RoutePath.Ucenter.PAGE_UCENTER_LIST)
                 .withInt(Constants.Ucenter.PAGE_TYPE, pageFollow)
                 .withString("userId", userId)
+                .navigation();
+    }
+
+    public void launchFavoriteList(Parcelable item) {
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_FAVORITE_LIST)
+                .withParcelable("collection",item)
                 .navigation();
     }
 

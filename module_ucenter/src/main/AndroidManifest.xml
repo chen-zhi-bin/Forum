@@ -5,7 +5,8 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
-        <activity android:name=".ui.UcenterListActivity"></activity>
+        <activity android:name=".ui.FavoriteListActivity"></activity>
+        <activity android:name=".ui.UcenterListActivity" />
         <activity android:name=".ui.UserCenterActivity" />
         <activity android:name=".ui.MessageListActivity" />
         <activity android:name=".ui.MsgCenterActivity" />

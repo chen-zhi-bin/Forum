@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.CollectionFolderAdapter;
 import com.program.module_ucenter.callback.IUserCollectionListFragmentCallback;
@@ -57,6 +60,15 @@ public class UserCollectionListFragment extends BaseFragment implements IUserCol
     protected void initListener() {
         mRefreshLayout.setOnRefreshListener(refreshLayout -> mUserCollectionListFragmentPresenter.getCollectionList());
         mRefreshLayout.setOnLoadMoreListener(refreshLayout -> mUserCollectionListFragmentPresenter.getMoreCollectionList());
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                Object item = adapter.getItem(position);
+                if (item instanceof CollectionBean.DataBean.ContentBean){
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchFavoriteList((CollectionBean.DataBean.ContentBean)item);
+                }
+            }
+        });
     }
 
     @Override

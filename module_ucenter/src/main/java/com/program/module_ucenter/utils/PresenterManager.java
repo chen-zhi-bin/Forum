@@ -1,5 +1,6 @@
 package com.program.module_ucenter.utils;
 
+import com.program.module_ucenter.presenter.IFavoriteListPresenter;
 import com.program.module_ucenter.presenter.IMoyuPresentere;
 import com.program.module_ucenter.presenter.IMsgCenterPresenter;
 import com.program.module_ucenter.presenter.IMsgListPresenter;
@@ -11,6 +12,7 @@ import com.program.module_ucenter.presenter.IUserCollectionListFragmentPresenter
 import com.program.module_ucenter.presenter.IUserFollowFragmentPresenter;
 import com.program.module_ucenter.presenter.IUserFragmentPresenter;
 import com.program.module_ucenter.presenter.IUserRankingFragmentPresenter;
+import com.program.module_ucenter.presenter.Impl.FavoriteListPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.MoyuPreseenterImpl;
 import com.program.module_ucenter.presenter.Impl.MsgCenterPresenterImpl;
 import com.program.module_ucenter.presenter.Impl.MsgListPresenterImpl;
@@ -36,6 +38,7 @@ public class PresenterManager {
     private final IUserFollowFragmentPresenter mUsrFollowFragmentPresenter;
     private final IUserRankingFragmentPresenter mUserRankingFragment;
     private final IUserCollectionListFragmentPresenter mUserCollectionListFragmentPresenter;
+    private final IFavoriteListPresenter mFavoriteListPresenter;
 
     public static PresenterManager getInstance(){
         return ourInstance;
@@ -85,6 +88,10 @@ public class PresenterManager {
         return mUserCollectionListFragmentPresenter;
     }
 
+    public IFavoriteListPresenter getFavoriteListPresenter() {
+        return mFavoriteListPresenter;
+    }
+
     private PresenterManager(){
         mUserFragmentPresenter = new UserFragmentPresenterImpl();
         mSettingPresenter = new SettingPresenterImpl();
@@ -97,5 +104,6 @@ public class PresenterManager {
         mUsrFollowFragmentPresenter = new UsrFollowFragmentPresenterImpl();
         mUserRankingFragment = new UserRankingFragmentPresentereImpl();
         mUserCollectionListFragmentPresenter = new UserCollectionListFragmentPresenterImpl();
+        mFavoriteListPresenter = new FavoriteListPresenterImpl();
     }
 }
