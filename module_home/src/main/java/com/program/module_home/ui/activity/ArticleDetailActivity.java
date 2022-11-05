@@ -56,6 +56,7 @@ import com.program.module_home.utils.PresenterManager;
 import com.program.moudle_base.adapter.CommonPriseAdapter;
 import com.program.moudle_base.model.ArticleTitleBean;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.CollectInputBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
@@ -304,7 +305,6 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         showCollectionFolder();
         mCollectFolderAdapter = showCollectionFolder();
         mArticleDetailPresenter.getCollectionList();
-        //todo:presenterimpl,callback,api?
     }
 
     private CollectFolderAdapter showCollectionFolder() {
@@ -325,14 +325,30 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 int id = view.getId();
                 if (id == R.id.tv_collect) {
-                    //todo:收藏d逻辑
-                    ToastUtils.showToast("收藏");
+                    Object item = adapter.getItem(position);
+                    if (item instanceof CollectionBean.DataBean.ContentBean) {
+                        favorite(
+                                new CollectInputBean(
+                                        ((CollectionBean.DataBean.ContentBean) item).getId(),
+                                        mArticleTitle,
+                                        Constants.WEBSITE_URL + mArticleId
+                                )
+                        );
+                    }
+                    mBottomSheetDialog.dismiss();
                 }
             }
         });
         mBottomSheetDialog.setContentView(inflate);
         mBottomSheetDialog.show();
         return adapter;
+    }
+
+    /**
+     * 收藏
+     */
+    private void favorite(CollectInputBean data) {
+        mArticleDetailPresenter.favorite(data);
     }
 
     private void showPriseDialog() {
@@ -789,6 +805,12 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
             mCollectFolderAdapter.getData().clear();
             mCollectFolderAdapter.setNewData(data.getData().getContent());
         }
+    }
+
+    @Override
+    public void setFavorite(BaseResponseBean data) {
+        ToastUtils.showToast(data.getMessage());
+        mArticleDetailPresenter.getCheckCollectionState(mArticleId);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.model.CollectInputBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.PriseQrCodeBean;
@@ -148,4 +149,9 @@ public interface HomeApi {
     @GET("ct/collection/list/{page}")
     Observable<CollectionBean> getCollectionList(@Path("page") int page, @Header("sob_token") String token);
 
+    /**
+     * 收藏
+     */
+    @POST("/ct/favorite")
+    Observable<BaseResponseBean> favorite(@Body CollectInputBean body,@Header("sob_token")String token);
 }

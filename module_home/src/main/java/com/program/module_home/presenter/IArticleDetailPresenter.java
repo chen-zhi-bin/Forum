@@ -5,6 +5,7 @@ import com.program.module_home.model.bean.CommentInputBean;
 import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
 import com.program.moudle_base.base.IBasePresenter;
+import com.program.moudle_base.model.CollectInputBean;
 
 public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCallback> {
 
@@ -68,4 +69,9 @@ public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCa
      * 得到收藏列表
      */
     void getCollectionList();
+
+    /**
+     * 收藏
+     */
+    void favorite(CollectInputBean data);
 }

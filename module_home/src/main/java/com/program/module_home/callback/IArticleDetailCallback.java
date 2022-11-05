@@ -49,4 +49,6 @@ public interface IArticleDetailCallback extends IBaseCallback {
     void setUnFollowMsgError(String msg);
 
     void setCollectionList(CollectionBean data);
+
+    void setFavorite(BaseResponseBean data);
 }
