@@ -32,7 +32,7 @@ public class WendaRankingAdapter extends BaseQuickAdapter<WendaRankingBean.DataB
                     .circleCrop()
                     .into(ivAvatar);
 
-            viewHolder.setText(R.id.tv_nickname,dataBean.getNickname());
+            viewHolder.setText(R.id.et_nickname,dataBean.getNickname());
             viewHolder.setText(R.id.tv_count,dataBean.getCount()+" 个回答");
             CommonViewUtils.setFollowState((TextView) viewHolder.getView(R.id.tv_follow),0);
             viewHolder.getView(R.id.tv_follow).setTag("-1");

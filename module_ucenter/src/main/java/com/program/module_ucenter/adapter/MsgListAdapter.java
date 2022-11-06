@@ -1,21 +1,15 @@
 package com.program.module_ucenter.adapter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.program.lib_base.LogUtils;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.model.domain.MsgArticleBean;
 import com.program.module_ucenter.model.domain.MsgAtBean;
@@ -25,7 +19,6 @@ import com.program.module_ucenter.model.domain.MsgThumbBean;
 import com.program.module_ucenter.model.domain.MsgWendaBean;
 import com.program.moudle_base.base.BaseApplication;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
@@ -42,7 +35,7 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
     }
 
     {
-        addChildClickViewIds(R.id.iv_avatar,R.id.tv_nickname,R.id.tv_reply_value);
+        addChildClickViewIds(R.id.iv_avatar,R.id.et_nickname,R.id.tv_reply_value);
     }
 
     @Override
@@ -68,7 +61,7 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
                 .placeholder(R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                 .circleCrop()       //圆角
                 .into(ivAvatar);
-        baseViewHolder.setText(R.id.tv_nickname,msgBean.getNickname());
+        baseViewHolder.setText(R.id.et_nickname,msgBean.getNickname());
         baseViewHolder.setText(R.id.tv_createTime,msgBean.getCreateTime());
         baseViewHolder.setText(R.id.tv_reply_title, "评论了我的提问：");
         TextView tvReplyValue = (TextView)baseViewHolder.getView(R.id.tv_reply_value);
@@ -84,7 +77,7 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
                 .placeholder(R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                 .circleCrop()       //圆角
                 .into(ivAvatar);
-        baseViewHolder.setText(R.id.tv_nickname,msgBean.getNickname());
+        baseViewHolder.setText(R.id.et_nickname,msgBean.getNickname());
         baseViewHolder.setText(R.id.tv_createTime,msgBean.getCreateTime());
         baseViewHolder.setText(R.id.tv_reply_title, "评论了我的文章：");
         baseViewHolder.setText(R.id.tv_reply_value, "「"+msgBean.getTitle()+"」");
@@ -99,7 +92,7 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
                 .placeholder(R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                 .circleCrop()       //圆角
                 .into(ivAvatar);
-        baseViewHolder.setText(R.id.tv_nickname,msgBean.getNickname());
+        baseViewHolder.setText(R.id.et_nickname,msgBean.getNickname());
         baseViewHolder.setText(R.id.tv_createTime,msgBean.getCreateTime());
         baseViewHolder.setText(R.id.tv_reply_title, "评论了我的文章：");
         baseViewHolder.setText(R.id.tv_reply_value, "「"+msgBean.getTitle()+"」");
@@ -114,7 +107,7 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
                 .placeholder(R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                 .circleCrop()       //圆角
                 .into(ivAvatar);
-        baseViewHolder.setText(R.id.tv_nickname,msgBean.getNickname());
+        baseViewHolder.setText(R.id.et_nickname,msgBean.getNickname());
         baseViewHolder.setText(R.id.tv_createTime,msgBean.getTimeText());
         baseViewHolder.setText(R.id.tv_reply_title, "给朕的内容点赞：");
         baseViewHolder.setText(R.id.tv_reply_value, "「"+msgBean.getTitle()+"」");
@@ -130,7 +123,7 @@ public class MsgListAdapter extends BaseQuickAdapter<MsgBean, BaseViewHolder> {
                 .placeholder(R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                 .circleCrop()       //圆角
                 .into(ivAvatar);
-        viewHolder.setText(R.id.tv_nickname,msgBean.getNickname());
+        viewHolder.setText(R.id.et_nickname,msgBean.getNickname());
         viewHolder.setText(R.id.tv_createTime,msgBean.getPublishTime());
         viewHolder.setText(R.id.tv_reply_title,"回复了我的评论");
         viewHolder.setText(R.id.tv_reply_value,"「点击查看详情」");

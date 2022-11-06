@@ -1,6 +1,5 @@
 package com.program.module_ucenter.adapter;
 
-import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,7 +35,7 @@ public class FollowAdapter extends BaseQuickAdapter<FollowListBean.DataBean.List
                     .placeholder(R.mipmap.ic_default_avatar)
                     .circleCrop()
                     .into(ivAvatar);
-            viewHolder.setText(R.id.tv_nickname,listBean.getNickname());
+            viewHolder.setText(R.id.et_nickname,listBean.getNickname());
             viewHolder.setText(R.id.tv_sign,listBean.getSign());
 //            relative对应的值:
 //            0表示没有关注对方，可以显示为：关注

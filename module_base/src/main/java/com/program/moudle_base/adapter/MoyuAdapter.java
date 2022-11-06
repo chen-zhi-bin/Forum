@@ -1,10 +1,8 @@
 package com.program.moudle_base.adapter;
 
 
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +36,7 @@ public class MoyuAdapter extends BaseQuickAdapter<MoyuItemBean, BaseViewHolder> 
      */
     public MoyuAdapter(int layoutResId) {
         super(R.layout.modulebase_common_moyu_adapter,null);
-        addChildClickViewIds(R.id.iv_avatar,R.id.tv_nickname,R.id.tv_link);
+        addChildClickViewIds(R.id.iv_avatar,R.id.et_nickname,R.id.tv_link);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class MoyuAdapter extends BaseQuickAdapter<MoyuItemBean, BaseViewHolder> 
                 .placeholder(R.mipmap.ic_default_avatar)        //加载中显示的图片（加载成功前）
                 .circleCrop()       //圆角
                 .into(ivAvatar);
-        viewHolder.setText(R.id.tv_nickname,moyuItemBean.getNickname());
+        viewHolder.setText(R.id.et_nickname,moyuItemBean.getNickname());
         String desc;
         if (TextUtils.isEmpty(moyuItemBean.getPosition())){
             desc="";

@@ -1,7 +1,5 @@
 package com.program.module_wenda.adapter;
 
-import android.content.Context;
-
 import androidx.core.content.ContextCompat;
 
 import com.allen.library.SuperTextView;
@@ -10,7 +8,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.module_wenda.R;
-import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaListBean;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +20,7 @@ public class WendaAdapter extends BaseQuickAdapter<WendaListBean.DataBean.ListBe
     }
 
     {
-        addChildClickViewIds(R.id.iv_avatar,R.id.tv_nickname);
+        addChildClickViewIds(R.id.iv_avatar,R.id.et_nickname);
     }
 
     @Override
@@ -31,7 +28,7 @@ public class WendaAdapter extends BaseQuickAdapter<WendaListBean.DataBean.ListBe
         if (dataBean != null) {
             viewHolder.setText(R.id.tv_viewCount,dataBean.getViewCount()+"浏览");
             viewHolder.setText(R.id.tv_title,dataBean.getTitle());
-            viewHolder.setText(R.id.tv_nickname,dataBean.getNickname());
+            viewHolder.setText(R.id.et_nickname,dataBean.getNickname());
             viewHolder.setText(R.id.tv_sob,dataBean.getSob().toString());
             viewHolder.setText(R.id.tv_labels,dataBean.getLabels().toString());
 

@@ -2,14 +2,9 @@ package com.program.module_wenda.ui.fragment;
 
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.google.android.material.tabs.TabLayout;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
@@ -17,15 +12,12 @@ import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_wenda.R;
 import com.program.module_wenda.adapter.WendaAdapter;
 import com.program.module_wenda.callback.IWendaListFragmentCallback;
-import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaListBean;
 import com.program.module_wenda.presenter.IWendaListFragmentPresenter;
 import com.program.module_wenda.utils.PresenterManager;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
 
@@ -71,7 +63,7 @@ public class WendaListFragment extends BaseFragment implements IWendaListFragmen
         mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             WendaListBean.DataBean.ListBean item = (WendaListBean.DataBean.ListBean) adapter.getItem(position);
             int id = view.getId();
-            if (id == R.id.iv_avatar||id==R.id.tv_nickname){
+            if (id == R.id.iv_avatar||id==R.id.et_nickname){
                 UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getUserId());
             }
 

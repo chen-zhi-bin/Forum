@@ -118,7 +118,7 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 MoyuItemBean item = (MoyuItemBean) adapter.getItem(position);
                 int id = view.getId();
-                if (id==R.id.iv_avatar||id==R.id.tv_nickname){
+                if (id==R.id.iv_avatar||id==R.id.et_nickname){
                     UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getUserId());
                 }else if (id==R.id.tv_link){
                     if (item.getLinkUrl() != null) {

@@ -1,6 +1,5 @@
 package com.program.module_ucenter.adapter;
 
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,7 +55,7 @@ public class UserCenterArticleAdapter extends BaseQuickAdapter<MultiItemEntity, 
         }else if (multiItemEntity instanceof ShareBean.DataBean.ListBean){
             ShareBean.DataBean.ListBean shareData = (ShareBean.DataBean.ListBean) multiItemEntity;
             viewHolder.setText(R.id.tv_title,shareData.getTitle());
-            viewHolder.setText(R.id.tv_nickname,shareData.getNickname());
+            viewHolder.setText(R.id.et_nickname,shareData.getNickname());
             viewHolder.setText(R.id.tv_time,DateUtils.timeFormat(shareData.getCreateTime()));
             viewHolder.setText(R.id.tv_labels,shareData.labels(false));
             viewHolder.setText(R.id.tv_star,shareData.getThumbUp().toString());

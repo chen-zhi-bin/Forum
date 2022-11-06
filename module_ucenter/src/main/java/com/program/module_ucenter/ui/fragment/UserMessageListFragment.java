@@ -119,7 +119,7 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 int id = view.getId();
                 Object item = adapter.getItem(position);
-                if (id == R.id.iv_avatar || id == R.id.tv_nickname) {
+                if (id == R.id.iv_avatar || id == R.id.et_nickname) {
                     String uId;
                     if (item instanceof MsgAtBean.DataBean.ContentBean) {
                         uId = ((MsgAtBean.DataBean.ContentBean) item).getUid();

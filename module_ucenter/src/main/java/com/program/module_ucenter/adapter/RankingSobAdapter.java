@@ -9,7 +9,6 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.model.domain.RankingSobBean;
-import com.program.moudle_base.adapter.ImageAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +27,7 @@ public class RankingSobAdapter extends BaseQuickAdapter<RankingSobBean.DataBean,
                     .error(R.mipmap.ic_default_avatar)
                     .circleCrop()
                     .into(ivAvatar);
-            viewHolder.setText(R.id.tv_nickname,item.getNickname());
+            viewHolder.setText(R.id.et_nickname,item.getNickname());
             viewHolder.setText(R.id.tv_sob,"Sob币："+item.getSob());
             ImageView ivRanking = viewHolder.getView(R.id.iv_ranking);
             ivRanking.setVisibility(View.GONE);

@@ -95,7 +95,7 @@
 
 
             <TextView
-                android:id="@+id/tv_nickname"
+                android:id="@+id/et_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="gs_wenbing"
@@ -113,7 +113,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_12"
                 android:textColor="@color/colorVip2"
-                app:layout_constraintLeft_toLeftOf="@+id/tv_nickname"
+                app:layout_constraintLeft_toLeftOf="@+id/et_nickname"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
                 />
             <TextView

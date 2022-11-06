@@ -25,7 +25,7 @@
     <!--        app:layout_constraintTop_toTopOf="parent"-->
     <!--        app:layout_constraintLeft_toLeftOf="parent"/>-->
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/et_nickname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Android"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         tools:text="0篇文章 • 0订阅"
         android:textSize="@dimen/sp_12"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_nickname"
+        app:layout_constraintLeft_toLeftOf="@+id/et_nickname"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         />
     <TextView

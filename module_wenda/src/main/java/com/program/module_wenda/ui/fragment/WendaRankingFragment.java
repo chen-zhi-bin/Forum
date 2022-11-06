@@ -1,11 +1,9 @@
 package com.program.module_wenda.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -140,7 +138,7 @@ public class WendaRankingFragment extends BaseFragment implements IWendaRankingF
                 .into(ivAvatar);
         ViewUtils.setViewWidth(item, (UIUtils.getScreenWidth() - w40) / 3);
 
-        TextView tvNickname = item.findViewById(R.id.tv_nickname);
+        TextView tvNickname = item.findViewById(R.id.et_nickname);
         TextView tvCount = item.findViewById(R.id.tv_count);
         tvNickname.setText(dataBean.getNickname());
         tvCount.setText(dataBean.getCount() + " 个回答");
@@ -204,7 +202,7 @@ public class WendaRankingFragment extends BaseFragment implements IWendaRankingF
         int childCount = mLinearlayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             TextView childAt = mLinearlayout.getChildAt(i).findViewById(R.id.tv_follow);
-            TextView child = mLinearlayout.getChildAt(i).findViewById(R.id.tv_nickname);
+            TextView child = mLinearlayout.getChildAt(i).findViewById(R.id.et_nickname);
             if (childAt.getTag().equals("-1")) {
                 LogUtils.d("test", "tag =====" + childAt.getTag() + ">>data===" + data.getData()+"  = child"+child.getText().toString());
                 CommonViewUtils.setFollowState(childAt, data.getData());

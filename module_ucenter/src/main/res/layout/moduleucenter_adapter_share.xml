@@ -57,7 +57,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/iv_cover"/>
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/et_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="都懂得wenbing"
@@ -79,7 +79,7 @@
         tools:text="12"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        app:layout_constraintLeft_toRightOf="@+id/tv_nickname"
+        app:layout_constraintLeft_toRightOf="@+id/et_nickname"
         />
     <TextView
         android:id="@+id/tv_viewCount"

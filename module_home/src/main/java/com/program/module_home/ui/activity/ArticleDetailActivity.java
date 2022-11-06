@@ -19,7 +19,9 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -102,6 +104,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private TextView mTvStarNum;
     private HomeDetailAdapter mAdapter;
     private FixedHeightBottomSheetDialog mBottomSheetDialog;
+    private FixedHeightBottomSheetDialog mBottomNewFolderSheetDialog = null;
     private ReplyBottomSheetDialog mReplyDialog;
     private MyCodeViewJava mCodeView;
     private RoundedImageView mIvHeaderAvatar;
@@ -134,7 +137,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private ImageView mIvCollection;
     private CollectFolderAdapter mCollectFolderAdapter = null;
 
-    //todo:收藏
+    private int mNewFolderstate = 0;
 
     @Subscribe
     @Override
@@ -313,14 +316,16 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     }
 
     private CollectFolderAdapter showCollectionFolder() {
-        if (mToken == null||mToken.equals("")){
+        if (mToken == null||mToken.equals("")) {
             ARouter.getInstance()
                     .build(RoutePath.Login.PATH_lOGIN)
                     .navigation();
             return null;
         }
+        initNewFolderSheetDialog();
         LayoutInflater from = LayoutInflater.from(this);
         View inflate = from.inflate(R.layout.modulehome_home_dialog_collection_folder, null);
+        TextView tvAdd = inflate.findViewById(R.id.tv_add);
         RecyclerView rvFolder = inflate.findViewById(R.id.rv_folder);
         rvFolder.setLayoutManager(new LinearLayoutManager(this));
         CollectFolderAdapter adapter = new CollectFolderAdapter();
@@ -344,9 +349,49 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
                 }
             }
         });
+        tvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBottomNewFolderSheetDialog.show();
+            }
+        });
         mBottomSheetDialog.setContentView(inflate);
         mBottomSheetDialog.show();
         return adapter;
+    }
+
+    //新建收藏集
+    private void initNewFolderSheetDialog() {
+        mBottomNewFolderSheetDialog = new FixedHeightBottomSheetDialog(
+                this,
+                R.style.BottomSheetDialog,
+                UIUtils.getScreenHeeight() * 2 / 3);
+        LayoutInflater from = LayoutInflater.from(this);
+        View inflate = from.inflate(R.layout.modulehome_dialog_new_collection_folder, null);
+        EditText etNickName = inflate.findViewById(R.id.et_nickname);
+        EditText etDesc = inflate.findViewById(R.id.ed_desc);
+//        TextView tvSwitchCover = inflate.findViewById(R.id.tv_switch_cover);
+        ImageView ivSwitchCover = inflate.findViewById(R.id.iv_switch_cover);
+        RadioGroup radioGroup = inflate.findViewById(R.id.radio_btn_switch);
+        TextView tvPut = inflate.findViewById(R.id.tv_put);
+
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                mNewFolderstate =( i==R.id.radio_button_public?0:1);
+            }
+        });
+        tvPut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LogUtils.d("test",etNickName.getText().toString());
+                LogUtils.d("test",etDesc.getText().toString());
+                LogUtils.d("test"," state ="+ mNewFolderstate);
+                
+            }
+        });
+        mBottomNewFolderSheetDialog.setContentView(inflate);
     }
 
     /**
@@ -376,7 +421,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
                 .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
                 .circleCrop()
                 .into(ivAvatar);
-        TextView tvNickname = inflate.findViewById(R.id.tv_nickname);
+        TextView tvNickname = inflate.findViewById(R.id.et_nickname);
         tvNickname.setText(mArticle.getNickname());
         inflate.findViewById(R.id.iv_close).setOnClickListener(view -> mBottomSheetDialog.dismiss());
         RecyclerView rvSob = inflate.findViewById(R.id.rv_sob);
@@ -542,7 +587,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mContentBinding = inflater.inflate(R.layout.modulehome_home_detail_content_layout, null);
         mCodeView = mContentBinding.findViewById(R.id.codeView);
         mIvAvatar = mContentBinding.findViewById(R.id.iv_avatar);
-        mTvNickname = mContentBinding.findViewById(R.id.tv_nickname);
+        mTvNickname = mContentBinding.findViewById(R.id.et_nickname);
         mTvPublishTime = mContentBinding.findViewById(R.id.tv_publishTime);
         mTvViewCount = mContentBinding.findViewById(R.id.tv_viewCount);
         mTvLabels = mContentBinding.findViewById(R.id.tv_labels);

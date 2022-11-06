@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/et_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="工头断点"
@@ -36,7 +36,7 @@
         android:layout_marginLeft="@dimen/dp_10"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-        app:layout_constraintLeft_toRightOf="@+id/tv_nickname"/>
+        app:layout_constraintLeft_toRightOf="@+id/et_nickname"/>
     <TextView
         android:id="@+id/tv_follow"
         android:layout_width="70dp"

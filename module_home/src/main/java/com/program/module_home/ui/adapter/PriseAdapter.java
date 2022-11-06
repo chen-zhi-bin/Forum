@@ -1,6 +1,5 @@
 package com.program.module_home.ui.adapter;
 
-import android.content.Context;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 
@@ -31,7 +30,7 @@ public class PriseAdapter extends BaseQuickAdapter<PriseArticleBean.DataBean, Ba
                     .placeholder(R.mipmap.ic_default_avatar)
                     .circleCrop()
                     .into(ivAvatar);
-            viewHolder.setText(R.id.tv_nickname,dataBean.getNickname());
+            viewHolder.setText(R.id.et_nickname,dataBean.getNickname());
             String str = "打赏 "+dataBean.getSob()+" Sob币";
             viewHolder.setText(R.id.tv_prise_value, UIUtils.setTextViewContentStyle(
                     str,

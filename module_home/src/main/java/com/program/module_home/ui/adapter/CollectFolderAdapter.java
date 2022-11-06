@@ -28,7 +28,7 @@ public class CollectFolderAdapter extends BaseQuickAdapter<CollectionBean.DataBe
                     .placeholder(R.drawable.shape_grey_background)
                     .into(ivCover);
             viewHolder.setText(R.id.tv_title,contentBean.getName());
-            viewHolder.setText(R.id.tv_desc,contentBean.getFavoriteCount()+"篇文章 • "+contentBean.getFollowCount()+"篇订阅");
+            viewHolder.setText(R.id.ed_desc,contentBean.getFavoriteCount()+"篇文章 • "+contentBean.getFollowCount()+"篇订阅");
 
         }
     }

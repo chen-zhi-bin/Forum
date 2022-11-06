@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -37,7 +35,6 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.DefaultRefreshHeaderCreator;
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
 import com.trello.rxlifecycle3.LifecycleProvider;
 
@@ -87,7 +84,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     protected void initView(View rootView) {
         setupState(State.SUCCESS);
         mAvatarIv = rootView.findViewById(R.id.iv_avatar);
-        mNameTv = rootView.findViewById(R.id.tv_nickname);
+        mNameTv = rootView.findViewById(R.id.et_nickname);
         mTvStars = rootView.findViewById(R.id.tv_stars);
         mTvFollow = rootView.findViewById(R.id.tv_follow);
         mTvCollection = rootView.findViewById(R.id.tv_collection);

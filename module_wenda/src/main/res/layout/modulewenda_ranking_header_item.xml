@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         />
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/et_nickname"
         android:layout_marginTop="@dimen/dp_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:textSize="@dimen/sp_12"
-        app:layout_constraintTop_toBottomOf="@+id/tv_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/et_nickname"
         tools:text="12个回答" />
 
     <TextView

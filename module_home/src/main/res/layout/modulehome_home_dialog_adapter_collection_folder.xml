@@ -27,7 +27,7 @@
         tools:text="Android" />
 
     <TextView
-        android:id="@+id/tv_desc"
+        android:id="@+id/ed_desc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_12"

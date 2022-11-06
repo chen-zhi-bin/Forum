@@ -223,7 +223,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         mBottomSheetDialog.show();
 
         RoundedImageView ivAvatar = inflate.findViewById(R.id.iv_avatar);
-        TextView tvNickName = inflate.findViewById(R.id.tv_nickname);
+        TextView tvNickName = inflate.findViewById(R.id.et_nickname);
         Glide.with(ivAvatar.getContext())
                 .load(mAnswerBean.getAvatar())
                 .placeholder(com.program.moudle_base.R.drawable.shape_grey_background)
