@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
-        <activity android:name=".ui.activity.PriseListActivity"></activity>
+        <activity android:name=".ui.activity.PriseListActivity" />
         <activity android:name=".ui.activity.WebViewActivity" />
         <activity android:name=".ui.activity.ArticleDetailActivity" />
         <activity android:name=".MainActivity" />

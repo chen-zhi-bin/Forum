@@ -3,6 +3,7 @@ package com.program.lib_common;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -10,6 +11,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -25,6 +27,12 @@ public class UIUtils {
 
     public static int getScreenHeeight(){
         return sMetrics!=null?sMetrics.heightPixels:0;
+    }
+
+    public static Point getScreenSize(Context context){
+        Point point = new Point();
+        ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(point);
+        return point;
     }
 
     public static int dp2px(float dipValue) {

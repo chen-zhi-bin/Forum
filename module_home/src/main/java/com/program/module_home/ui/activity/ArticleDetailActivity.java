@@ -61,11 +61,13 @@ import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.CollectInputBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
+import com.program.moudle_base.model.ImageItem;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.model.PriseSobBean;
 import com.program.moudle_base.model.TitleMultiBean;
 import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.EventBusUtils;
+import com.program.moudle_base.utils.ImagePickerConfig;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
@@ -89,6 +91,7 @@ import kotlin.collections.CollectionsKt;
 @Route(path = RoutePath.Home.PAGE_ARTICLE)
 public class ArticleDetailActivity extends RxAppCompatActivity implements IArticleDetailCallback {
 
+    private static final int MAX_SELECTED_COUNT = 1;
     @Autowired(name = "articleId")
     public String mArticleId;
 
@@ -138,6 +141,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private CollectFolderAdapter mCollectFolderAdapter = null;
 
     private int mNewFolderstate = 0;
+    private ImageView mIvSwitchCover;
 
     @Subscribe
     @Override
@@ -156,6 +160,21 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         initView();
         initPresenter();
         initListener();
+        initPickerConfig();
+    }
+
+    private void initPickerConfig() {
+        ImagePickerConfig pickerConfig = ImagePickerConfig.getInstance();
+        pickerConfig.setMaxSelectCount(MAX_SELECTED_COUNT);
+        pickerConfig.setOnImageSelectFinishedListener(new ImagePickerConfig.OnImageSelectFinishedListener() {
+            @Override
+            public void onSelectedFinished(List<ImageItem> result) {
+                //显示选中的图片
+                Glide.with(mIvSwitchCover.getContext())
+                        .load(result.get(0).getPath())
+                        .into(mIvSwitchCover);
+            }
+        });
     }
 
     private void initPresenter() {
@@ -371,7 +390,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         EditText etNickName = inflate.findViewById(R.id.et_nickname);
         EditText etDesc = inflate.findViewById(R.id.ed_desc);
 //        TextView tvSwitchCover = inflate.findViewById(R.id.tv_switch_cover);
-        ImageView ivSwitchCover = inflate.findViewById(R.id.iv_switch_cover);
+        mIvSwitchCover = inflate.findViewById(R.id.iv_switch_cover);
         RadioGroup radioGroup = inflate.findViewById(R.id.radio_btn_switch);
         TextView tvPut = inflate.findViewById(R.id.tv_put);
 
@@ -382,13 +401,19 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
                 mNewFolderstate =( i==R.id.radio_button_public?0:1);
             }
         });
+        mIvSwitchCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchImageSwitch(MAX_SELECTED_COUNT);
+            }
+        });
         tvPut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LogUtils.d("test",etNickName.getText().toString());
                 LogUtils.d("test",etDesc.getText().toString());
                 LogUtils.d("test"," state ="+ mNewFolderstate);
-                
+                    
             }
         });
         mBottomNewFolderSheetDialog.setContentView(inflate);

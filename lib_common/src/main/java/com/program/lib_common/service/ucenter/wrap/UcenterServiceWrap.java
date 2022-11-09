@@ -74,6 +74,13 @@ public class UcenterServiceWrap{
                 .navigation();
     }
 
+    public void launchImageSwitch(int maxCount){
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_IMAGE_SWITCH)
+                .withInt("maxCount",maxCount)
+                .navigation();
+    }
+
 
     public static final class Singletion{
         private static final UcenterServiceWrap holder;

@@ -49,7 +49,7 @@
         android:layout_width="@dimen/dp_80"
         android:layout_height="@dimen/dp_80"
         android:layout_gravity="center"
-        android:background="@mipmap/ic_add" />
+        android:src="@mipmap/ic_add" />
 
     <RadioGroup
         android:id="@+id/radio_btn_switch"
