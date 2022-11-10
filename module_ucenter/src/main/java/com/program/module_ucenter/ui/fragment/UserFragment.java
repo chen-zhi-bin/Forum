@@ -6,8 +6,10 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
@@ -16,6 +18,7 @@ import com.allen.library.SuperTextView;
 import com.bumptech.glide.Glide;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.UIUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
@@ -83,6 +86,10 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     @Override
     protected void initView(View rootView) {
         setupState(State.SUCCESS);
+        ConstraintLayout layout = rootView.findViewById(R.id.toolbar);
+        StatusBarUtil.immersive(requireActivity());
+        StatusBarUtil.darkMode(requireActivity(),true);
+        StatusBarUtil.setPaddingSmart(requireContext(),layout);
         mAvatarIv = rootView.findViewById(R.id.iv_avatar);
         mNameTv = rootView.findViewById(R.id.et_nickname);
         mTvStars = rootView.findViewById(R.id.tv_stars);
