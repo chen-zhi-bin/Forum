@@ -62,6 +62,7 @@ import com.program.moudle_base.model.CollectInputBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.ImageItem;
+import com.program.moudle_base.model.NewCollection;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.model.PriseSobBean;
 import com.program.moudle_base.model.TitleMultiBean;
@@ -83,10 +84,18 @@ import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import kotlin.collections.CollectionsKt;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Multipart;
 
 @Route(path = RoutePath.Home.PAGE_ARTICLE)
 public class ArticleDetailActivity extends RxAppCompatActivity implements IArticleDetailCallback {
@@ -142,6 +151,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 
     private int mNewFolderstate = 0;
     private ImageView mIvSwitchCover;
+    private List<ImageItem> mSelectImage = new ArrayList<>();
 
     @Subscribe
     @Override
@@ -169,6 +179,8 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         pickerConfig.setOnImageSelectFinishedListener(new ImagePickerConfig.OnImageSelectFinishedListener() {
             @Override
             public void onSelectedFinished(List<ImageItem> result) {
+                mSelectImage.clear();
+                mSelectImage.addAll(result);
                 //显示选中的图片
                 Glide.with(mIvSwitchCover.getContext())
                         .load(result.get(0).getPath())
@@ -410,13 +422,40 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         tvPut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LogUtils.d("test",etNickName.getText().toString());
-                LogUtils.d("test",etDesc.getText().toString());
-                LogUtils.d("test"," state ="+ mNewFolderstate);
-                    
+                //todo:新建收藏夹，需要调整
+//                LogUtils.d("test",etNickName.getText().toString());
+//                LogUtils.d("test",etDesc.getText().toString());
+//                LogUtils.d("test"," state ="+ mNewFolderstate);
+//                LogUtils.d("test",mSelectImage.toString());
+//                LogUtils.d("test",mSelectImage.get(0).getPath());
+                NewCollection newCollection = new NewCollection(
+                        etNickName.getText().toString(),
+                        etDesc.getText().toString(),
+//                        new File(mSelectImage.get(0).getPath()),
+                        createPartByPathAndKet(mSelectImage.get(0).getPath(), "image"),
+                        mNewFolderstate + ""
+                );
+//                LogUtils.d("test","n  = "+(newCollection.getCover() instanceof MultipartBody.Part));
+//                LogUtils.d("test","n  = "+newCollection.getCover().toString());
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("name",etNickName.getText().toString());
+//                map.put("description",etDesc.getText().toString());
+//                map.put("cover",  createPartByPathAndKet(mSelectImage.get(0).getPath(), "file"));
+//                map.put("permission",mNewFolderstate + "");
+                mArticleDetailPresenter.postNewCollection(newCollection);
             }
         });
         mBottomNewFolderSheetDialog.setContentView(inflate);
+    }
+
+    private MultipartBody.Part createPartByPathAndKet(String path, String key) {
+        File file = new File(path);
+//        LogUtils.d("test","file = "+file.getName());
+//        LogUtils.d("test","file = "+file.getPath());
+//        LogUtils.d("test","file = "+file);
+        RequestBody body = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), body);
+        return part;
     }
 
     /**
@@ -659,6 +698,11 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     public void showBigImage(int index) {
         LogUtils.d("test","123");
         CommonViewUtils.showBigImage(this, mCodeView.getImageList(), index);
+    }
+
+    @Override
+    public void returnNewCollectionMsg(BaseResponseBean data) {
+
     }
 
     @SuppressLint("SetTextI18n")

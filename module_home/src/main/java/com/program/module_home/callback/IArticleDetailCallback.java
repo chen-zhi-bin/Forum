@@ -12,6 +12,9 @@ import com.program.moudle_base.model.PriseSobBean;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 
 public interface IArticleDetailCallback extends IBaseCallback {
+
+    void returnNewCollectionMsg(BaseResponseBean data);
+
     void setArticleDetail(ArticleDetailBean.DataBean data);
 
     void setRequestError(String msg);

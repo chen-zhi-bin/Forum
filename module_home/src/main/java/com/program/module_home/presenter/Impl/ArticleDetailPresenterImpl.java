@@ -22,8 +22,11 @@ import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.CollectInputBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
+import com.program.moudle_base.model.NewCollection;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+
+import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -58,6 +61,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_COLLECTION_LIST = 17;   //收藏列表
     private static final int RETURN_FAVORITE = 18;   //添加收藏
     private static final int RETURN_UN_FAVORITE = 19;   //取消收藏
+    private static final int RETURN_NEW_COLLECTION_MSG = 20;   //新建收藏集
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
@@ -129,6 +133,9 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                 case RETURN_UN_FAVORITE:
                     mCallback.setUnFavorite((BaseResponseBean)msg.obj);
                     break;
+                case RETURN_NEW_COLLECTION_MSG:
+                    mCallback.returnNewCollectionMsg((BaseResponseBean)msg.obj);
+                    break;
             }
         }
     };
@@ -137,6 +144,46 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     public ArticleDetailPresenterImpl() {
         mApi = RetrofitManager.getInstence().getApi();
         mToken = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+    }
+
+    @Override
+    public void postNewCollection(NewCollection data) {
+        mApi.postNewCollection(data,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        LogUtils.d("test","data+'\n'"
+                        +o.toString());
+                        Message message = new Message();
+                        message.what = RETURN_NEW_COLLECTION_MSG;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+//                        LogUtils.d("test","error = e "+e.getMessage().toString());
+//                        LogUtils.d("test","error = e "+e.toString());
+//                        for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+//                            LogUtils.d("test","error ="+stackTraceElement.toString());
+//
+//                        }
+                        requestFailed();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override

@@ -6,8 +6,13 @@ import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
 import com.program.moudle_base.base.IBasePresenter;
 import com.program.moudle_base.model.CollectInputBean;
+import com.program.moudle_base.model.NewCollection;
+
+import java.util.Map;
 
 public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCallback> {
+
+    void postNewCollection(NewCollection data);
 
     void getArticleDetail(String articleId);
 

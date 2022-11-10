@@ -15,23 +15,33 @@ import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.CollectInputBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FollowBean;
+import com.program.moudle_base.model.NewCollection;
 import com.program.moudle_base.model.PriseQrCodeBean;
 
 import org.jsoup.Connection;
 
+import java.util.Map;
 import java.util.logging.Handler;
 
 import io.reactivex.rxjava3.core.Observable;
+import kotlin.jvm.JvmSuppressWildcards;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface HomeApi {
+
+    /**
+     * 收藏集创建
+     */
+    @POST("/ct/ucenter/collection")
+    Observable<BaseResponseBean> postNewCollection(@Body NewCollection data, @Header("sob_token")String token);
 
     /**
      * 首页分类列表
