@@ -1,10 +1,14 @@
 package com.program.module_moyu.model.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.annotations.SerializedName;
 import com.program.lib_common.Constants;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MomentCommentBean implements Serializable {
@@ -119,7 +123,7 @@ public class MomentCommentBean implements Serializable {
             return list;
         }
 
-        public static class ListBean implements Serializable , MultiItemEntity {
+        public static class ListBean implements Serializable , MultiItemEntity, Parcelable {
             /**
              * id : 1513828129153544194
              * userId : 1497193244834926593
@@ -159,7 +163,7 @@ public class MomentCommentBean implements Serializable {
             @SerializedName("vip")
             private Boolean vip;
             @SerializedName("thumbUpList")
-            private List<?> thumbUpList;
+            private List<String> thumbUpList;
             @SerializedName("subComments")
             private List<MomentSubCommentBean> subComments;
 
@@ -238,6 +242,77 @@ public class MomentCommentBean implements Serializable {
             public int getItemType() {
                 return Constants.MultiItemType.TYPE_COMMENT;
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(this.id);
+                dest.writeString(this.userId);
+                dest.writeString(this.company);
+                dest.writeString(this.position);
+                dest.writeString(this.avatar);
+                dest.writeString(this.nickname);
+                dest.writeString(this.createTime);
+                dest.writeString(this.content);
+                dest.writeValue(this.thumbUp);
+                dest.writeString(this.momentId);
+                dest.writeValue(this.vip);
+                dest.writeStringList(this.thumbUpList);
+                dest.writeList(this.subComments);
+            }
+
+            public void readFromParcel(Parcel source) {
+                this.id = source.readString();
+                this.userId = source.readString();
+                this.company = source.readString();
+                this.position = source.readString();
+                this.avatar = source.readString();
+                this.nickname = source.readString();
+                this.createTime = source.readString();
+                this.content = source.readString();
+                this.thumbUp = (Integer) source.readValue(Integer.class.getClassLoader());
+                this.momentId = source.readString();
+                this.vip = (Boolean) source.readValue(Boolean.class.getClassLoader());
+                this.thumbUpList = source.createStringArrayList();
+                this.subComments = new ArrayList<MomentSubCommentBean>();
+                source.readList(this.subComments, MomentSubCommentBean.class.getClassLoader());
+            }
+
+            public ListBean() {
+            }
+
+            protected ListBean(Parcel in) {
+                this.id = in.readString();
+                this.userId = in.readString();
+                this.company = in.readString();
+                this.position = in.readString();
+                this.avatar = in.readString();
+                this.nickname = in.readString();
+                this.createTime = in.readString();
+                this.content = in.readString();
+                this.thumbUp = (Integer) in.readValue(Integer.class.getClassLoader());
+                this.momentId = in.readString();
+                this.vip = (Boolean) in.readValue(Boolean.class.getClassLoader());
+                this.thumbUpList = in.createStringArrayList();
+                this.subComments = new ArrayList<MomentSubCommentBean>();
+                in.readList(this.subComments, MomentSubCommentBean.class.getClassLoader());
+            }
+
+            public static final Creator<ListBean> CREATOR = new Creator<ListBean>() {
+                @Override
+                public ListBean createFromParcel(Parcel source) {
+                    return new ListBean(source);
+                }
+
+                @Override
+                public ListBean[] newArray(int size) {
+                    return new ListBean[size];
+                }
+            };
         }
     }
 }

@@ -99,6 +99,9 @@ dependencies {
     implementation rootProject.ext.dependencies.refresh_header
     implementation rootProject.ext.dependencies.refresh_footer
 
+
+    implementation rootProject.ext.dependencies.shape_view
+
     //load with coil
     implementation "com.github.mikaelzero.mojito:coilimageloader:1.8.5"
 //load with glide

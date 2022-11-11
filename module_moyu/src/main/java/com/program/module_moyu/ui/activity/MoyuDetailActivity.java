@@ -26,12 +26,15 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.hjq.shape.layout.ShapeLinearLayout;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
 import com.program.lib_common.event.UpdateItemEvent;
+import com.program.lib_common.service.moyu.wrap.MoyuServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_moyu.R;
 import com.program.module_moyu.adapter.CommentAdapter;
@@ -85,7 +88,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     private RecyclerView mRvPic;
     private TextView mTvShare;
     private ReplyBottomSheetDialog mReplyBottomSheetDialog;
-    private Button mTvHeaderFollow;
+    private TextView mTvHeaderFollow;
     private String mMyId;
     private ImageView mIvBack;
     private SmartRefreshLayout mRefreshLayout;
@@ -108,6 +111,8 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
             }
         });
     }
+
+    private ShapeLinearLayout mBottomReply;
 
 
     @Subscribe
@@ -138,6 +143,12 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     }
 
     private void initListener() {
+        mBottomReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReplyDialog(null);
+            }
+        });
         mTvDetailStar.setOnClickListener(view ->{
             mMoyuDetailPresenter.getThumbUp(mId);
             EventBusUtils.INSTANCE.postEvent(new UpdateItemEvent(UpdateItemEvent.Event.UPDATE_MOYU,mId));
@@ -149,14 +160,30 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
 
         mTvShare.setOnClickListener(view -> ToastUtils.showToast("分享"));
 
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                Object o = adapter.getData().get(position);
+                if (o instanceof MomentCommentBean.DataBean.ListBean){
+                    MoyuServiceWrap.Singletion.INSTANCE.getHolder().launchDetailComment(mId,(MomentCommentBean.DataBean.ListBean)o);
+                }
+            }
+        });
+
         mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 if (adapter.getItem(position) instanceof MomentCommentBean.DataBean.ListBean){
                     MomentCommentBean.DataBean.ListBean item = (MomentCommentBean.DataBean.ListBean) adapter.getItem(position);
-                    if (view.getId() == R.id.tv_comment_nickname||view.getId()==R.id.iv_comment_avatar){
+                    int id = view.getId();
+//                    if (id == R.id.tv_comment_nickname|| id ==R.id.iv_comment_avatar){
+//                        UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getUserId());
+//                    }else if (id == R.id.iv_comment_reply){
+//                        showReplyDialog(item);
+//                    }
+                    if (id == R.id.iv_fish_pond_avatar||id==R.id.cb_fish_pond_nick_name){
                         UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getUserId());
-                    }else if (view.getId() == R.id.iv_comment_reply){
+                    }else if (id == R.id.iv_fish_pond_comment){
                         showReplyDialog(item);
                     }
                 }
@@ -211,6 +238,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
         mTvHeaderNickname = this.findViewById(R.id.tv_header_nickname);//
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);//
         mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
+        mBottomReply = this.findViewById(R.id.comment_container);
         mTvHeader = inflateView.findViewById(R.id.tv_header);
         mTvContent = inflateView.findViewById(R.id.tv_content);
         mTvLink = inflateView.findViewById(R.id.tv_link);
@@ -371,12 +399,14 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     public void setMoyuCommentData(MomentCommentBean momentCommentBean) {
 //        mAdapter.addData(momentCommentBean);
         mAdapter.getData().clear();
-        for (MomentCommentBean.DataBean.ListBean listBean : momentCommentBean.getData().getList()) {
-            mAdapter.addData(listBean);
-            mAdapter.addData(listBean.getSubComments());
-            LogUtils.d("test"," comments == "+ listBean.getContent());
-            LogUtils.d("test","sub comments == "+listBean.getSubComments().toString());
-        }
+//        for (MomentCommentBean.DataBean.ListBean listBean : momentCommentBean.getData().getList()) {
+//            mAdapter.addData(listBean);
+//            mAdapter.addData(listBean.getSubComments());
+//            LogUtils.d("test"," comments == "+ listBean.getContent());
+//            LogUtils.d("test","sub comments == "+listBean.getSubComments().toString());
+//        }
+        LogUtils.d(MoyuDetailActivity.class,momentCommentBean.getData().toString());
+        mAdapter.addData(momentCommentBean.getData().getList());
     }
 
     @Override
@@ -384,10 +414,11 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
         if (mRefreshLayout.isLoading()){
             mRefreshLayout.finishLoadMore();
         }
-        for (MomentCommentBean.DataBean.ListBean listBean : momentCommentBean.getData().getList()) {
-            mAdapter.addData(listBean);
-            mAdapter.addData(listBean.getSubComments());
-        }
+//        for (MomentCommentBean.DataBean.ListBean listBean : momentCommentBean.getData().getList()) {
+//            mAdapter.addData(listBean);
+//            mAdapter.addData(listBean.getSubComments());
+//        }
+        mAdapter.addData(momentCommentBean.getData().getList());
         if (momentCommentBean.getData().getList().size()==0){
             ToastUtils.showToast("暂无更多评论");
         }else {

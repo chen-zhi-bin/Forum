@@ -52,6 +52,7 @@ ext {
     def CODEVIEW_VERSION="0.3.1"        //显示代码之类
     def JSOUP_VERSION="1.11.1"
     def PERMISSIONS_VERSION="13.2"
+    def SHAPE_VIEW_VERSION="8.5"
     //三方库统一管理_VERSION
     dependencies = [
             appcompatV7         : 'com.android.support:appcompat-v7:' + APPCOMPAT_V7_VERSION,
@@ -89,6 +90,7 @@ ext {
             mojito_image_view_loader: "com.github.mikaelzero.mojito:SketchImageViewLoader:"+MOJITO_VERSION,
             codeview            :'thereisnospon.codeview:codeview:'+CODEVIEW_VERSION,
             jsoup               :'org.jsoup:jsoup:'+JSOUP_VERSION,
-            permissions         :'com.github.getActivity:XXPermissions:'+PERMISSIONS_VERSION
+            permissions         :'com.github.getActivity:XXPermissions:'+PERMISSIONS_VERSION,
+            shape_view          :'com.github.getActivity:ShapeView:'+SHAPE_VIEW_VERSION
     ]
 }
