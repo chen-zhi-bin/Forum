@@ -38,6 +38,19 @@ public class MoyuServiceWrap {
 
     }
 
+    public void launchDetail(String id){
+        ARouter.getInstance()
+                .build(RoutePath.Moyu.PAGE_DETAIL)
+                .withString(RoutePath.Moyu.MOYU_ID,id)
+                .navigation();
+    }
+
+    public void launchPutFish(){
+        ARouter.getInstance()
+                .build(RoutePath.Moyu.PAGE_PUT_FISH)
+                .navigation();
+    }
+
     private MoyuServiceWrap(){
         ARouter.getInstance().inject(this);
         Object navigation = ARouter.getInstance().build(RoutePath.Moyu.SERVICE_MOYU).navigation();
@@ -62,12 +75,6 @@ public class MoyuServiceWrap {
     }
 
 
-    public void launchDetail(String id){
-        ARouter.getInstance()
-                .build(RoutePath.Moyu.PAGE_DETAIL)
-                .withString(RoutePath.Moyu.MOYU_ID,id)
-                .navigation();
-    }
 
 
 

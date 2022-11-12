@@ -19,6 +19,7 @@ public class RoutePath {
         public static final String SERVICE_MOYU="/moyu/moyu_service";
         public static final String PAGE_DETAIL="/moyu/MoyuDetailActivity";
         public static final String PAGE_DETAIL_COMMENT="/moyu/MoyuCommentDetailActivity";
+        public static final String PAGE_PUT_FISH="/moyu/PutFishActivity";
         public static final String MOYU_ID="/moyu/moyu_id";
         public static final String MOYU_DETAIL_ID="/moyu/moyu_detail_id";
         public static final String COMMENT="/moyu/moyu_comment";

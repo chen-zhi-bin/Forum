@@ -1,5 +1,6 @@
 package com.program.module_moyu.ui.fragment;
 
+import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.program.moudle_base.model.MoyuItemBean;
 import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.ToastUtils;
+import com.program.moudle_base.widget.FloatActionButton;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -58,6 +60,12 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
             EventBusUtils.INSTANCE.register(this);
         }
         mTopicId = requireArguments().getString("topicId", "1");
+        FloatActionButton floatActionButton = rootView.findViewById(R.id.iv_publish_content);
+        if (mTopicId.equals("1")) {
+            floatActionButton.setOnClickListener(view -> MoyuServiceWrap.Singletion.INSTANCE.getHolder().launchPutFish());
+        }else {
+            floatActionButton.setVisibility(View.GONE);
+        }
         LogUtils.d(MoyuListFragment.class,"topicId = "+mTopicId);
         mAdapter = new MoyuAdapter(0);
         RecyclerView rvList = rootView.findViewById(R.id.rv_list);

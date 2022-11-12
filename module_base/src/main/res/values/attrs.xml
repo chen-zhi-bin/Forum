@@ -11,4 +11,10 @@
         <attr name="codeHint" format="string"/>
         <attr name="isPhoneCode" format="boolean"/>
     </declare-styleable>
+
+    <!-- 按照比例显示的 FrameLayout -->
+    <declare-styleable name="RatioFrameLayout">
+        <!-- 宽高比例 -->
+        <attr name="sizeRatio" format="string" />
+    </declare-styleable>
 </resources>
