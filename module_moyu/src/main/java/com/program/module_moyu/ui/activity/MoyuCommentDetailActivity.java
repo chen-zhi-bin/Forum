@@ -21,8 +21,12 @@ import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.module_moyu.R;
+import com.program.module_moyu.adapter.FishCommentDetailListAdapter;
 import com.program.module_moyu.model.bean.MomentCommentBean;
 
+/**
+ * 评论列表
+ */
 @Route(path = RoutePath.Moyu.PAGE_DETAIL_COMMENT)
 public class MoyuCommentDetailActivity extends AppCompatActivity {
 
@@ -31,6 +35,7 @@ public class MoyuCommentDetailActivity extends AppCompatActivity {
 
     @Autowired(name = RoutePath.Moyu.COMMENT)
     public MomentCommentBean.DataBean.ListBean mComment;
+    private FishCommentDetailListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,16 @@ public class MoyuCommentDetailActivity extends AppCompatActivity {
         setContentView(R.layout.modulemoyu_activity_moyu_comment_detail);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         initView();
+        initEvent();
+        initPresenter();
+    }
+
+    private void initPresenter() {
+
+    }
+
+    private void initEvent() {
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -60,10 +75,13 @@ public class MoyuCommentDetailActivity extends AppCompatActivity {
         tvNickName.setText(mComment.getNickname());
         tvDesc.setText(mComment.getPosition()+" · "+ DateUtils.timeFormat(mComment.getCreateTime()));
         tvDesc.setMaxLines(Integer.MAX_VALUE);
+        tvReply.setText(mComment.getContent());
         tvBuildReplyMsgContainer.setVisibility(View.GONE);
         RecyclerView rvFishCommentDetailList = this.findViewById(R.id.rv_fish_commend_detail_list);
         rvFishCommentDetailList.setLayoutManager(new LinearLayoutManager(this));
 //        rvFishCommentDetailList.addItemDecoration();
-//        new FishCommentDetailListAdapter();
+        mAdapter = new FishCommentDetailListAdapter();
+        rvFishCommentDetailList.setAdapter(mAdapter);
+        mAdapter.addData(mComment.getSubComments());
     }
 }
