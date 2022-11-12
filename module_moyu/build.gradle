@@ -3,7 +3,7 @@ if (rootProject.ext.isModule){
 }else {
     apply plugin:  'com.android.application'
 }
-
+apply plugin: 'kotlin-android'
 
 android {
     resourcePrefix "modulemoyu_"
@@ -101,6 +101,9 @@ dependencies {
 
 
     implementation rootProject.ext.dependencies.shape_view
+    implementation rootProject.ext.dependencies.titlebar
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32"
 
     //load with coil
     implementation "com.github.mikaelzero.mojito:coilimageloader:1.8.5"

@@ -93,18 +93,18 @@ public class CommentAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, B
                     if (subComments.isEmpty()){
                         tvBuildReplyMsgContainer.setVisibility(View.GONE);
                     }
-                    viewHolder.setText(R.id.tv_fish_pond_desc,job+"      "+comment.getCreateTime());
+                    viewHolder.setText(R.id.tv_fish_pond_desc,job+"  "+comment.getCreateTime());
                     viewHolder.setText(R.id.tv_reply_msg,comment.getContent());
                     TextView tvChildReplyMsg = viewHolder.getView(R.id.tv_child_reply_msg);
                     TextView tvChildReplyMsg1 = viewHolder.getView(R.id.tv_child_reply_msg1);
                     tvChildReplyMsg.setVisibility(View.GONE);
-                    if (subComments.size()>1&&subComments.get(0) != null) {
+                    if (subComments.size()>=1&&subComments.get(0) != null) {
                         tvChildReplyMsg.setText(getBeautifiedFormat(subComments.get(0),comment));
                         tvChildReplyMsg.setVisibility(View.VISIBLE);
                         tvChildReplyMsg.setMovementMethod(LinkMovementMethod.getInstance());//使点击事件起作用
                     }
                     tvChildReplyMsg1.setVisibility(View.GONE);
-                    if (subComments.size()>2&&subComments.get(1) != null) {
+                    if (subComments.size()>=2&&subComments.get(1) != null) {
                         tvChildReplyMsg1.setText(getBeautifiedFormat(subComments.get(1),comment));
                         tvChildReplyMsg1.setVisibility(View.VISIBLE);
                     }

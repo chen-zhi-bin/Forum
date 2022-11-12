@@ -1,6 +1,8 @@
 apply plugin: 'com.jakewharton.butterknife'
 //if (rootProject.ext.isModule){
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 //}else {
 //    apply plugin: 'com.android.application'
 //}
@@ -90,6 +92,8 @@ dependencies {
     implementation rootProject.ext.dependencies.codeview
     implementation rootProject.ext.dependencies.jsoup
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32"
 
     api project(":lib_base")
     api project(":lib_common")
