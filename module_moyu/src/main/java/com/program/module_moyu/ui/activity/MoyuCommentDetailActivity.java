@@ -28,18 +28,20 @@ import com.program.lib_common.RoutePath;
 import com.program.module_moyu.R;
 import com.program.module_moyu.adapter.FishCommentDetailListAdapter;
 import com.program.module_moyu.callback.IMoyuCommentDetailActivityCallback;
-import com.program.module_moyu.model.bean.MomentComment;
 import com.program.module_moyu.model.bean.MomentCommentBean;
 import com.program.module_moyu.model.bean.MomentSubComment;
 import com.program.module_moyu.model.bean.MomentSubCommentBean;
 import com.program.module_moyu.presenter.IMoyuCommentDetailActivityPresenter;
 import com.program.module_moyu.utils.PresenterManager;
 import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -60,11 +62,15 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
     private IMoyuCommentDetailActivityPresenter mMoyuCommentDetailActivityPresenter;
     private SharedPreferencesUtils mPreferencesUtils;
 
+    @Subscribe
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulemoyu_activity_moyu_comment_detail);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
+        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.register(this);
+        }
         initView();
         initEvent();
         initPresenter();
@@ -162,6 +168,15 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
     }
 
     @Override
+    protected void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        mMoyuCommentDetailActivityPresenter.unregisterViewCallback();
+        super.onDestroy();
+    }
+
+    @Override
     public LifecycleTransformer<Object> TobindToLifecycle() {
         BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
         return  RxLifecycle.bind(objectBehaviorSubject);
@@ -177,7 +192,8 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
         if (data.getSuccess()){
             mReplyBottomSheetDialog.dismiss();
         }
-        ToastUtils.showToast(data.getMessage());
+        EventBusUtils.INSTANCE.postEvent("refresh");
+        ToastUtils.showToast(data.getMessage()+"刷新后即可看到");
     }
 
     @Override

@@ -66,6 +66,7 @@ import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
 import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -360,6 +361,13 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
             mTvHeaderFollow.setVisibility(View.GONE);
         }else {
             mMoyuDetailPresenter.getFollowState(mMoyuInfo.getUserId());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventUpdateItem(String event){
+        if (event.equals("refresh")) {
+            mMoyuDetailPresenter.getMoyuComment(mId);
         }
     }
 
