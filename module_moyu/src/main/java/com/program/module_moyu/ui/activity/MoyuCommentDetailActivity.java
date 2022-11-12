@@ -19,12 +19,15 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 import com.hjq.shape.layout.ShapeLinearLayout;
 import com.hjq.shape.view.ShapeTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
+import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_moyu.R;
 import com.program.module_moyu.adapter.FishCommentDetailListAdapter;
 import com.program.module_moyu.callback.IMoyuCommentDetailActivityCallback;
@@ -61,6 +64,10 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
     private ReplyBottomSheetDialog mReplyBottomSheetDialog;
     private IMoyuCommentDetailActivityPresenter mMoyuCommentDetailActivityPresenter;
     private SharedPreferencesUtils mPreferencesUtils;
+    private RoundedImageView mIvHearderAvatar;
+    private TextView mTvHearderNickName;
+    private LinearLayout mTvHearderNickNameLinerLayout;
+    private TitleBar mTitleBar;
 
     @Subscribe
     @Override
@@ -83,47 +90,58 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
     }
 
     private void initEvent() {
-        mClReplyContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showReplyDialog(null);
-            }
-        });
-        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
-                Object item = adapter.getItem(position);
-                int id = view.getId();
-                if (item instanceof MomentSubCommentBean) {
-                    if (id==R.id.iv_fish_pond_comment) {
-                        showReplyDialog((MomentSubCommentBean) item);
-                    }
+        mClReplyContainer.setOnClickListener(view -> showReplyDialog(null));
+
+        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            Object item = adapter.getItem(position);
+            int id = view.getId();
+            if (item instanceof MomentSubCommentBean) {
+                if (id==R.id.iv_fish_pond_comment) {
+                    showReplyDialog((MomentSubCommentBean) item);
+                }else if (id==R.id.ll_top_container||id==R.id.iv_fish_pond_avatar){
+                    UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(((MomentSubCommentBean) item).getUserId());
                 }
             }
         });
+
+        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(TitleBar titleBar) {
+                finish();
+            }
+        });
+
+        mIvHearderAvatar.setOnClickListener(view -> UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(mComment.getUserId()));
+
+        mTvHearderNickName.setOnClickListener(view -> UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(mComment.getUserId()));
+
+        mTvHearderNickNameLinerLayout.setOnClickListener(view -> UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(mComment.getUserId()));
+
     }
 
     @SuppressLint("SetTextI18n")
     private void initView() {
         TextView tvReplyAndGreat = this.findViewById(R.id.tv_reply_and_great);
         ConstraintLayout fishPondDetailComment =this.findViewById(R.id.fish_pond_detail_comment);
-        RoundedImageView ivAvatar = fishPondDetailComment.findViewById(R.id.iv_fish_pond_avatar);
-        TextView tvNickName = fishPondDetailComment.findViewById(R.id.cb_fish_pond_nick_name);
+        mTvHearderNickNameLinerLayout = fishPondDetailComment.findViewById(R.id.ll_top_container);
+        mIvHearderAvatar = fishPondDetailComment.findViewById(R.id.iv_fish_pond_avatar);
+        mTvHearderNickName = fishPondDetailComment.findViewById(R.id.cb_fish_pond_nick_name);
         ImageView ivFishPondComment= fishPondDetailComment.findViewById(R.id.iv_fish_pond_comment);
         TextView tvDesc= fishPondDetailComment.findViewById(R.id.tv_fish_pond_desc);
         TextView tvReply= fishPondDetailComment.findViewById(R.id.tv_reply_msg);
         LinearLayout tvBuildReplyMsgContainer= fishPondDetailComment.findViewById(R.id.tv_build_reply_msg_container);
 
+        mTitleBar = this.findViewById(R.id.title_bar);
         ShapeLinearLayout commentContainer = this.findViewById(R.id.comment_container);
         mClReplyContainer = commentContainer.findViewById(R.id.tv_fish_pond_submit_comment);
         tvReplyAndGreat.setText(mComment.getSubComments().size()+"回复");
         ivFishPondComment.setVisibility(View.GONE);
-        Glide.with(ivAvatar.getContext())
+        Glide.with(mIvHearderAvatar.getContext())
                 .load(mComment.getAvatar())
                 .placeholder(com.program.moudle_base.R.mipmap.ic_default_avatar)
                 .circleCrop()       //圆角
-                .into(ivAvatar);
-        tvNickName.setText(mComment.getNickname());
+                .into(mIvHearderAvatar);
+        mTvHearderNickName.setText(mComment.getNickname());
         tvDesc.setText(mComment.getPosition()+" · "+ DateUtils.timeFormat(mComment.getCreateTime()));
         tvDesc.setMaxLines(Integer.MAX_VALUE);
         tvReply.setText(mComment.getContent());
