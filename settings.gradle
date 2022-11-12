@@ -1,3 +1,5 @@
+include ':library:base'
+include ':library:widget'
 include ':module_wenda'
 include ':module_moyu'
 include ':module_home'
