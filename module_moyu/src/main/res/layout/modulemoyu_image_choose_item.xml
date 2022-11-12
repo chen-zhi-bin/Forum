@@ -18,6 +18,6 @@
         android:layout_width="@dimen/dp_18"
         android:layout_height="@dimen/dp_18"
         android:layout_gravity="top|end"
-        android:src="@drawable/cat" />
+        android:src="@mipmap/ic_clear" />
 
 </com.program.moudle_base.widget.RatioFrameLayout>
