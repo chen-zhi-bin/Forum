@@ -5,7 +5,8 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
-        <activity android:name=".ui.activity.PutFishActivity"></activity>
+        <activity android:name=".ui.activity.FishPoneSelectionActivity"></activity>
+        <activity android:name=".ui.activity.PutFishActivity" />
         <activity android:name=".ui.activity.MoyuCommentDetailActivity" />
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.MoyuDetailActivity" />

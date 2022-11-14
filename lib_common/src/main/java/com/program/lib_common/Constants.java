@@ -21,6 +21,11 @@ public class Constants {
     public static final String DATA_TPTE_SHARA = "share";
     public static final String DATA_TPTE_WENDA = "wenda";
 
+    public class Moyu{
+        public static final String MOYU_NAME = "moyu_name";   //分类名字
+        public static final String MOYU_ID = "moyu_id";   //分类id
+    }
+
     public class Wenda{
         public static final String WENDA_TYPE = "wenda_type";   //类型
 
