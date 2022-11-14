@@ -75,7 +75,7 @@ public class TopicIndexReturnBean implements Serializable {
         @SerializedName("order")
         private Integer order;
         @SerializedName("description")
-        private Object description;
+        private String description;
         @SerializedName("createTime")
         private Object createTime;
         @SerializedName("updateTime")
@@ -105,7 +105,7 @@ public class TopicIndexReturnBean implements Serializable {
             return order;
         }
 
-        public Object getDescription() {
+        public String getDescription() {
             return description;
         }
 

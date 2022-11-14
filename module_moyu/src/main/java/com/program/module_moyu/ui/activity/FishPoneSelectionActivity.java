@@ -1,6 +1,7 @@
 package com.program.module_moyu.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -10,6 +11,7 @@ import com.hjq.bar.TitleBar;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.module_moyu.R;
+import com.program.module_moyu.adapter.FishPoneSelectAdapter;
 import com.program.module_moyu.callback.IFishPoneSelectionActivityCallback;
 import com.program.module_moyu.model.bean.TopicIndexReturnBean;
 import com.program.module_moyu.presenter.IFishPoneSelectionActivityPresenter;
@@ -29,6 +31,7 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
     private TitleBar mTitleBar;
     private RecyclerView mRvFishPoneList;
     private IFishPoneSelectionActivityPresenter mFishPoneSelectionActivityPresenter;
+    private FishPoneSelectAdapter mAdapter;
 
     @Override
     protected void initPresenter() {
@@ -48,6 +51,9 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
         mTitleBar = this.findViewById(R.id.title_bar);
         mRefreshLayout = this.findViewById(R.id.refresh_layout);
         mRvFishPoneList = this.findViewById(R.id.rv_fish_pond_labels_list);
+        mRvFishPoneList.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new FishPoneSelectAdapter();
+        mRvFishPoneList.setAdapter(mAdapter);
     }
 
     @Override
@@ -57,7 +63,11 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
 
     @Override
     public void setFishPone(TopicIndexReturnBean data) {
-        LogUtils.d("test",data.toString());
+        if (data.getSuccess()) {
+            mAdapter.addData(data.getData());
+        }else {
+            ToastUtils.showToast(data.getMessage());
+        }
     }
 
     @Override

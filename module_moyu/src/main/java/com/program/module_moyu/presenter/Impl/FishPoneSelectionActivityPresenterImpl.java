@@ -55,7 +55,7 @@ public class FishPoneSelectionActivityPresenterImpl implements IFishPoneSelectio
 
     @Override
     public void getFishPone() {
-        mApi.getTopicIndex()
+        mApi.getTopicList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .compose(mCallback.TobindToLifecycle())

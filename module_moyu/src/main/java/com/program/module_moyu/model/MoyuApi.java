@@ -20,6 +20,8 @@ import retrofit2.http.Query;
 
 public interface MoyuApi {
 
+    @GET("ct/moyu/topic")
+    Observable<TopicIndexReturnBean> getTopicList();
     /**
      *获取猿村分类
      */
