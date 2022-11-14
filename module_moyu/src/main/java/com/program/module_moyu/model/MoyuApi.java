@@ -1,5 +1,6 @@
 package com.program.module_moyu.model;
 
+import com.program.module_moyu.model.bean.Moment;
 import com.program.module_moyu.model.bean.MomentComment;
 import com.program.module_moyu.model.bean.MomentCommentBean;
 import com.program.module_moyu.model.bean.MomentSubComment;
@@ -9,16 +10,32 @@ import com.program.module_moyu.model.bean.TopicIndexReturnBean;
 import com.program.moudle_base.model.BaseResponseBean;
 
 import io.reactivex.rxjava3.core.Observable;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MoyuApi {
+
+    /**
+     * 发布动态
+     */
+    @POST("/ct/moyu")
+    Observable<BaseResponseBean> postMoyu(@Body Moment moment, @Header("sob_token")String token);
+
+    /**
+     * 上传图片
+     */
+    @Multipart
+    @POST("/ct/image/mo_yu")
+    Observable<BaseResponseBean> postImage(@Part MultipartBody.Part file, @Header("sob_token")String token);
 
     @GET("ct/moyu/topic")
     Observable<TopicIndexReturnBean> getTopicList();

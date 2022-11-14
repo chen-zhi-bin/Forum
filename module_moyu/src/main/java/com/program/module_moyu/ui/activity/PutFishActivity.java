@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.hjq.bar.OnTitleBarListener;
@@ -33,15 +32,31 @@ import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_moyu.R;
 import com.program.module_moyu.adapter.ImagePreviewAdapter;
+import com.program.module_moyu.callback.IPutFishActivityCallback;
+import com.program.module_moyu.model.bean.Moment;
+import com.program.module_moyu.presenter.IPutFishActivityPresenter;
+import com.program.module_moyu.utils.PresenterManager;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.ImageItem;
 import com.program.moudle_base.utils.ImagePickerConfig;
 import com.program.moudle_base.utils.ToastUtils;
+import com.program.moudle_base.view.EditDialog;
+import com.program.moudle_base.view.WaitDialog;
+import com.trello.rxlifecycle4.LifecycleTransformer;
+import com.trello.rxlifecycle4.RxLifecycle;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import okhttp3.MediaType;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
 @Route(path = RoutePath.Moyu.PAGE_PUT_FISH)
-public class PutFishActivity extends AppCompatActivity {
+public class PutFishActivity extends AppCompatActivity implements IPutFishActivityCallback {
 
     private static final int  INPUT_MAX_LENGTH = 1024;
     private static final int  MAX_SELECTED_COUNT = 4;
@@ -58,6 +73,14 @@ public class PutFishActivity extends AppCompatActivity {
     private String mMoyuId =null;
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
     private TextView mTvChooseFishPone;
+    private WaitDialog mWaitDialog;
+    private IPutFishActivityPresenter mPutFishActivityPresenter;
+    private List<String> mPostedImagesPath = new ArrayList<>();
+    private ImageItem tempImage = null;//暂时保存上传失败的图片
+    private int postIndex = 0;
+    private ImageView mIvLink;
+    private EditDialog mEditDialog;
+    private String mUrlLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +106,20 @@ public class PutFishActivity extends AppCompatActivity {
     }
 
     private void initEvent() {
+        mIvLink.setOnClickListener(view -> mEditDialog.show());
+        mEditDialog.setYesOnclickListener("确认", new EditDialog.onYesOnclickListener() {
+            @Override
+            public void onYesClick(String phone) {
+                mUrlLink = phone;
+                mEditDialog.dismiss();
+            }
+        });
+        mEditDialog.setNoOnclickListener("取消", new EditDialog.onNoOnclickListener() {
+            @Override
+            public void onNoClick() {
+                mEditDialog.dismiss();
+            }
+        });
         mRlChooseFishPone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,6 +148,15 @@ public class PutFishActivity extends AppCompatActivity {
             @Override
             public void onLeftClick(TitleBar titleBar) {
                 finish();
+            }
+
+            @Override
+            public void onRightClick(TitleBar titleBar) {
+                if (mEtInputContent.getText().length()<5){
+                    return;
+                }
+                mWaitDialog.show();
+                mPutFishActivityPresenter.postImage(createPartByPathAndKet(mSelectImage.get(0).getPath(),"image"));
             }
         });
         mIvImage.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +218,8 @@ public class PutFishActivity extends AppCompatActivity {
     }
 
     private void initPresenter() {
-
+        mPutFishActivityPresenter = PresenterManager.getInstance().getPutFishActivityPresenter();
+        mPutFishActivityPresenter.registerViewCallback(this);
     }
 
     @SuppressLint("SetTextI18n")
@@ -189,6 +236,86 @@ public class PutFishActivity extends AppCompatActivity {
         mIvImage = this.findViewById(R.id.iv_image);
         mTitleBar = this.findViewById(R.id.title_bar);
         mRlChooseFishPone = this.findViewById(R.id.rl_choose_fish_pond);
+        mIvLink = this.findViewById(R.id.iv_link);
+        mIvImage.setVisibility(View.VISIBLE);
+        mWaitDialog = new WaitDialog(this);
+        mWaitDialog.setText("上传中...");
+        mWaitDialog.setCancelable(false);
+        mEditDialog = new EditDialog(this);
+        mEditDialog.setTitle("请输入你想分享的网址");
     }
 
+
+    private MultipartBody.Part createPartByPathAndKet(String path, String key) {
+        File file = new File(path);
+        String[] split = path.split("\\.");
+        RequestBody body = RequestBody.create(MediaType.parse("image/"+split[split.length-1]), file);
+        MultipartBody.Part formData = MultipartBody.Part.createFormData(key, file.getName(), body);
+        return formData;
+
+    }
+
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onEmpty() {
+
+    }
+
+    @Override
+    public void setPutFishReturn(BaseResponseBean data) {
+        mWaitDialog.dismiss();
+        if (data.getSuccess()){
+            ToastUtils.showToast("发表成功"+data.getMessage());
+            finish();
+        }else {
+            ToastUtils.showToast(data.getMessage());
+        }
+
+    }
+
+    @Override
+    public void setImageReturn(BaseResponseBean data) {
+        if (data.getSuccess()){
+            mPostedImagesPath.add((String) data.getData());
+            if (postIndex<mSelectImage.size()-1){
+                ++postIndex;
+                mPutFishActivityPresenter.postImage(createPartByPathAndKet(mSelectImage.get(postIndex).getPath(),"image"));
+            }
+        }else {
+            mPostedImagesPath.clear();
+            postIndex = 0;
+        }
+        if (mPostedImagesPath.size()-1==postIndex){
+            mPutFishActivityPresenter.postMoment(
+                    new Moment(
+                        mEtInputContent.getText().toString(),
+                            mMoyuId,
+                            mPostedImagesPath,
+                            mUrlLink
+                    )
+            );
+        }
+        LogUtils.d(PutFishActivity.this,data.toString());
+    }
+
+    @Override
+    public LifecycleTransformer<Object> TobindToLifecycle() {
+        BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
+        return  RxLifecycle.bind(objectBehaviorSubject);
+    }
+
+    @Override
+    public void setRequestError(String msg) {
+        ToastUtils.showToast(msg);
+    }
 }
