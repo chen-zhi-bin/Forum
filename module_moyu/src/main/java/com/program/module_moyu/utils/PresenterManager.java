@@ -1,9 +1,11 @@
 package com.program.module_moyu.utils;
 
+import com.program.module_moyu.presenter.IFishPoneSelectionActivityPresenter;
 import com.program.module_moyu.presenter.IMoyuCommentDetailActivityPresenter;
 import com.program.module_moyu.presenter.IMoyuDetailPresenter;
 import com.program.module_moyu.presenter.IMoyuListFragmentPresenter;
 import com.program.module_moyu.presenter.IMoyuMainFragmentPresenter;
+import com.program.module_moyu.presenter.Impl.FishPoneSelectionActivityPresenterImpl;
 import com.program.module_moyu.presenter.Impl.MoyuCommentDetailActivityPresenterImpl;
 import com.program.module_moyu.presenter.Impl.MoyuDetailPresenterImpl;
 import com.program.module_moyu.presenter.Impl.MoyuListPresenterImpl;
@@ -15,6 +17,7 @@ public class PresenterManager {
     private final IMoyuMainFragmentPresenter mMoyuMainFragmentPresenter;
     private final IMoyuListFragmentPresenter mMoyuListPresenter;
     private final IMoyuCommentDetailActivityPresenter mMoyuCommentDetailActivityPresenter;
+    private final IFishPoneSelectionActivityPresenter mFishPoneSelectionActivityPresenter;
 
     public static PresenterManager getInstance(){
         return ourInstance;
@@ -36,10 +39,15 @@ public class PresenterManager {
         return mMoyuCommentDetailActivityPresenter;
     }
 
+    public IFishPoneSelectionActivityPresenter getFishPoneSelectionActivityPresenter() {
+        return mFishPoneSelectionActivityPresenter;
+    }
+
     private PresenterManager(){
         mMoyuDetailPresenter = new MoyuDetailPresenterImpl();
         mMoyuMainFragmentPresenter = new MoyuMainFragmentPresenterImpl();
         mMoyuListPresenter = new MoyuListPresenterImpl();
         mMoyuCommentDetailActivityPresenter = new MoyuCommentDetailActivityPresenterImpl();
+        mFishPoneSelectionActivityPresenter = new FishPoneSelectionActivityPresenterImpl();
     }
 }
