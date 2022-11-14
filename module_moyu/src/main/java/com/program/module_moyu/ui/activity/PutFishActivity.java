@@ -57,11 +57,16 @@ public class PutFishActivity extends AppCompatActivity {
     private String mMoyuName =null;
     private String mMoyuId =null;
     private ActivityResultLauncher<Intent> mIntentActivityResultLauncher;
+    private TextView mTvChooseFishPone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulemoyu_activity_put_fish);
+        initView();
+        initPresenter();
+        initEvent();
+        initPickerConfig();
         mIntentActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
@@ -70,14 +75,11 @@ public class PutFishActivity extends AppCompatActivity {
                     mMoyuId = result.getData().getStringExtra(Constants.Moyu.MOYU_ID);
 
                 }
+                mTvChooseFishPone.setText(mMoyuName);
                 LogUtils.d("test","name = "+mMoyuName);
                 LogUtils.d("test","id = "+mMoyuId);
             }
         });
-        initView();
-        initPresenter();
-        initEvent();
-        initPickerConfig();
     }
 
     private void initEvent() {
@@ -175,6 +177,7 @@ public class PutFishActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void initView() {
+        mTvChooseFishPone = this.findViewById(R.id.tv_choose_fish_pond);
         mTvInputLength = this.findViewById(R.id.tv_input_length);
         mTvInputLength.setText(0+"/"+INPUT_MAX_LENGTH);
         mEtInputContent = this.findViewById(R.id.et_input_content);

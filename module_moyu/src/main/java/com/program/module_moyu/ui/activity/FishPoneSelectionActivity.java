@@ -1,12 +1,17 @@
 package com.program.module_moyu.ui.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
@@ -19,6 +24,8 @@ import com.program.module_moyu.utils.PresenterManager;
 import com.program.moudle_base.base.BaseActivity;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
 
@@ -33,6 +40,9 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
     private IFishPoneSelectionActivityPresenter mFishPoneSelectionActivityPresenter;
     private FishPoneSelectAdapter mAdapter;
 
+    private String mName = null;
+    private String mId = null;
+
     @Override
     protected void initPresenter() {
         mFishPoneSelectionActivityPresenter = PresenterManager.getInstance().getFishPoneSelectionActivityPresenter();
@@ -42,7 +52,37 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
 
     @Override
     protected void initEvent() {
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                int id = view.getId();
+                if (id==R.id.btn_choose){
+                    TopicIndexReturnBean.DataBean item = (TopicIndexReturnBean.DataBean)adapter.getItem(position);
+                    mName = item.getTopicName();
+                    mId = item.getId();
+                    finish();
+                }
+            }
+        });
+        mTitleBar.setOnTitleBarListener(new OnTitleBarListener() {
+            @Override
+            public void onLeftClick(TitleBar titleBar) {
+                finish();
+            }
 
+            @Override
+            public void onRightClick(TitleBar titleBar) {
+                finish();
+            }
+        });
+
+        mRefreshLayout.setEnableLoadMore(false);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mFishPoneSelectionActivityPresenter.getFishPone();
+            }
+        });
 
     }
 
@@ -63,7 +103,11 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
 
     @Override
     public void setFishPone(TopicIndexReturnBean data) {
+        if (mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.finishRefresh();
+        }
         if (data.getSuccess()) {
+            mAdapter.getData().clear();
             mAdapter.addData(data.getData());
         }else {
             ToastUtils.showToast(data.getMessage());
@@ -79,6 +123,17 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
     @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public void finish() {
+        if (mName!=null&&mId!=null){
+            Intent intent = new Intent();
+            intent.putExtra(Constants.Moyu.MOYU_NAME,mName);
+            intent.putExtra(Constants.Moyu.MOYU_ID,mId);
+            setResult(RESULT_OK,intent);
+        }
+        super.finish();
     }
 
     @Override
