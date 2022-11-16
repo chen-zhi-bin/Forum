@@ -7,6 +7,10 @@ public class RoutePath {
         public static final String PATH_lOGIN="/login/login";
     }
 
+    public static class Search{
+        public static final String PAGE_SEARCH = "/search/SearchActivity";
+    }
+
     public static class Home{
         public static final String ARTICLE_ID="articleId";
         public static final String SERVICE_HOME="/home/SERVICE_HOME";

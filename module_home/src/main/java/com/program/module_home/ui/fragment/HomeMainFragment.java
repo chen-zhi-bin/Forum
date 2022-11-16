@@ -3,6 +3,7 @@ package com.program.module_home.ui.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.program.lib_base.LogUtils;
 import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.service.home.wrap.HomeServiceWrap;
+import com.program.lib_common.service.search.SearchServiceWrap;
 import com.program.module_home.R;
 import com.program.module_home.callback.IHomeMainFragmentCallback;
 import com.program.module_home.model.bean.CategoryDB;
@@ -37,6 +39,7 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
     private List<Class> fragments = CollectionsKt.mutableListOf();
     private FragmentStateAdapter mAdapter;
     private IHomeMainFragmentPresenter mHomeMainFragmentPresenter;
+    private ImageView mIvSearch;
 
     @Override
     protected int getRootViewResId() {
@@ -46,6 +49,7 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
     @Override
     protected void initView(View rootView) {
         setupState(State.SUCCESS);
+        mIvSearch = rootView.findViewById(R.id.iv_search);
         RelativeLayout relativeLayout = rootView.findViewById(R.id.relativeLayout);
         StatusBarUtil.immersive(requireActivity());
         StatusBarUtil.darkMode(requireActivity(),true);
@@ -91,6 +95,12 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
         mHomeMainFragmentPresenter = PresenterManager.getInstance().getHomeMainFragmentPresenter();
         mHomeMainFragmentPresenter.registerViewCallback(this);
         mHomeMainFragmentPresenter.getCategoryList();
+    }
+
+    @Override
+    protected void initListener() {
+        super.initListener();
+        mIvSearch.setOnClickListener(view -> SearchServiceWrap.Singletion.INSTANCE.getHolder().launchSearch());
     }
 
     @Override

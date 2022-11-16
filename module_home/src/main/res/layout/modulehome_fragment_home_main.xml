@@ -18,7 +18,7 @@
             android:layout_centerInParent="true"
             android:paddingLeft="@dimen/dp_10"
             app:tabGravity="center"
-            android:layout_toLeftOf="@+id/iv_more"
+            android:layout_toLeftOf="@+id/iv_search"
             app:tabIndicatorColor="@color/colorAccent"
             app:tabIndicatorHeight="2dp"
             app:tabMode="scrollable"
@@ -27,7 +27,7 @@
             app:tabTextColor="@color/textSecondary" />
 
         <ImageView
-            android:id="@+id/iv_more"
+            android:id="@+id/iv_search"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_centerVertical="true"
