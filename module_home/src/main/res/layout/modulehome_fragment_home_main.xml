@@ -33,7 +33,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:padding="@dimen/dp_12"
-            android:src="@mipmap/ic_more" />
+            android:src="@mipmap/ic_search" />
 
     </RelativeLayout>
     <androidx.viewpager2.widget.ViewPager2
