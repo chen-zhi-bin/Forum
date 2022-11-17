@@ -20,6 +20,9 @@ import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_search.R;
 import com.program.module_search.ui.fragment.SearchListFragment;
+import com.program.moudle_base.utils.EventBusUtils;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +38,14 @@ public class SearchActivity extends AppCompatActivity {
     private EditText mEdSearch;
     private int thistype = -1;
 
+    @Subscribe
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulesearch_activity_search);
+        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.register(this);
+        }
         initView();
         initEvent();
     }
@@ -57,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                EventBusUtils.INSTANCE.postEvent(editable.toString());
             }
         });
     }
@@ -126,5 +133,13 @@ public class SearchActivity extends AppCompatActivity {
             }
         }).attach();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        super.onDestroy();
     }
 }

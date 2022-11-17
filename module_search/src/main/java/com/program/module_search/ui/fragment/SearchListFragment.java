@@ -7,16 +7,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
+import com.program.lib_common.event.UpdateItemEvent;
 import com.program.module_search.R;
 import com.program.module_search.callback.ISearchListFragmentCallback;
 import com.program.module_search.model.bean.SearchListBean;
 import com.program.module_search.presenter.ISearchListFragmentPresenter;
 import com.program.module_search.utils.PresenterManager;
 import com.program.moudle_base.base.BaseFragment;
+import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -26,6 +31,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     private RecyclerView mRvList;
     private SmartRefreshLayout mRefreshLayout;
     private ISearchListFragmentPresenter mSearchListFragmentPresenter;
+    private String mKeyword;
 
 
     @Override
@@ -45,14 +51,23 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         mSearchListFragmentPresenter.getSearchList("android",mType);
     }
 
+    @Subscribe
     @Override
-    protected void initView(View rootView) {
+    public void initView(View rootView) {
         setupState(State.SUCCESS);
         mType = getArguments().getString(Constants.Search.SEARCH_TYPE);
         LogUtils.d("test","type = "+mType);
         mRvList = rootView.findViewById(R.id.rv_list);
         mRefreshLayout = rootView.findViewById(R.id.refreshLayout);
+        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.register(this);
+        }
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshSearch(String s){
+        mKeyword = s;
+        LogUtils.d(SearchListFragment.class,"keyword = "+s);
     }
 
     @Override
@@ -84,5 +99,13 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Override
     public void onEmpty() {
         setupState(State.EMPTY);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (EventBusUtils.INSTANCE.isRegistered(this)){
+            EventBusUtils.INSTANCE.unRegister(this);
+        }
+        super.onDestroy();
     }
 }
