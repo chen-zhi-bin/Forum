@@ -21,6 +21,13 @@ public class Constants {
     public static final String DATA_TPTE_SHARA = "share";
     public static final String DATA_TPTE_WENDA = "wenda";
 
+    public class Search{
+        public static final String SEARCH_TYPE="search_type";
+        public static final int SEARCH_ARTICLE = 1;
+        public static final int SEARCH_WENDA = 2;
+        public static final int SEARCH_SHAPE = 3;
+    }
+
     public class Moyu{
         public static final String MOYU_NAME = "moyu_name";   //分类名字
         public static final String MOYU_ID = "moyu_id";   //分类id
