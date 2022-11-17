@@ -8,6 +8,10 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.tabs.TabLayout;
@@ -28,16 +32,38 @@ public class SearchActivity extends AppCompatActivity {
     private FragmentStateAdapter mAdapter;
     private ViewPager2 mVpConent;
     private TabLayout mTabLayout;
+    private EditText mEdSearch;
+    private int thistype = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulesearch_activity_search);
         initView();
+        initEvent();
+    }
+
+    private void initEvent() {
+        mEdSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     private void initView() {
-
+        mEdSearch = this.findViewById(R.id.homeSearchTv);
         mVpConent = this.findViewById(R.id.vp_content);
         mTabLayout = this.findViewById(R.id.tab_layout);
 
@@ -49,7 +75,7 @@ public class SearchActivity extends AppCompatActivity {
         mFragments.add(SearchListFragment.class);
         mFragments.add(SearchListFragment.class);
 
-        mVpConent.setOffscreenPageLimit(3);
+//        mVpConent.setOffscreenPageLimit(3);
         mAdapter = (FragmentStateAdapter) (new FragmentStateAdapter((FragmentActivity) this) {
             @Override
             public int getItemCount() {
@@ -67,13 +93,16 @@ public class SearchActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         switch (position){
                             case 0:
-                                bundle.putInt(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_ARTICLE);
+                                thistype=0;
+                                bundle.putString(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_ARTICLE);
                                 break;
                             case 1:
-                                bundle.putInt(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_WENDA);
+                                thistype=1;
+                                bundle.putString(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_WENDA);
                                 break;
                             case 2:
-                                bundle.putInt(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_SHAPE);
+                                thistype=2;
+                                bundle.putString(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_SHAPE);
                                 break;
                         }
                         fragment.setArguments(bundle);

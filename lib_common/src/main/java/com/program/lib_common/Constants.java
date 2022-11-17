@@ -23,9 +23,9 @@ public class Constants {
 
     public class Search{
         public static final String SEARCH_TYPE="search_type";
-        public static final int SEARCH_ARTICLE = 1;
-        public static final int SEARCH_WENDA = 2;
-        public static final int SEARCH_SHAPE = 3;
+        public static final String SEARCH_ARTICLE = "a";    //文章
+        public static final String SEARCH_WENDA = "w";      //问答
+        public static final String SEARCH_SHAPE ="s";       //分享
     }
 
     public class Moyu{
