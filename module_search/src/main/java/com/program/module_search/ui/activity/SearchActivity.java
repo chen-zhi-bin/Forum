@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.tabs.TabLayout;
@@ -51,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
         initEvent();
     }
 
+
     private void initEvent() {
         mEdSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,8 +65,8 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mEditTextText = editable.toString();
-                EventBusUtils.INSTANCE.postEvent(editable.toString());
+                    mEditTextText = editable.toString();
+                    EventBusUtils.INSTANCE.postEvent(mEditTextText);
             }
         });
     }

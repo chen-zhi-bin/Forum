@@ -20,7 +20,8 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
 
     {
         addItemType(Constants.Search.SEARCH_INT_ARTICLE, R.layout.modulesearch_adapter_article);
-        addItemType(Constants.Search.SEARCH_INT_WENDA, R.layout.modulesearch_wenda_article);
+        addItemType(Constants.Search.SEARCH_INT_WENDA, R.layout.modulesearch_adapter_list);
+        addItemType(Constants.Search.SEARCH_INT_SHAPE,R.layout.modulesearch_adapter_list);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .into(ivCover);
                 break;
                 case Constants.Search.SEARCH_INT_WENDA:
+                case Constants.Search.SEARCH_INT_SHAPE:
                     viewHolder.setText(R.id.tv_qa_title,Html.fromHtml(item.getTitle()));
                     viewHolder.setText(R.id.tv_desc,Html.fromHtml(item.getContent()));
                     if (itemLabels.size()>2){

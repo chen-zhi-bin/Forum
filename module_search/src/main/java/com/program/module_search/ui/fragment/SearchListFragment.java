@@ -1,7 +1,6 @@
 package com.program.module_search.ui.fragment;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
-import com.program.lib_common.event.UpdateItemEvent;
 import com.program.module_search.R;
 import com.program.module_search.callback.ISearchListFragmentCallback;
 import com.program.module_search.model.bean.SearchListBean;
@@ -66,6 +64,8 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         });
     }
 
+
+
     @Override
     protected int getRootViewResId() {
         return R.layout.modulesearch_fragment_list;
@@ -76,15 +76,21 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mSearchListFragmentPresenter.getSearchList(mKeyword,mType);
+                search();
             }
         });
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                EventBusUtils.INSTANCE.postEvent(false);
                 mSearchListFragmentPresenter.getSearchListMore(mKeyword,mType);
             }
         });
+    }
+
+    private void search() {
+        setupState(State.LOADING);
+        mSearchListFragmentPresenter.getSearchList(mKeyword, mType);
     }
 
     @Override
@@ -92,7 +98,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         mSearchListFragmentPresenter = PresenterManager.getInstance().getSearchListFragmentPresenter();
         mSearchListFragmentPresenter.registerViewCallback(this);
         if (!mKeyword.equals("")){
-            mSearchListFragmentPresenter.getSearchList(mKeyword,mType);
+            search();
         }
     }
 
@@ -120,12 +126,13 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     public void refreshSearch(String s){
         if (s!=null&&!s.equals("")){
             mKeyword = s;
-            mSearchListFragmentPresenter.getSearchList(mKeyword,mType);
+            search();
         }
     }
 
     @Override
     public void setSearchResults(SearchListBean data) {
+
         if (mRefreshLayout.isRefreshing()){
             mRefreshLayout.finishRefresh();
         }
@@ -133,9 +140,14 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         if (data.getSuccess()&&data.getData()!=null){
             mAdapter.getData().clear();
             mAdapter.addData(data.getData().getList());
+            if (data.getData().getList()==null||data.getData().getList().size()==0){
+                setupState(State.ERROR);
+                return;
+            }
         }else {
-            ToastUtils.showToast(data.getMessage());
-            setupState(State.EMPTY);
+            ToastUtils.showToast("网络错误，请稍后重试");
+            setupState(State.ERROR);
+            return;
         }
 
         if (data.getData() != null) {
@@ -143,6 +155,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
                 mRefreshLayout.setEnableLoadMore(false);
             }
         }
+        setupState(State.SUCCESS);
     }
 
     @Override
