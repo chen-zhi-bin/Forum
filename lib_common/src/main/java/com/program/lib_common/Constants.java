@@ -26,6 +26,9 @@ public class Constants {
         public static final String SEARCH_ARTICLE = "a";    //文章
         public static final String SEARCH_WENDA = "w";      //问答
         public static final String SEARCH_SHAPE ="s";       //分享
+        public static final int SEARCH_INT_ARTICLE =1;    //文章
+        public static final int SEARCH_INT_WENDA =2;      //问答
+        public static final int SEARCH_INT_SHAPE =3;       //分享
     }
 
     public class Moyu{

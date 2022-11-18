@@ -8,6 +8,8 @@ public interface ISearchListFragmentCallback extends IBaseCallback {
 
     void setSearchResults(SearchListBean data);
 
+    void setSearchMoreResults(SearchListBean data);
+
     void serErrorMsg(String msg);
 
     LifecycleTransformer<Object> TobindToLifecycle();

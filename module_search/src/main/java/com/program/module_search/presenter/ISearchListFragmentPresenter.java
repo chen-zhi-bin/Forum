@@ -7,4 +7,6 @@ public interface ISearchListFragmentPresenter extends IBasePresenter<ISearchList
 
     void getSearchList(String keyword,String type);
 
+    void getSearchListMore(String keyword,String type);
+
 }

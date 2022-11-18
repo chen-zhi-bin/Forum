@@ -1,6 +1,8 @@
 package com.program.module_search.model.bean;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.gson.annotations.SerializedName;
+import com.program.lib_common.Constants;
 
 import java.io.Serializable;
 import java.util.List;
@@ -99,7 +101,7 @@ public class SearchListBean implements Serializable {
                     '}';
         }
 
-        public static class ListBean implements Serializable {
+        public static class ListBean implements Serializable , MultiItemEntity {
             /**
              * id : 1549301712764801026
              * title : 【Android】<font color='red'>tabLayout</font>改变标签<font color='red'>文字</font>大小时发生的跳闪问题解决方法
@@ -172,6 +174,18 @@ public class SearchListBean implements Serializable {
                         ", cover='" + cover + '\'' +
                         ", labels=" + labels +
                         '}';
+            }
+
+            @Override
+            public int getItemType() {
+                if (type.equals(Constants.Search.SEARCH_ARTICLE)){
+                    return Constants.Search.SEARCH_INT_ARTICLE;
+                }else if (type.equals(Constants.Search.SEARCH_WENDA)){
+                    return Constants.Search.SEARCH_INT_WENDA;
+                }else if (type.equals(Constants.Search.SEARCH_SHAPE)){
+                    return Constants.Search.SEARCH_INT_SHAPE;
+                }
+                return 0;
             }
         }
     }
