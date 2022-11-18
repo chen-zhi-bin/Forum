@@ -172,6 +172,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Override
     public void serErrorMsg(String msg) {
         ToastUtils.showToast(msg);
+        onError();
     }
 
     @Override

@@ -10,7 +10,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.tabs.TabLayout;
@@ -21,6 +23,7 @@ import com.program.lib_common.RoutePath;
 import com.program.module_search.R;
 import com.program.module_search.ui.fragment.SearchListFragment;
 import com.program.moudle_base.utils.EventBusUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -37,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private EditText mEdSearch;
     private String mEditTextText = "";
+    private ImageView mIvSearch;
 
     @Subscribe
     @Override
@@ -69,12 +73,26 @@ public class SearchActivity extends AppCompatActivity {
                     EventBusUtils.INSTANCE.postEvent(mEditTextText);
             }
         });
+        mIvSearch.setOnClickListener(view -> {
+            if (mEditTextText.equals("")){
+                ToastUtils.showToast("搜索框不能为空");
+            }else {
+                EventBusUtils.INSTANCE.postEvent(mEditTextText);
+            }
+        });
     }
 
     private void initView() {
         mEdSearch = this.findViewById(R.id.homeSearchTv);
         mVpConent = this.findViewById(R.id.vp_content);
         mTabLayout = this.findViewById(R.id.tab_layout);
+        mIvSearch = this.findViewById(R.id.iv_search);
+        this.findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         mTitles.add("文章");
         mTitles.add("问答");
