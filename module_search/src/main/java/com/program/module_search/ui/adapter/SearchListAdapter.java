@@ -20,17 +20,18 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
 
     {
         addItemType(Constants.Search.SEARCH_INT_ARTICLE, R.layout.modulesearch_adapter_article);
+        addItemType(Constants.Search.SEARCH_INT_WENDA, R.layout.modulesearch_wenda_article);
     }
 
     @Override
     protected void convert(@NotNull BaseViewHolder viewHolder, MultiItemEntity multiItemEntity) {
         SearchListBean.DataBean.ListBean item = (SearchListBean.DataBean.ListBean) multiItemEntity;
+        String labels="";
+        List<String> itemLabels = item.getLabels();
         switch (multiItemEntity.getItemType()) {
             case Constants.Search.SEARCH_INT_ARTICLE:
                 viewHolder.setText(R.id.tv_a_title, Html.fromHtml(item.getTitle()));
                 viewHolder.setText(R.id.tv_desc,Html.fromHtml(item.getContent()));
-                String labels="";
-                List<String> itemLabels = item.getLabels();
                 if (itemLabels.size()>2){
                     labels = "["+itemLabels.get(0)+itemLabels.get(1)+"..]";
                 }else if (itemLabels.size()==2){
@@ -45,6 +46,19 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                         .load(item.getCover())
                         .into(ivCover);
                 break;
+                case Constants.Search.SEARCH_INT_WENDA:
+                    viewHolder.setText(R.id.tv_qa_title,Html.fromHtml(item.getTitle()));
+                    viewHolder.setText(R.id.tv_desc,Html.fromHtml(item.getContent()));
+                    if (itemLabels.size()>2){
+                        labels = "["+itemLabels.get(0)+itemLabels.get(1)+"..]";
+                    }else if (itemLabels.size()==2){
+                        labels = "["+itemLabels.get(0)+itemLabels.get(1)+"]";
+                    }else if (itemLabels.size()==1){
+                        labels = "["+itemLabels.get(0)+"]";
+                    }
+                    viewHolder.setText(R.id.tv_labels,labels);
+                    viewHolder.setText(R.id.tv_publishTime,item.getPublishTime());
+                    break;
         }
     }
 }

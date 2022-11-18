@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_search.R;
@@ -36,7 +37,7 @@ public class SearchActivity extends AppCompatActivity {
     private ViewPager2 mVpConent;
     private TabLayout mTabLayout;
     private EditText mEdSearch;
-    private int thistype = -1;
+    private String mEditTextText = "";
 
     @Subscribe
     @Override
@@ -64,6 +65,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                mEditTextText = editable.toString();
                 EventBusUtils.INSTANCE.postEvent(editable.toString());
             }
         });
@@ -98,17 +100,18 @@ public class SearchActivity extends AppCompatActivity {
                     if (o!=null){
                         fragment = (Fragment)o;
                         Bundle bundle = new Bundle();
+                        bundle.putString("keyword",mEditTextText);
                         switch (position){
                             case 0:
-                                thistype=0;
+
                                 bundle.putString(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_ARTICLE);
                                 break;
                             case 1:
-                                thistype=1;
+
                                 bundle.putString(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_WENDA);
                                 break;
                             case 2:
-                                thistype=2;
+
                                 bundle.putString(Constants.Search.SEARCH_TYPE,Constants.Search.SEARCH_SHAPE);
                                 break;
                         }

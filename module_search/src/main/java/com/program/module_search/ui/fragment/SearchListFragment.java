@@ -44,7 +44,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     private RecyclerView mRvList;
     private SmartRefreshLayout mRefreshLayout;
     private ISearchListFragmentPresenter mSearchListFragmentPresenter;
-    private String mKeyword;
+    private String mKeyword="";
     private SearchListAdapter mAdapter;
 
     static {
@@ -91,6 +91,9 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     protected void initPresenter() {
         mSearchListFragmentPresenter = PresenterManager.getInstance().getSearchListFragmentPresenter();
         mSearchListFragmentPresenter.registerViewCallback(this);
+        if (!mKeyword.equals("")){
+            mSearchListFragmentPresenter.getSearchList(mKeyword,mType);
+        }
     }
 
     @Subscribe
@@ -98,6 +101,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     public void initView(View rootView) {
         setupState(State.SUCCESS);
         mType = getArguments().getString(Constants.Search.SEARCH_TYPE);
+        mKeyword=getArguments().getString("keyword");
         LogUtils.d("test","type = "+mType);
         mAdapter = new SearchListAdapter();
         mRvList = rootView.findViewById(R.id.rv_list);
@@ -116,7 +120,6 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     public void refreshSearch(String s){
         if (s!=null&&!s.equals("")){
             mKeyword = s;
-            LogUtils.d(SearchListFragment.class,"keyword = "+s);
             mSearchListFragmentPresenter.getSearchList(mKeyword,mType);
         }
     }
@@ -127,7 +130,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
             mRefreshLayout.finishRefresh();
         }
         LogUtils.d("test","data = "+data.toString());
-        if (data.getSuccess()){
+        if (data.getSuccess()&&data.getData()!=null){
             mAdapter.getData().clear();
             mAdapter.addData(data.getData().getList());
         }else {
@@ -135,8 +138,10 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
             setupState(State.EMPTY);
         }
 
-        if (!data.getData().getHasNext()){
-            mRefreshLayout.setEnableLoadMore(false);
+        if (data.getData() != null) {
+            if (!data.getData().getHasNext()){
+                mRefreshLayout.setEnableLoadMore(false);
+            }
         }
     }
 
