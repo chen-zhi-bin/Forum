@@ -132,7 +132,7 @@ public class HomeMainFragmentPresenterImpl implements IHomeMainFragmentPresenter
             mHandler.sendMessage(message);
             return;
         }
-        mApi.getUserIsLogin()
+        mApi.getUserIsLogin(token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .compose(mCallback.TobindToLifecycle())

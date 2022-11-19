@@ -42,7 +42,7 @@ public interface HomeApi {
      * 检查是否登录
      */
     @GET("/uc/user/checkToken")
-    Observable<InfoBean> getUserIsLogin();
+    Observable<InfoBean> getUserIsLogin(@Header("sob_token")String token);
 
     /**
      * 收藏集创建
