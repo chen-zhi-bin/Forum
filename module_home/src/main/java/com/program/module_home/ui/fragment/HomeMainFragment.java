@@ -95,6 +95,7 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
         mHomeMainFragmentPresenter = PresenterManager.getInstance().getHomeMainFragmentPresenter();
         mHomeMainFragmentPresenter.registerViewCallback(this);
         mHomeMainFragmentPresenter.getCategoryList();
+        mHomeMainFragmentPresenter.getUserIsLogin();
     }
 
     @Override
@@ -111,6 +112,11 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
         }
         mAdapter.notifyDataSetChanged();
         LogUtils.d(HomeMainFragment.class,"adapter data size="+mAdapter.getItemCount());
+    }
+
+    @Override
+    public void setUserIsLogin(String msg) {
+        ToastUtils.showToast(msg);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.program.module_home.model.bean.CategoryBean;
 import com.program.module_home.model.bean.CommentBean;
 import com.program.module_home.model.bean.CommentInputBean;
 import com.program.module_home.model.bean.HomeItemBean;
+import com.program.module_home.model.bean.InfoBean;
 import com.program.module_home.model.bean.PriseArticleBean;
 import com.program.module_home.model.bean.PriseArticleInputBean;
 import com.program.module_home.model.bean.SubCommentInputBean;
@@ -36,6 +37,12 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface HomeApi {
+
+    /**
+     * 检查是否登录
+     */
+    @GET("/uc/user/checkToken")
+    Observable<InfoBean> getUserIsLogin();
 
     /**
      * 收藏集创建

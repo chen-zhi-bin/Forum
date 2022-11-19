@@ -12,6 +12,8 @@ public interface IHomeMainFragmentCallback extends IBaseCallback {
 
     void setCategoryList(List<CategoryDB> data);
 
+    void setUserIsLogin(String msg);
+
     LifecycleTransformer<Object> TobindToLifecycle();
 
     Context getContext();

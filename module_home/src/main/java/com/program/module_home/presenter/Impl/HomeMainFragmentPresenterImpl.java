@@ -13,8 +13,11 @@ import com.program.module_home.db.ChannelDao;
 import com.program.module_home.model.HomeApi;
 import com.program.module_home.model.bean.CategoryBean;
 import com.program.module_home.model.bean.CategoryDB;
+import com.program.module_home.model.bean.InfoBean;
 import com.program.module_home.presenter.IHomeMainFragmentPresenter;
 import com.program.module_home.utils.RetrofitManager;
+import com.program.moudle_base.base.BaseApplication;
+import com.program.moudle_base.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class HomeMainFragmentPresenterImpl implements IHomeMainFragmentPresenter
     private static final int ERROR = 0;
     private static final int IS_HAVE_LIST = 1;
     private static final int RETURN_CATEGORY_lIST = 2;
+    private static final int RETURN_IS_LOGIN = 3;
     private final Handler mHandler = new Handler(Looper.myLooper()){
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -65,15 +69,20 @@ public class HomeMainFragmentPresenterImpl implements IHomeMainFragmentPresenter
                     }
                     mCallback.setCategoryList(categoryDBS);
                     break;
+                case RETURN_IS_LOGIN:
+                    mCallback.setUserIsLogin(msg.obj.toString());
+                    break;
             }
         }
     };
     private final HomeApi mApi;
     private final ChannelDao mDao;
+    private final SharedPreferencesUtils mSharedPreferencesUtils;
 
     public HomeMainFragmentPresenterImpl(){
         mApi = RetrofitManager.getInstence().getApi();
         mDao = new ChannelBaseHelper().getDb().getChannelDao();
+        mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
     }
 
     //数据库里查
@@ -104,6 +113,48 @@ public class HomeMainFragmentPresenterImpl implements IHomeMainFragmentPresenter
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
 
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getUserIsLogin() {
+        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE, "");
+        Message message = new Message();
+        message.what=RETURN_IS_LOGIN;
+        if (token.equals("")){
+            message.obj="用户未登录";
+            mHandler.sendMessage(message);
+            return;
+        }
+        mApi.getUserIsLogin()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
+                        InfoBean bean = (InfoBean) o;
+                        if (!bean.getSuccess()){
+                            message.obj="用户未登录";
+                            mSharedPreferencesUtils.putString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+                            mHandler.sendMessage(message);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+//                        mSharedPreferencesUtils.putString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
                     }
 
                     @Override

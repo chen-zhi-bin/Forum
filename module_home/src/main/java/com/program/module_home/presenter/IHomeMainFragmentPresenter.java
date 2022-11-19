@@ -8,4 +8,6 @@ public interface IHomeMainFragmentPresenter extends IBasePresenter<IHomeMainFrag
 
     void getCategoryList();
 
+    void getUserIsLogin();
+
 }
