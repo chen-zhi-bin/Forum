@@ -83,11 +83,11 @@ public class WebViewActivity extends AppCompatActivity {
         WebSettings webSetting = mX5webView.getSettings();
         webSetting.setJavaScriptEnabled(true);
 //        webSetting.setBuiltInZoomControls(true);
-//        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
 //        webSetting.setDomStorageEnabled(true);
 //        webSetting.setAllowContentAccess(true);
 //        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-//        webSetting.setLoadWithOverviewMode(true);
+        webSetting.setLoadWithOverviewMode(true);
 //        webSetting.setSupportMultipleWindows(true);
 //
 //        webSetting.setAppCacheEnabled(true);
