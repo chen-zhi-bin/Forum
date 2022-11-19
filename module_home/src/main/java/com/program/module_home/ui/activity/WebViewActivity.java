@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -81,32 +82,35 @@ public class WebViewActivity extends AppCompatActivity {
 
         WebSettings webSetting = mX5webView.getSettings();
         webSetting.setJavaScriptEnabled(true);
-        webSetting.setBuiltInZoomControls(true);
-        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSetting.setDomStorageEnabled(true);
-        webSetting.setAllowContentAccess(true);
-        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webSetting.setLoadWithOverviewMode(true);
-        webSetting.setSupportMultipleWindows(true);
+//        webSetting.setBuiltInZoomControls(true);
+//        webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
+//        webSetting.setDomStorageEnabled(true);
+//        webSetting.setAllowContentAccess(true);
+//        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+//        webSetting.setLoadWithOverviewMode(true);
+//        webSetting.setSupportMultipleWindows(true);
+//
+//        webSetting.setAppCacheEnabled(true);
+//        webSetting.setGeolocationEnabled(true);
+//        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
+//        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
+//        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
+//        webSetting.setSupportZoom(true);
+//        webSetting.setUseWideViewPort(true);
 
-        webSetting.setAppCacheEnabled(true);
-        webSetting.setGeolocationEnabled(true);
-        webSetting.setAppCacheMaxSize(Long.MAX_VALUE);
-        webSetting.setPluginState(WebSettings.PluginState.ON_DEMAND);
-        webSetting.setRenderPriority(WebSettings.RenderPriority.HIGH);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
         );
 
-        mX5webView.loadUrl(mUrl);
+
         mX5webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String s) {
                 //这里可以对特殊scheme进行拦截处理
                 LogUtils.d("test","s = "+s);
                 LogUtils.d("test","web = "+webView.getUrl());
-                LogUtils.d("test","web = "+webView.toString());
+                LogUtils.d("test","web = "+webView.getX5HitTestResult());
 
                 if (s != null) {
                     if (s.startsWith("http") || s.startsWith("https")) {
@@ -137,6 +141,7 @@ public class WebViewActivity extends AppCompatActivity {
                 mTvTitle.setText(s);
             }
         });
+        mX5webView.loadUrl(mUrl);
     }
 
     @Override

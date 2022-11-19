@@ -8,6 +8,7 @@
     <include
         android:id="@+id/include_bar"
         layout="@layout/layout_toolbar"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
