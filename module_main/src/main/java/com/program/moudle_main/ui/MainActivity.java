@@ -124,6 +124,9 @@ public class MainActivity extends BaseActivity {
                                 .navigation();
                         LogUtils.d("test","to login");
                         isNeedtoFragmentUser=true;
+                        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE, "");
+                        LogUtils.d("test","logined");
+                        switchFragment(lastOneFragment);
                         return false;
                     }
 
@@ -138,7 +141,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 上一次显示的Fragment
      */
-    private BaseFragment lastOneFragment = null;
+    private BaseFragment lastOneFragment = mHomeFragment;
 
     private void switchFragment(BaseFragment targetFragment) {
         //如果上一个Fragment和当前要切换的fragment是同一个，那么不需要切换
@@ -181,7 +184,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtils.d("onResume","onResume()");
         if (isNeedtoFragmentUser) {
             isLogin = mSharedPreferencesUtils.contains(SharedPreferencesUtils.USER_TOKEN_COOKIE);
             LogUtils.d("boolean", "isLogin == " + isLogin);
