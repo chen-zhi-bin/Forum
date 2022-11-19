@@ -70,7 +70,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                     mEditTextText = editable.toString();
-                    EventBusUtils.INSTANCE.postEvent(mEditTextText);
+                    if (mEditTextText.toString().length()>5){
+                        EventBusUtils.INSTANCE.postEvent(mEditTextText);
+                    }
             }
         });
         mIvSearch.setOnClickListener(view -> {

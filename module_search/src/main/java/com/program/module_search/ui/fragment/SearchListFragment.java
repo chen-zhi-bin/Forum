@@ -7,8 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
+import com.program.lib_common.service.home.wrap.HomeServiceWrap;
+import com.program.lib_common.service.wenda.wrap.WendaServiceWrap;
 import com.program.module_search.R;
 import com.program.module_search.callback.ISearchListFragmentCallback;
 import com.program.module_search.model.bean.SearchListBean;
@@ -16,6 +20,7 @@ import com.program.module_search.presenter.ISearchListFragmentPresenter;
 import com.program.module_search.ui.adapter.SearchListAdapter;
 import com.program.module_search.utils.PresenterManager;
 import com.program.moudle_base.base.BaseFragment;
+import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.EventBusUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
@@ -42,7 +47,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     private RecyclerView mRvList;
     private SmartRefreshLayout mRefreshLayout;
     private ISearchListFragmentPresenter mSearchListFragmentPresenter;
-    private String mKeyword="";
+    private String mKeyword = "";
     private SearchListAdapter mAdapter;
 
     static {
@@ -65,7 +70,6 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     }
 
 
-
     @Override
     protected int getRootViewResId() {
         return R.layout.modulesearch_fragment_list;
@@ -73,6 +77,23 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
 
     @Override
     protected void initListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                SearchListBean.DataBean.ListBean item = (SearchListBean.DataBean.ListBean) adapter.getItem(position);
+                switch (item.getItemType()) {
+                    case Constants.Search.SEARCH_INT_ARTICLE:
+                        HomeServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getId(), item.getTitle());
+                        break;
+                    case Constants.Search.SEARCH_INT_WENDA:
+                        WendaServiceWrap.Singletion.INSTANCE.getHolder().launchDetail(item.getId());
+                        break;
+                    case Constants.Search.SEARCH_INT_SHAPE:
+                            CommonViewUtils.toWebView(Constants.SHAPE_URL+item.getId());
+                        break;
+                }
+            }
+        });
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
@@ -83,7 +104,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 EventBusUtils.INSTANCE.postEvent(false);
-                mSearchListFragmentPresenter.getSearchListMore(mKeyword,mType);
+                mSearchListFragmentPresenter.getSearchListMore(mKeyword, mType);
             }
         });
     }
@@ -97,7 +118,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     protected void initPresenter() {
         mSearchListFragmentPresenter = PresenterManager.getInstance().getSearchListFragmentPresenter();
         mSearchListFragmentPresenter.registerViewCallback(this);
-        if (!mKeyword.equals("")){
+        if (!mKeyword.equals("")) {
             search();
         }
     }
@@ -105,16 +126,16 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Subscribe
     @Override
     public void initView(View rootView) {
-        setupState(State.SUCCESS);
+        setupState(State.EMPTY);
         mType = getArguments().getString(Constants.Search.SEARCH_TYPE);
-        mKeyword=getArguments().getString("keyword");
-        LogUtils.d("test","type = "+mType);
+        mKeyword = getArguments().getString("keyword");
+        LogUtils.d("test", "type = " + mType);
         mAdapter = new SearchListAdapter();
         mRvList = rootView.findViewById(R.id.rv_list);
         mRvList.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvList.setAdapter(mAdapter);
         mRefreshLayout = rootView.findViewById(R.id.refreshLayout);
-        if (!EventBusUtils.INSTANCE.isRegistered(this)){
+        if (!EventBusUtils.INSTANCE.isRegistered(this)) {
             EventBusUtils.INSTANCE.register(this);
         }
     }
@@ -123,8 +144,8 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
      * SearchActivity 输入框改变是通知这
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshSearch(String s){
-        if (s!=null&&!s.equals("")){
+    public void refreshSearch(String s) {
+        if (s != null && !s.equals("")) {
             mKeyword = s;
             search();
         }
@@ -133,25 +154,25 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Override
     public void setSearchResults(SearchListBean data) {
 
-        if (mRefreshLayout.isRefreshing()){
+        if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.finishRefresh();
         }
-        LogUtils.d("test","data = "+data.toString());
-        if (data.getSuccess()&&data.getData()!=null){
+        LogUtils.d("test", "data = " + data.toString());
+        if (data.getSuccess() && data.getData() != null) {
             mAdapter.getData().clear();
             mAdapter.addData(data.getData().getList());
-            if (data.getData().getList()==null||data.getData().getList().size()==0){
+            if (data.getData().getList() == null || data.getData().getList().size() == 0) {
                 setupState(State.ERROR);
                 return;
             }
-        }else {
+        } else {
             ToastUtils.showToast("网络错误，请稍后重试");
             setupState(State.ERROR);
             return;
         }
 
         if (data.getData() != null) {
-            if (!data.getData().getHasNext()){
+            if (!data.getData().getHasNext()) {
                 mRefreshLayout.setEnableLoadMore(false);
             }
         }
@@ -163,8 +184,8 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
         }
-        LogUtils.d("test","load more = "+data.toString());
-        if (data.getSuccess()){
+        LogUtils.d("test", "load more = " + data.toString());
+        if (data.getSuccess()) {
             mAdapter.addData(data.getData().getList());
         }
     }
@@ -178,7 +199,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Override
     public LifecycleTransformer<Object> TobindToLifecycle() {
         BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
-        return  RxLifecycle.bind(objectBehaviorSubject);
+        return RxLifecycle.bind(objectBehaviorSubject);
     }
 
     @Override
@@ -198,7 +219,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
 
     @Override
     public void onDestroy() {
-        if (EventBusUtils.INSTANCE.isRegistered(this)){
+        if (EventBusUtils.INSTANCE.isRegistered(this)) {
             EventBusUtils.INSTANCE.unRegister(this);
         }
         super.onDestroy();

@@ -6,6 +6,7 @@ public class Constants {
    public static final String WEBSITE_URL = "https://www.sunofbeach.net/a/";
    public static final String UCENTER_URL = "https://www.sunofbeach.net/u/";
    public static final String WENDA_URL = "https://www.sunofbeach.net/qa/";
+   public static final String SHAPE_URL = "https://www.sunofbeach.net/s/";
 
     public static final int NAVIGATION_VIEW_MENU_RECOMMEND_ITEM_ID_INDEX = 0;
     public static final int NAVIGATION_VIEW_MENU_USER_ITEM_ID_INDEX = 2;
