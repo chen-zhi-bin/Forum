@@ -181,11 +181,14 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
                     break;
                 }
             }
-            MoyuItemBean moyuItemBean = mAdapter.getData().get(index);
-            moyuItemBean.setCommentCount(moyu.getCommentCount());
-            moyuItemBean.setThumbUpCount(moyu.getThumbUpCount());
-            moyuItemBean.setHasThumbUp(moyu.getHasThumbUp());
-            mAdapter.notifyItemChanged(index);
+            if (index!=-1){
+
+                MoyuItemBean moyuItemBean = mAdapter.getData().get(index);
+                moyuItemBean.setCommentCount(moyu.getCommentCount());
+                moyuItemBean.setThumbUpCount(moyu.getThumbUpCount());
+                moyuItemBean.setHasThumbUp(moyu.getHasThumbUp());
+                mAdapter.notifyItemChanged(index);
+            }
 //            mAdapter.notifyItemChanged(index);
         }
     }

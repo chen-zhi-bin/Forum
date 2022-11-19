@@ -6,6 +6,7 @@ import android.os.Message;
 
 import androidx.annotation.NonNull;
 
+import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.module_moyu.callback.IMoyuListFragmentCallback;
 import com.program.module_moyu.model.MoyuApi;
@@ -31,6 +32,8 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
     private static final int RETURN_LIST = 1;
     private static final int RETURN_UPDATE_MOYU = 2;
     private static final int RETURN_LIST_MORE = 3;
+    private static final int RETURN_NOT_LOGIN = 4;
+
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -52,14 +55,18 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
                 case RETURN_LIST_MORE:
                     page++;
                     mCallback.setListMore(((MoyuListBean)msg.obj).getData().getList());
+                case RETURN_NOT_LOGIN:
+                    mCallback.setErrorMsg(msg.obj.toString());
+                    break;
             }
         }
     };
-    private final String mToken;
+    private final SharedPreferencesUtils mSharedPreferencesUtils;
+    private String mToken;
 
     public MoyuListPresenterImpl() {
         mApi = RetrofitManager.getInstence().getApi();
-        mToken = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
     }
 
     private int page = 0;
@@ -131,6 +138,15 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
 
     @Override
     public void getFollowList() {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE, "");
+        if (mToken.equals("")) {
+            Message message = new Message();
+            message.what = RETURN_NOT_LOGIN;
+            message.obj = "用户未登录";
+            mHandler.sendMessage(message);
+            return;
+        }
+        LogUtils.d("test","?????");
         mApi.getFollowList(page, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
