@@ -1,4 +1,4 @@
-package com.program.moulde_login.bean;
+package com.program.moulde_login.model.bean;
 
 import com.google.gson.annotations.SerializedName;
 

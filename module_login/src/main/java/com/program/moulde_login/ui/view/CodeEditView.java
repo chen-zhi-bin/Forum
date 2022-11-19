@@ -16,10 +16,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -69,11 +69,12 @@ public class CodeEditView extends LinearLayout implements View.OnFocusChangeList
     }
 
     private String codeUrl = "https://api.sunofbeaches.com/uc/ut/captcha?code=";
+    private String RegisterCodeUrl = "https://api.sunofbeaches.com/uc/ut/join/send-sms";
     private final Context context;
     private int leftIcon = R.mipmap.ic_phone_code;
     private String mHint;
     private boolean mIsPhoneCode;
-    private Button mBtnMsgCode;
+    private TextView mBtnMsgCode;
     private ImageView mIvTuring;
     private EditText mEditInput;
     private ConstraintLayout mInputLayout;
@@ -104,9 +105,7 @@ public class CodeEditView extends LinearLayout implements View.OnFocusChangeList
         mBtnMsgCode.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if (mPhoneCodeListener.isPreContented()){
-                    mPhoneCodeListener.sendMessage();
-                }
+                mPhoneCodeListener.getSms();
             }
         });
         mIvTuring.setOnClickListener(new OnClickListener() {
@@ -262,6 +261,7 @@ public class CodeEditView extends LinearLayout implements View.OnFocusChangeList
     public interface PhoneCodeListener{
         String sendMessage();
         boolean isPreContented();
+        void getSms();
     }
 
 }

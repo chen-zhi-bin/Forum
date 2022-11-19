@@ -1,7 +1,7 @@
 package com.program.moulde_login.utils;
 
 import com.program.lib_common.Constants;
-import com.program.moulde_login.LoginApi;
+import com.program.moulde_login.model.LoginApi;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

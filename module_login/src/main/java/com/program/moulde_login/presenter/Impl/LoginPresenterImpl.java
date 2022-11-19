@@ -1,15 +1,13 @@
 package com.program.moulde_login.presenter.Impl;
 
-import android.util.Log;
-
 import com.program.lib_base.LogUtils;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
-import com.program.moulde_login.bean.LoginBean;
-import com.program.moulde_login.bean.TokenBean;
+import com.program.moulde_login.model.bean.LoginBean;
+import com.program.moulde_login.model.bean.TokenBean;
 import com.program.moulde_login.utils.RetrofitManager;
 import com.program.moudle_base.model.User;
-import com.program.moulde_login.LoginApi;
+import com.program.moulde_login.model.LoginApi;
 import com.program.moulde_login.presenter.ILoginPresenter;
 import com.program.moulde_login.view.ILoginCallback;
 

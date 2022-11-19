@@ -1,22 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="@dimen/dp_10"
     android:focusable="true"
     android:focusableInTouchMode="true">
+
+    <com.program.moulde_login.ui.view.CodeEditView
+        android:id="@+id/edit_turing_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:codeHint="请输入图灵码"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:codeLeftIcon="@mipmap/ic_turing_code" />
 
     <com.program.moudle_base.view.LoginEditView
         android:id="@+id/edit_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
-        app:inputHint="请输入账号"
+        app:inputHint="请输入手机号"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_turing_code" />
+
+    <com.program.moulde_login.ui.view.CodeEditView
+        android:id="@+id/edit_phone_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:codeHint="请输入验证码"
+        android:background="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_phone"
+        app:codeLeftIcon="@mipmap/ic_phone_code"
+        app:isPhoneCode="true"/>
+
+    <com.program.moudle_base.view.LoginEditView
+        android:id="@+id/edit_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        app:inputHint="请输入昵称"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_phone_code"
+        app:inputLeftIcon="@mipmap/ic_nickname" />
 
     <com.program.moudle_base.view.LoginEditView
         android:id="@+id/edit_password"
@@ -27,20 +61,9 @@
         app:isPassword="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_phone"
-        app:inputLeftIcon="@mipmap/ic_password"/>
+        app:layout_constraintTop_toBottomOf="@+id/edit_nickname"
+        app:inputLeftIcon="@mipmap/ic_password" />
 
-    <com.program.moudle_base.view.LoginEditView
-        android:id="@+id/edit_password_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
-        app:inputHint="请再次输入密码，以便确认"
-        app:isPassword="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_password"
-        app:inputLeftIcon="@mipmap/ic_password"/>
 
     <Button
         android:id="@+id/btn_register"
@@ -53,37 +76,27 @@
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_password_confirm" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_password" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="该功能还未实现"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_login"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="@dimen/dp_20"-->
+<!--        android:text="已注册，登录"-->
+<!--        android:textColor="@color/colorPrimary"-->
+<!--        android:textSize="@dimen/sp_13"-->
+<!--        app:layout_constraintLeft_toLeftOf="@+id/btn_register"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/btn_register" />-->
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_login"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:padding="@dimen/dp_20"-->
-    <!--        android:text="已注册，登录"-->
-    <!--        android:textColor="@color/colorPrimary"-->
-    <!--        android:textSize="@dimen/sp_13"-->
-    <!--        app:layout_constraintLeft_toLeftOf="@+id/btn_register"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/btn_register" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/tv_forget"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:padding="@dimen/dp_20"-->
-    <!--        android:text="忘记密码"-->
-    <!--        android:textColor="@color/colorPrimary"-->
-    <!--        android:textSize="@dimen/sp_13"-->
-    <!--        app:layout_constraintRight_toRightOf="@+id/btn_register"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/btn_register" />-->
-
+<!--    <TextView-->
+<!--        android:id="@+id/tv_forget"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="@dimen/dp_20"-->
+<!--        android:text="忘记密码"-->
+<!--        android:textColor="@color/colorPrimary"-->
+<!--        android:textSize="@dimen/sp_13"-->
+<!--        app:layout_constraintRight_toRightOf="@+id/btn_register"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/btn_register" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

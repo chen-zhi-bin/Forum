@@ -1,12 +1,31 @@
 package com.program.moulde_login.ui.fragment;
 
 import android.view.View;
+import android.widget.Button;
 
 import com.program.moudle_base.base.BaseFragment;
+import com.program.moudle_base.model.BaseResponseBean;
+import com.program.moudle_base.utils.ToastUtils;
+import com.program.moudle_base.view.LoginEditView;
 import com.program.moulde_login.R;
+import com.program.moulde_login.model.bean.SendSmsVo;
+import com.program.moulde_login.model.bean.UserR;
+import com.program.moulde_login.presenter.IRegisterPresenter;
+import com.program.moulde_login.ui.view.CodeEditView;
+import com.program.moulde_login.utils.PresenterManager;
+import com.program.moulde_login.view.IRegisterCallback;
 
 
-public class RegisterFragment extends BaseFragment {
+public class RegisterFragment extends BaseFragment implements CodeEditView.PhoneCodeListener, IRegisterCallback {
+
+    private CodeEditView mEditTuringCode;
+    private LoginEditView mEditPhone;
+    private CodeEditView mEditPhoneCode;
+    private LoginEditView mEditNickName;
+    private LoginEditView mEditPsw;
+    private Button mBtnRegister;
+    private IRegisterPresenter mRegisterPresenter;
+
     @Override
     protected int getRootViewResId() {
         return R.layout.moudlelogin_fragment_register;
@@ -15,5 +34,75 @@ public class RegisterFragment extends BaseFragment {
     @Override
     protected void initView(View rootView) {
         setupState(State.SUCCESS);
+        mEditTuringCode = rootView.findViewById(R.id.edit_turing_code);
+        mEditPhone = rootView.findViewById(R.id.edit_phone);
+        mEditPhoneCode = rootView.findViewById(R.id.edit_phone_code);
+        mEditNickName = rootView.findViewById(R.id.edit_nickname);
+        mEditPsw = rootView.findViewById(R.id.edit_password);
+        mBtnRegister = rootView.findViewById(R.id.btn_register);
+
+        mEditPhoneCode.setPhoneCodeListener(this);
+
+    }
+
+    @Override
+    protected void initListener() {
+        mBtnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRegisterPresenter.postRegister(new UserR(mEditPhone.getValue(),mEditPsw.getValue(),mEditNickName.getValue()),mEditPhoneCode.getValue());
+            }
+        });
+    }
+
+    @Override
+    protected void initPresenter() {
+        super.initPresenter();
+        mRegisterPresenter = PresenterManager.getInstance().getRegisterPresenter();
+        mRegisterPresenter.registerViewCallback(this);
+    }
+
+    @Override
+    public String sendMessage() {
+        return null;
+    }
+
+    @Override
+    public boolean isPreContented() {
+        return false;
+    }
+
+    @Override
+    public void getSms() {
+        String keyCode = mEditTuringCode.getKeyCode();
+        mRegisterPresenter.getSmsCode(new SendSmsVo(mEditPhone.getValue(),mEditTuringCode.getValue()),keyCode);
+
+    }
+
+    @Override
+    public void setSmsCode(BaseResponseBean data) {
+        ToastUtils.showToast(data.getMessage());
+    }
+
+    @Override
+    public void setRegister(BaseResponseBean data) {
+        if (!data.getSuccess()){
+            ToastUtils.showToast("身份验证失败");
+        }
+    }
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onEmpty() {
+
     }
 }
