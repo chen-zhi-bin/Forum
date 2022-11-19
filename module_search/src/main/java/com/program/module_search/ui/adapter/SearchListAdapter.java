@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.program.lib_common.Constants;
 import com.program.module_search.R;
 import com.program.module_search.model.bean.SearchListBean;
+import com.program.moudle_base.utils.CommonViewUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
         addItemType(Constants.Search.SEARCH_INT_ARTICLE, R.layout.modulesearch_adapter_article);
         addItemType(Constants.Search.SEARCH_INT_WENDA, R.layout.modulesearch_adapter_list);
         addItemType(Constants.Search.SEARCH_INT_SHAPE,R.layout.modulesearch_adapter_list);
+        addChildClickViewIds(R.id.iv_cover);
     }
 
     @Override
@@ -46,6 +48,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                 Glide.with(ivCover.getContext())
                         .load(item.getCover())
                         .into(ivCover);
+                ivCover.setOnClickListener(view -> CommonViewUtils.showBigImage(ivCover,item.getCover()));
                 break;
                 case Constants.Search.SEARCH_INT_WENDA:
                 case Constants.Search.SEARCH_INT_SHAPE:

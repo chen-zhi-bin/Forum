@@ -19,6 +19,7 @@ import com.program.module_search.model.bean.SearchListBean;
 import com.program.module_search.presenter.ISearchListFragmentPresenter;
 import com.program.module_search.ui.adapter.SearchListAdapter;
 import com.program.module_search.utils.PresenterManager;
+import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.utils.CommonViewUtils;
 import com.program.moudle_base.utils.EventBusUtils;
@@ -35,6 +36,10 @@ import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
+
+import net.mikaelzero.mojito.Mojito;
+import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
+import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -127,6 +132,7 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Override
     public void initView(View rootView) {
         setupState(State.EMPTY);
+        Mojito.initialize(GlideImageLoader.Companion.with(BaseApplication.getAppContext()), new SketchImageLoadFactory()); //初始化
         mType = getArguments().getString(Constants.Search.SEARCH_TYPE);
         mKeyword = getArguments().getString("keyword");
         LogUtils.d("test", "type = " + mType);
