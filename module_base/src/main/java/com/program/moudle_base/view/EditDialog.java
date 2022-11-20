@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.program.lib_base.LogUtils;
 import com.program.moudle_base.R;
 
 public class EditDialog extends Dialog {
@@ -23,6 +24,13 @@ public class EditDialog extends Dialog {
 
     private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
     private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
+
+    public void clearEtMessage(){
+        if (et_phone!=null){
+            et_phone.setHint("");
+            et_phone.setText("");
+        }
+    }
 
     /**
      * 设置取消按钮的显示内容和监听
@@ -104,6 +112,7 @@ public class EditDialog extends Dialog {
         }
         if (messageStr != null) {
 //            messageTv.setText(messageStr);
+            et_phone.setText(messageStr);
         }
         //如果设置按钮的文字
         if (yesStr != null) {
@@ -128,6 +137,23 @@ public class EditDialog extends Dialog {
      */
     public void setTitle(String title) {
         titleStr = title;
+        if (titleTv!=null){
+            titleTv.setText(title);
+        }
+    }
+
+    public void setEditText(String s){
+        messageStr = s;
+        if (et_phone != null) {
+            et_phone.setText(s);
+        }
+    }
+
+    public void setHint(String s){
+        if (et_phone!=null){
+            et_phone.setHint("");
+        }
+
     }
 
     /**

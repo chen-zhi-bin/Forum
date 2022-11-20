@@ -5,7 +5,8 @@
     <application
         android:allowBackup="true"
         android:supportsRtl="true">
-        <activity android:name=".ui.ImageSwitchActivity"></activity>
+        <activity android:name=".ui.UserInfoActivity"></activity>
+        <activity android:name=".ui.ImageSwitchActivity" />
         <activity android:name=".ui.FavoriteListActivity" />
         <activity android:name=".ui.UcenterListActivity" />
         <activity android:name=".ui.UserCenterActivity" />
@@ -13,9 +14,10 @@
         <activity android:name=".ui.MsgCenterActivity" />
         <activity android:name=".ui.SettingActivity" />
         <activity android:name=".ui.MainActivity" />
+
         <meta-data
             android:name="ScopedStorage"
-            android:value="true"/>
+            android:value="true" />
     </application>
 
 </manifest>

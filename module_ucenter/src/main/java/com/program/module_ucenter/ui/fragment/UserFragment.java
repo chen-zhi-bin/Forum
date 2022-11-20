@@ -78,6 +78,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     private AchievementBean data;
     private SuperTextView mTvRanking;
     private TextView mTvHeaderSob;
+    private SuperTextView mTvAccount;
 
     @Override
     protected int getRootViewResId() {
@@ -116,10 +117,13 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         mTvNotifyNum = rootView.findViewById(R.id.tv_notify_num);
         mIvNotify = rootView.findViewById(R.id.iv_notify);
         mTvHeaderSob = rootView.findViewById(R.id.tv_header_sob);
+        mTvAccount = rootView.findViewById(R.id.tv_account);
     }
 
     @Override
     protected void initListener() {
+        mTvAccount.setOnClickListener(view -> UcenterServiceWrap.Singletion.INSTANCE.getHolder().launchUserInfo());
+
         mRefreshLayout.setOnRefreshListener(refreshLayout -> getData());
 
         mIvSetting.setOnClickListener(view -> {

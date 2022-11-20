@@ -81,6 +81,12 @@ public class UcenterServiceWrap{
                 .navigation();
     }
 
+    public void launchUserInfo(){
+        ARouter.getInstance()
+                .build(RoutePath.Ucenter.PAGE_USER_INFO)
+                .navigation();
+    }
+
 
     public static final class Singletion{
         private static final UcenterServiceWrap holder;

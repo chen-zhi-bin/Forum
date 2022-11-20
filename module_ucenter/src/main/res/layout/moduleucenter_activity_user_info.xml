@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.UserInfoActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="用户详情"
+        app:rightTitle="保存"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_46">
+        <TextView
+            android:id="@+id/tv_company"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="公司"
+            android:layout_marginStart="@dimen/dp_16"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/tv_company_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_to"
+            android:layout_marginRight="@dimen/dp_18"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="无业"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_to"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/dp_18"
+            android:singleLine="true"
+            android:background="@mipmap/ic_edit"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E7E7E7" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_46">
+        <TextView
+            android:id="@+id/tv_position"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="职位"
+            android:layout_marginStart="@dimen/dp_16"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/tv_position_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_to_tv_position"
+            android:layout_marginRight="@dimen/dp_18"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="游民"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_to_tv_position"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/dp_18"
+            android:singleLine="true"
+            android:background="@mipmap/ic_edit"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E7E7E7" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_46">
+        <TextView
+            android:id="@+id/tv_skill"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="技能"
+            android:layout_marginStart="@dimen/dp_16"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/tv_skill_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_to_tv_skill"
+            android:layout_marginRight="@dimen/dp_18"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text=" "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_to_tv_skill"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/dp_18"
+            android:singleLine="true"
+            android:background="@mipmap/ic_edit"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E7E7E7" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_46">
+        <TextView
+            android:id="@+id/tv_sign"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="签名"
+            android:layout_marginStart="@dimen/dp_16"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/tv_sign_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_to_tv_sign"
+            android:layout_marginRight="@dimen/dp_18"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text=" "
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_to_tv_sign"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/dp_16"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/dp_18"
+            android:singleLine="true"
+            android:background="@mipmap/ic_edit"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#E7E7E7" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

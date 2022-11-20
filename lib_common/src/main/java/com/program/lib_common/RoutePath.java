@@ -51,5 +51,6 @@ public class RoutePath {
         public static final String PAGE_UCENTER_LIST="/ucenter/UcenterListActivity";
         public static final String PAGE_FAVORITE_LIST="/ucenter/FavoriteListActivity";
         public static final String PAGE_IMAGE_SWITCH="/ucenter/ImageSwitchActivity";
+        public static final String PAGE_USER_INFO="/ucenter/UserInfoActivity";
     }
 }
