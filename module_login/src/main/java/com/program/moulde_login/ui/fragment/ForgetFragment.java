@@ -6,6 +6,7 @@ import android.widget.Button;
 import com.program.moudle_base.base.BaseFragment;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.ToastUtils;
+import com.program.moudle_base.view.LoadingDialog;
 import com.program.moudle_base.view.LoginEditView;
 import com.program.moulde_login.R;
 import com.program.moulde_login.model.bean.SendSmsVo;
@@ -24,6 +25,7 @@ public class ForgetFragment extends BaseFragment implements CodeEditView.PhoneCo
     private CodeEditView mEtPhoneCode;
     private Button mBtnForget;
     private LoginEditView mEtNewPassword;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected int getRootViewResId() {
@@ -39,6 +41,11 @@ public class ForgetFragment extends BaseFragment implements CodeEditView.PhoneCo
         mBtnForget = rootView.findViewById(R.id.btn_forget);
         mEtNewPassword = rootView.findViewById(R.id.edit_password);
         mEtPhoneCode.setPhoneCodeListener(this);
+        LoadingDialog.Builder builder = new LoadingDialog.Builder(getContext())
+                .setMessage("请求中...")
+                .setCancelable(true)//返回键是否可点击
+                .setCancelOutside(false);//窗体外是否可点击
+        mLoadingDialog = builder.create();
     }
 
     @Override
@@ -48,6 +55,19 @@ public class ForgetFragment extends BaseFragment implements CodeEditView.PhoneCo
             @Override
             public void onClick(View view) {
 //                ToastUtils.showToast("dianji");
+                if (mEtPhone.getValue().equals("")||mEtPhone.getValue()==null){
+                    ToastUtils.showToast("请输入手机号");
+                    return;
+                }
+                if (mEtNewPassword.getValue().equals("")||mEtNewPassword.getValue()==null){
+                    ToastUtils.showToast("请输入新密码");
+                    return;
+                }
+                if (mEtPhoneCode.getValue().equals("")||mEtPhoneCode.getValue()==null){
+                    ToastUtils.showToast("请输入验证码");
+                    return;
+                }
+                mLoadingDialog.show();
                 mForgetPresenter.toForget(new UserVo(mEtPhone.getValue(),mEtNewPassword.getValue()),
                         mEtPhoneCode.getValue());
             }
@@ -73,6 +93,14 @@ public class ForgetFragment extends BaseFragment implements CodeEditView.PhoneCo
 
     @Override
     public void getSms() {
+        if (mEtTuringCode.getValue().equals("")||mEtTuringCode.getValue()==null){
+            ToastUtils.showToast("请输入图灵验证码");
+        }
+        if (mEtPhone.getValue().equals("")||mEtPhone.getValue()==null){
+            ToastUtils.showToast("请输入手机号");
+            return;
+        }
+        mLoadingDialog.show();
         mForgetPresenter.toSendSms(
                 new SendSmsVo(mEtPhone.getValue(),mEtTuringCode.getValue()),
                 mEtTuringCode.getKeyCode()
@@ -81,11 +109,13 @@ public class ForgetFragment extends BaseFragment implements CodeEditView.PhoneCo
 
     @Override
     public void setForgetSmsCode(BaseResponseBean data) {
+        mLoadingDialog.dismiss();
         ToastUtils.showToast(data.getMessage());
     }
 
     @Override
     public void setForget(BaseResponseBean data) {
+        mLoadingDialog.dismiss();
         ToastUtils.showToast(data.getMessage());
     }
 
