@@ -1,5 +1,6 @@
 package com.program.module_ucenter.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.style.AbsoluteSizeSpan;
@@ -76,6 +77,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     private ImageView mIvNotify;
     private AchievementBean data;
     private SuperTextView mTvRanking;
+    private TextView mTvHeaderSob;
 
     @Override
     protected int getRootViewResId() {
@@ -113,6 +115,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
 
         mTvNotifyNum = rootView.findViewById(R.id.tv_notify_num);
         mIvNotify = rootView.findViewById(R.id.iv_notify);
+        mTvHeaderSob = rootView.findViewById(R.id.tv_header_sob);
     }
 
     @Override
@@ -195,6 +198,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         mNameTv.setText(data.getData().getNickname());
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void setUserAchievement(AchievementBean data) {
         this.data=data;
@@ -235,6 +239,7 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         );
 
         mTvSobNum.setText(achieve.getSob().toString());
+        mTvHeaderSob.setText("Sob币："+achieve.getSob().toString());
         String sobDx = "昨日新增" + achieve.getSobDx().toString();
         mTvSobDx.setText(
                 UIUtils.setTextViewContentStyle(

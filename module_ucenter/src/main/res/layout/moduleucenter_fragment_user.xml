@@ -386,33 +386,33 @@
             app:sLeftTextString="帐户信息" />
 
 
-        <com.allen.library.SuperTextView
-            android:id="@+id/tv_reward"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_46"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_6"
-            app:sBackgroundDrawableRes="@drawable/menu_btn_selector"
-            app:sLeftIconRes="@mipmap/ic_reward"
-            app:sLeftTextColor="@color/textSecondary"
-            app:sRightIconRes="@mipmap/ic_next"
-            app:sLeftTextSize="@dimen/sp_14"
-            app:sLeftTextString="打赏码" />
+<!--        <com.allen.library.SuperTextView-->
+<!--            android:id="@+id/tv_reward"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/dp_46"-->
+<!--            android:paddingLeft="@dimen/dp_10"-->
+<!--            android:paddingRight="@dimen/dp_10"-->
+<!--            android:layout_marginTop="@dimen/dp_6"-->
+<!--            app:sBackgroundDrawableRes="@drawable/menu_btn_selector"-->
+<!--            app:sLeftIconRes="@mipmap/ic_reward"-->
+<!--            app:sLeftTextColor="@color/textSecondary"-->
+<!--            app:sRightIconRes="@mipmap/ic_next"-->
+<!--            app:sLeftTextSize="@dimen/sp_14"-->
+<!--            app:sLeftTextString="打赏码" />-->
 
-        <com.allen.library.SuperTextView
-            android:id="@+id/tv_public_account"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_46"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_6"
-            app:sBackgroundDrawableRes="@drawable/menu_btn_selector"
-            app:sLeftIconRes="@mipmap/ic_public_account"
-            app:sLeftTextColor="@color/textSecondary"
-            app:sRightIconRes="@mipmap/ic_next"
-            app:sLeftTextSize="@dimen/sp_14"
-            app:sLeftTextString="公众号" />
+<!--        <com.allen.library.SuperTextView-->
+<!--            android:id="@+id/tv_public_account"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/dp_46"-->
+<!--            android:paddingLeft="@dimen/dp_10"-->
+<!--            android:paddingRight="@dimen/dp_10"-->
+<!--            android:layout_marginTop="@dimen/dp_6"-->
+<!--            app:sBackgroundDrawableRes="@drawable/menu_btn_selector"-->
+<!--            app:sLeftIconRes="@mipmap/ic_public_account"-->
+<!--            app:sLeftTextColor="@color/textSecondary"-->
+<!--            app:sRightIconRes="@mipmap/ic_next"-->
+<!--            app:sLeftTextSize="@dimen/sp_14"-->
+<!--            app:sLeftTextString="公众号" />-->
 
     </LinearLayout>
 
