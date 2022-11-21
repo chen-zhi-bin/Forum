@@ -7,6 +7,7 @@ import com.program.module_ucenter.model.domain.MsgMomentBean;
 import com.program.module_ucenter.model.domain.MsgThumbBean;
 import com.program.module_ucenter.model.domain.MsgWendaBean;
 import com.program.module_ucenter.model.domain.RankingSobBean;
+import com.program.module_ucenter.model.domain.UcenterInfo;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
@@ -33,6 +34,12 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface UcenterApi {
+
+    /*
+    在个人信息页获得个人信息
+     */
+    @GET("/uc/ucenter/user-info")
+    Observable<UcenterInfo> getUcenterInfo(@Header("sob_token")String token);
 
     @GET("/ct/moyu/{moyuId}")
     Observable<MoyuRequestBean> getMoyuDetail(@Path("moyuId")String id, @Header("sob_token")String token);

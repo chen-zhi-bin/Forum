@@ -9,12 +9,21 @@ import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
+import com.program.module_ucenter.callback.IUserInfoActivityCallback;
+import com.program.module_ucenter.model.domain.UcenterInfo;
+import com.program.module_ucenter.model.domain.UserMessageBean;
+import com.program.module_ucenter.presenter.IUserInfoActivityPresenter;
+import com.program.module_ucenter.utils.PresenterManager;
 import com.program.moudle_base.base.BaseActivity;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.EditDialog;
+import com.trello.rxlifecycle4.LifecycleTransformer;
+import com.trello.rxlifecycle4.RxLifecycle;
+
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
 @Route(path = RoutePath.Ucenter.PAGE_USER_INFO)
-public class UserInfoActivity extends BaseActivity {
+public class UserInfoActivity extends BaseActivity implements IUserInfoActivityCallback {
 
     private TextView mTvUserCompany;
     private TextView mTvCompany;
@@ -39,10 +48,13 @@ public class UserInfoActivity extends BaseActivity {
     private static final int mSkillInt = 3;
     private static final int mSignInt = 4;
     private TitleBar mTitleBar;
+    private IUserInfoActivityPresenter mUserInfoActivityPresenter;
 
     @Override
     protected void initPresenter() {
-
+        mUserInfoActivityPresenter = PresenterManager.getInstance().getUserInfoActivityPresenter();
+        mUserInfoActivityPresenter.registerViewCallback(this);
+        mUserInfoActivityPresenter.getUserInfo();
     }
 
     @Override
@@ -113,7 +125,6 @@ public class UserInfoActivity extends BaseActivity {
                 mEditDialog.setYesOnclickListener("确认", new EditDialog.onYesOnclickListener() {
                     @Override
                     public void onYesClick(String phone) {
-                        mTvUserCompany.setText(phone);
                         toMessage(mCompanyInt,phone);
                     }
                 });
@@ -130,7 +141,6 @@ public class UserInfoActivity extends BaseActivity {
                 mEditDialog.setYesOnclickListener("确认", new EditDialog.onYesOnclickListener() {
                     @Override
                     public void onYesClick(String phone) {
-                        mTvUserPosition.setText(phone);
                         toMessage(mPositionInt,phone);
                     }
                 });
@@ -146,7 +156,6 @@ public class UserInfoActivity extends BaseActivity {
                 mEditDialog.setYesOnclickListener("确认", new EditDialog.onYesOnclickListener() {
                     @Override
                     public void onYesClick(String phone) {
-                        mTvSkill.setText(phone);
                         toMessage(mSkillInt,phone);
                     }
                 });
@@ -162,7 +171,6 @@ public class UserInfoActivity extends BaseActivity {
                 mEditDialog.setYesOnclickListener("确认", new EditDialog.onYesOnclickListener() {
                     @Override
                     public void onYesClick(String phone) {
-                        mTvSign.setText(phone);
                         toMessage(mSignInt,phone);
                     }
                 });
@@ -171,21 +179,77 @@ public class UserInfoActivity extends BaseActivity {
     }
 
     private void toMessage(int type,String msg){
+        if (msg.equals("")){
+            return;
+        }
         switch (type){
             case mCompanyInt:
                 mCompany =msg;
+                mTvUserCompany.setText(msg);
                 break;
             case mPositionInt:
+                mTvUserPosition.setText(msg);
                 mPosition = msg;
                 break;
             case mSkillInt:
+                mTvUserSkill.setText(msg);
                 mSkill = msg;
                 break;
             case mSignInt:
                 mSign = msg;
+                mTvUserSign.setText(msg);
                 break;
 
         }
         mEditDialog.dismiss();
+    }
+
+    @Override
+    public void setUserInfo(UcenterInfo data) {
+        UcenterInfo.DataBean bean = data.getData();
+        if (bean.getCompany()!=null&&!bean.getCompany().equals("")){
+            mTvUserCompany.setText(bean.getCompany());
+        }
+        if (bean.getPosition()!=null&&!bean.getPosition().equals("")){
+            mTvUserPosition.setText(bean.getPosition());
+        }
+        if (bean.getGoodAt()!=null&&!bean.getGoodAt().equals("")){
+            mTvUserSkill.setText(bean.getGoodAt());
+        }
+        if (bean.getSign()!=null&&!bean.getSign().equals("")){
+            mTvUserSign.setText(bean.getSign());
+        }
+    }
+
+    @Override
+    public void setErrorMsg(String msg) {
+        ToastUtils.showToast(msg);
+    }
+
+    @Override
+    public LifecycleTransformer<Object> TobindToLifecycle() {
+        BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
+        return RxLifecycle.bind(objectBehaviorSubject);
+    }
+
+    @Override
+    public void onError() {
+
+    }
+
+    @Override
+    public void onLoading() {
+
+    }
+
+    @Override
+    public void onEmpty() {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mUserInfoActivityPresenter.unregisterViewCallback();
     }
 }
