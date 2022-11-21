@@ -10,11 +10,13 @@ import com.hjq.bar.TitleBar;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.IUserInfoActivityCallback;
+import com.program.module_ucenter.model.domain.PersonCenterInfo;
 import com.program.module_ucenter.model.domain.UcenterInfo;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 import com.program.module_ucenter.presenter.IUserInfoActivityPresenter;
 import com.program.module_ucenter.utils.PresenterManager;
 import com.program.moudle_base.base.BaseActivity;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.EditDialog;
 import com.trello.rxlifecycle4.LifecycleTransformer;
@@ -109,10 +111,16 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoActivityC
 
             @Override
             public void onRightClick(TitleBar titleBar) {
-                ToastUtils.showToast("a = "+mCompany+"" +
-                        "b= "+mPosition+"" +
-                        "c = "+mSkill+"" +
-                        "d = "+mSign);
+                PersonCenterInfo personCenterInfo = new PersonCenterInfo();
+                personCenterInfo.setCompany(mCompany);
+                personCenterInfo.setPosition(mPosition);
+                personCenterInfo.setGoodAt(mSkill);
+                personCenterInfo.setSign(mSign);
+                mUserInfoActivityPresenter.modifyUserInfo(personCenterInfo);
+//                ToastUtils.showToast("mCompany = "+mCompany+"" +
+//                        "mPosition= "+mPosition+"" +
+//                        "mSkill = "+mSkill+"" +
+//                        "mSign = "+mSign);
             }
         });
         mTvTo.setOnClickListener(new View.OnClickListener() {
@@ -208,17 +216,26 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoActivityC
     public void setUserInfo(UcenterInfo data) {
         UcenterInfo.DataBean bean = data.getData();
         if (bean.getCompany()!=null&&!bean.getCompany().equals("")){
+            mCompany = bean.getCompany();
             mTvUserCompany.setText(bean.getCompany());
         }
         if (bean.getPosition()!=null&&!bean.getPosition().equals("")){
+            mPosition = bean.getPosition();
             mTvUserPosition.setText(bean.getPosition());
         }
         if (bean.getGoodAt()!=null&&!bean.getGoodAt().equals("")){
+            mSkill = bean.getGoodAt();
             mTvUserSkill.setText(bean.getGoodAt());
         }
         if (bean.getSign()!=null&&!bean.getSign().equals("")){
+            mSign = bean.getSign();
             mTvUserSign.setText(bean.getSign());
         }
+    }
+
+    @Override
+    public void setModifyUserInfo(BaseResponseBean data) {
+        ToastUtils.showToast(data.getMessage());
     }
 
     @Override

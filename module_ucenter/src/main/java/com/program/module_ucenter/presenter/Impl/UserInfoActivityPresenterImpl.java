@@ -6,11 +6,13 @@ import android.os.Message;
 
 import com.program.module_ucenter.callback.IUserInfoActivityCallback;
 import com.program.module_ucenter.model.UcenterApi;
+import com.program.module_ucenter.model.domain.PersonCenterInfo;
 import com.program.module_ucenter.model.domain.UcenterInfo;
 import com.program.module_ucenter.model.domain.UserMessageBean;
 import com.program.module_ucenter.presenter.IUserInfoActivityPresenter;
 import com.program.module_ucenter.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -29,6 +31,7 @@ public class UserInfoActivityPresenterImpl implements IUserInfoActivityPresenter
     private static final int ERROR=-1;
     private static final int RETURN_ERROR=0;
     private static final int RETURN_USERINFO=1;
+    private static final int RETURN_PUT_USERINFO=2;
 
     private final Handler mHandler = new Handler(Looper.myLooper()){
         @Override
@@ -42,6 +45,9 @@ public class UserInfoActivityPresenterImpl implements IUserInfoActivityPresenter
                     break;
                 case RETURN_USERINFO:
                     mCallback.setUserInfo((UcenterInfo)msg.obj);
+                    break;
+                case RETURN_PUT_USERINFO:
+                    mCallback.setModifyUserInfo((BaseResponseBean)msg.obj);
                     break;
             }
         }
@@ -69,6 +75,39 @@ public class UserInfoActivityPresenterImpl implements IUserInfoActivityPresenter
                     public void onNext(@NonNull Object o) {
                         Message message = new Message();
                         message.what = RETURN_USERINFO;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        responseError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void modifyUserInfo(PersonCenterInfo personCenterInfo) {
+        String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mApi.modifyUserInfo(personCenterInfo,token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = RETURN_PUT_USERINFO;
                         message.obj = o;
                         mHandler.sendMessage(message);
                     }

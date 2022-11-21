@@ -6,11 +6,13 @@ import com.program.module_ucenter.model.domain.MsgArticleBean;
 import com.program.module_ucenter.model.domain.MsgMomentBean;
 import com.program.module_ucenter.model.domain.MsgThumbBean;
 import com.program.module_ucenter.model.domain.MsgWendaBean;
+import com.program.module_ucenter.model.domain.PersonCenterInfo;
 import com.program.module_ucenter.model.domain.RankingSobBean;
 import com.program.module_ucenter.model.domain.UcenterInfo;
 import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.module_ucenter.model.domain.ArticleBean;
 import com.program.module_ucenter.model.domain.AvaTarBean;
+import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.CollectionBean;
 import com.program.moudle_base.model.FavoriteBean;
 import com.program.moudle_base.model.FollowBean;
@@ -27,13 +29,18 @@ import com.program.module_ucenter.model.domain.UserWendaBean;
 import com.program.moudle_base.model.MoyuRequestBean;
 
 import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UcenterApi {
+
+    @PUT("/uc/ucenter/user-info")
+    Observable<BaseResponseBean> modifyUserInfo(@Body PersonCenterInfo personCenterInfo,@Header("sob_token")String token);
 
     /*
     在个人信息页获得个人信息
