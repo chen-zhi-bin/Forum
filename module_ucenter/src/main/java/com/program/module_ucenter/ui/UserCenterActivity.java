@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,8 +74,8 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
     private SharedPreferencesUtils mSharedPreferencesUtils;
     private List<String> mTitles = new ArrayList<>();
     private List mFragments = (List) (new ArrayList());
-    private Button mBtnToolbarFollow;
-    private Button mBtnFollow;
+    private TextView mBtnToolbarFollow;
+    private TextView mBtnFollow;
     private FragmentStateAdapter mAdapter;
     private ViewPager2 mVpContent;
     private Toolbar mToobar;
@@ -120,6 +121,7 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.moduleucenter_activity_user_center);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS); //布局延伸
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "userId = " + userId);
 //        userId = "1153952789488054272";
@@ -159,6 +161,7 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         mTvPosition = findViewById(R.id.tv_position);
         mIvBack = findViewById(R.id.iv_back);
         mIvMore = findViewById(R.id.iv_more);
+        mIvMore.setVisibility(View.GONE);
         mTabLayout = this.findViewById(R.id.tab_layout);
         mIvRewardCode = findViewById(R.id.iv_reward_code);
         mIvToolbarAvatar = findViewById(R.id.iv_toolbar_avatar);

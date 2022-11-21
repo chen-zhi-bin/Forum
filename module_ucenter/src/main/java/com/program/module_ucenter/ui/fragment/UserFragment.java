@@ -118,6 +118,8 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
         mIvNotify = rootView.findViewById(R.id.iv_notify);
         mTvHeaderSob = rootView.findViewById(R.id.tv_header_sob);
         mTvAccount = rootView.findViewById(R.id.tv_account);
+
+        rootView.findViewById(R.id.iv_moon).setVisibility(View.GONE);
     }
 
     @Override

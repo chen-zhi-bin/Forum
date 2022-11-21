@@ -4,7 +4,8 @@
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Forum">
         <activity android:name=".ui.UserInfoActivity"></activity>
         <activity android:name=".ui.ImageSwitchActivity" />
         <activity android:name=".ui.FavoriteListActivity" />
