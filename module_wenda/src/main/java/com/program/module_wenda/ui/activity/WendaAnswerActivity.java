@@ -32,6 +32,7 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
@@ -89,11 +90,12 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     private TextView mTvPublishTime;
     private TextView mTvQuestioner;
     private IWendaAnswerPresenter mWendaAnswerPresenter;
-    private Button mBtnHeaderFollow;
+    private TextView mBtnHeaderFollow;
     private TextView mTvReply;
     private TextView mTvReward;
     private ImageView mIvRight;
     private SharedPreferencesUtils mSharedPreferencesUtils;
+    private RelativeLayout mIncludeBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +110,13 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         initView();
         initPresenter();
         initListener();
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
     }
 
     private void initPresenter() {
@@ -311,7 +320,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     }
 
     private void initView() {
-        RelativeLayout includeBar = this.findViewById(R.id.include_bar);
+        mIncludeBar = this.findViewById(R.id.include_bar);
         mRvContent = this.findViewById(R.id.rv_content);
         mTvHeaderBickName = this.findViewById(R.id.tv_header_nickname);
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
@@ -319,9 +328,9 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         mBtnHeaderFollow = this.findViewById(R.id.tv_header_follow);
         mTvReply = this.findViewById(R.id.tv_reply);
         mTvReward = this.findViewById(R.id.tv_reward);
-        includeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
-        includeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
-        mIvRight = includeBar.findViewById(R.id.ivRight);
+        mIncludeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
+        mIncludeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
+        mIvRight = mIncludeBar.findViewById(R.id.ivRight);
         if (!mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_ID).equals(mWendaContentBean.getUserId())){
             mIvRight.setVisibility(View.GONE);
         }

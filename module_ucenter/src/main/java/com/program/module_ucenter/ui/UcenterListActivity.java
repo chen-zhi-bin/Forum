@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
@@ -29,6 +30,7 @@ public class UcenterListActivity extends AppCompatActivity {
     public String userId;
 
     private Fragment mFragment;
+    private RelativeLayout mIncludeBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +38,19 @@ public class UcenterListActivity extends AppCompatActivity {
         setContentView(R.layout.moduleucenter_activity_ucenter_list);
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         initView();
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
     }
 
     private void initView() {
-        RelativeLayout includeBar = this.findViewById(R.id.include_bar);
-        TextView tvTitle = includeBar.findViewById(R.id.tv_title);
-        includeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
+        mIncludeBar = this.findViewById(R.id.include_bar);
+        TextView tvTitle = mIncludeBar.findViewById(R.id.tv_title);
+        mIncludeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (pageType) {

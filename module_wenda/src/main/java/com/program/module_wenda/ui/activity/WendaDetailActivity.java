@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
@@ -89,7 +91,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     private TextView mTvLabels;
     private TextView mTvHeaderNickName;
     private RoundedImageView mIvHeaderAvatar;
-    private Button mTvHeaderFollow;
+    private TextView mTvHeaderFollow;
     private List<MultiItemEntity> answerList = CollectionsKt.mutableListOf();
     private List<MultiItemEntity> mRelatedQuestionList = CollectionsKt.mutableListOf();
     private SharedPreferencesUtils mSharedPreferencesUtils;
@@ -99,6 +101,8 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     private TextView mTvReply;
     private boolean mIsLogin;
     private boolean isJustCreate = true;
+    private RelativeLayout mIncludeBar;
+    private ConstraintLayout mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,14 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         initView();
         initPresenter();
         initListener();
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
+        StatusBarUtil.setPaddingSmart(this,mLayout );
     }
 
     @Override
@@ -219,9 +231,10 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     }
 
     private void initView() {
-        RelativeLayout includeBar = this.findViewById(R.id.include_bar);
-        mTvSearch = includeBar.findViewById(R.id.tvSearch);
-        mIvBack = includeBar.findViewById(R.id.ivBack);
+        mLayout = this.findViewById(R.id.layout_header_avatar);
+        mIncludeBar = this.findViewById(R.id.include_bar);
+        mTvSearch = mIncludeBar.findViewById(R.id.tvSearch);
+        mIvBack = mIncludeBar.findViewById(R.id.ivBack);
         mTvSearch.setVisibility(View.GONE);
         LayoutInflater inflater = LayoutInflater.from(this);
         View inflate = inflater.inflate(R.layout.modulewenda_wenda_detail_header, null);
@@ -240,6 +253,7 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
         mTvHeaderNickName = this.findViewById(R.id.tv_header_nickname);
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
         mTvHeaderFollow = this.findViewById(R.id.tv_header_follow);
+        mTvHeaderFollow.setTag(-1);
         mTvInvite = this.findViewById(R.id.tv_invite);
         mTvReply = this.findViewById(R.id.tv_reply);
 

@@ -17,6 +17,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.FavoriteAdapter;
@@ -41,6 +42,7 @@ public class FavoriteListActivity extends AppCompatActivity implements IFavorite
     private IFavoriteListPresenter mFavoriteListPresenter;
     private FavoriteAdapter mAdapter;
     private SmartRefreshLayout mRefreshLayout;
+    private RelativeLayout mIncluderBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,16 @@ public class FavoriteListActivity extends AppCompatActivity implements IFavorite
         initView();
         initListener();
         initPresenter();
+        initStatusBar();
     }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncluderBar);
+    }
+
+
 
     private void initPresenter() {
         mFavoriteListPresenter = PresenterManager.getInstance().getFavoriteListPresenter();
@@ -71,10 +82,10 @@ public class FavoriteListActivity extends AppCompatActivity implements IFavorite
     }
 
     private void initView() {
-        RelativeLayout includerBar = this.findViewById(R.id.include_bar);
+        mIncluderBar = this.findViewById(R.id.include_bar);
         mRefreshLayout = this.findViewById(R.id.refreshLayout);
-        TextView tvTitle = includerBar.findViewById(R.id.tv_title);
-        includerBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
+        TextView tvTitle = mIncluderBar.findViewById(R.id.tv_title);
+        mIncluderBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
         if (mCollectionBean != null) {
             tvTitle.setText(mCollectionBean.getName());
             tvTitle.setGravity(Gravity.FILL);

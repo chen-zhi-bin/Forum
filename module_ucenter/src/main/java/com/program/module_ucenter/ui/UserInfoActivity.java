@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.IUserInfoActivityCallback;
@@ -84,6 +85,13 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoActivityC
         mSign = mTvUserSign.getText().toString();
 
         mEditDialog = new EditDialog(this);
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mTitleBar);
     }
 
     @Override

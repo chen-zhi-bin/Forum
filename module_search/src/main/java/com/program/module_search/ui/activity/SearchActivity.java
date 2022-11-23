@@ -13,11 +13,13 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_search.R;
@@ -41,6 +43,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText mEdSearch;
     private String mEditTextText = "";
     private ImageView mIvSearch;
+    private LinearLayout mLinearLayout;
 
     @Subscribe
     @Override
@@ -51,7 +54,14 @@ public class SearchActivity extends AppCompatActivity {
             EventBusUtils.INSTANCE.register(this);
         }
         initView();
+        initStatusBar();
         initEvent();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mLinearLayout);
     }
 
 
@@ -85,6 +95,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        mLinearLayout = this.findViewById(R.id.layout);
         mEdSearch = this.findViewById(R.id.homeSearchTv);
         mVpConent = this.findViewById(R.id.vp_content);
         mTabLayout = this.findViewById(R.id.tab_layout);

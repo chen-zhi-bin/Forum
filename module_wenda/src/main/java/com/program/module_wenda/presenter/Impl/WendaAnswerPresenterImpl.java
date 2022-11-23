@@ -16,6 +16,7 @@ import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -93,12 +94,16 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     public WendaAnswerPresenterImpl() {
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
-        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         mApi = RetrofitManager.getInstence().getApi();
     }
 
     @Override
     public void replyAnswer(WendaSubCommentInputBean data) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.replyAnswer(data, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -132,7 +137,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void isThumbCheck(String commentId) {
-        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.commentThumbCheck(commentId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -165,7 +174,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void toWendaCommentThumb(String wendaCommentId) {
-        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.commentThumbCheck(wendaCommentId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -199,6 +212,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void toCommentPrise(String commentId, int value) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.commentPrise(commentId, value, false, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -231,6 +249,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void setBestAsAnswer(String wendaId, String wendaCommentId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.setBestAsComment(wendaId,wendaCommentId,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -263,6 +286,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void getUserFollowState(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.getFollowState(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -294,6 +322,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void addFollow(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.addFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -325,6 +358,11 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
 
     @Override
     public void unFollow(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.unFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

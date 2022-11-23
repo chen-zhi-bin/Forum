@@ -8,6 +8,7 @@
     tools:context=".ui.activity.SearchActivity">
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="@dimen/dp_42">

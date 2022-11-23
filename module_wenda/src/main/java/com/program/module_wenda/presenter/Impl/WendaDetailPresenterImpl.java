@@ -20,6 +20,7 @@ import com.program.moudle_base.model.AddOrUnFollowBean;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -110,12 +111,12 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
         }
     };
     private final SharedPreferencesUtils mSharedPreferencesUtils;
-    private final String mToken;
+    private  String mToken;
 
     public WendaDetailPresenterImpl() {
         mApi = RetrofitManager.getInstence().getApi();
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
-        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+
     }
 
     @Override
@@ -221,6 +222,11 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void sendComment(Answer answer) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.toAnswer(answer,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -254,6 +260,11 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void isWendaThumbClick(String wendaId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.wendaThumbClick(wendaId,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -286,6 +297,11 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void toWendaThumb(String wendaId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.toWendaThumb(wendaId,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -352,6 +368,11 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void getUserFollowState(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.getFollowState(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -383,6 +404,11 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void addFollow(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.addFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -414,6 +440,11 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
 
     @Override
     public void unFollow(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.unFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

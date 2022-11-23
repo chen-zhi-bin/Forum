@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.adapter.ImageListAdapter;
@@ -47,6 +49,7 @@ public class ImageSwitchActivity extends AppCompatActivity implements ImageListA
     private List<ImageItem> mImageItems = new ArrayList<>();
     private TextView mTvFinish;
     private ImagePickerConfig mPickerConfig;
+    private RelativeLayout mLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -159,6 +162,7 @@ public class ImageSwitchActivity extends AppCompatActivity implements ImageListA
     @SuppressLint("SetTextI18n")
     private void initView() {
         mTvFinish = this.findViewById(R.id.tv_finish);
+        mLayout = this.findViewById(R.id.layout);
         mTvFinish.setText("(0/"+maxCount+")   完成");
         RecyclerView list = this.findViewById(R.id.image_list);
         list.setLayoutManager(new GridLayoutManager(this,3));
@@ -167,6 +171,14 @@ public class ImageSwitchActivity extends AppCompatActivity implements ImageListA
         list.setAdapter(mAdapter);
         initEvent();
         initImageSwitchConfig();
+
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mLayout);
     }
 
     private void initImageSwitchConfig() {

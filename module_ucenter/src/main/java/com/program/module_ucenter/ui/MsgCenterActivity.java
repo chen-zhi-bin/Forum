@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.allen.library.SuperTextView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.UIUtils;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
@@ -79,6 +80,13 @@ public class MsgCenterActivity extends RxAppCompatActivity implements IMsgCenter
         initView();
         initEvent();
         initPresenter();
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mRelativeLayoutBar);
     }
 
     protected void initEvent() {

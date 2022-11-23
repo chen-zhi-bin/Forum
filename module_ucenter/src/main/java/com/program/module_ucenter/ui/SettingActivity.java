@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.module_ucenter.R;
 import com.program.module_ucenter.callback.ISettingCallback;
@@ -52,6 +53,12 @@ public class SettingActivity extends RxAppCompatActivity implements ISettingCall
                 settingPresenter.loginout();
             }
         });
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
     }
 
     @Override

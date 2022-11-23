@@ -6,7 +6,9 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
@@ -39,8 +41,9 @@ public class ReplyBottomSheetDialog extends BottomSheetDialog {
     private final View mDialogBinding;
     private ConstraintLayout mRootView;
     private EditText mEditReply;
-    private Button mBtnSend;
+    private TextView mBtnSend;
     private TextView mTvTitle;
+    private TextView mTvNum;
 
     public ReplyBottomSheetDialog(@NonNull Activity context, int theme) {
         super(context, theme);
@@ -74,6 +77,23 @@ public class ReplyBottomSheetDialog extends BottomSheetDialog {
             mEditReply = mDialogBinding.findViewById(R.id.edit_reply);
             mBtnSend = mDialogBinding.findViewById(R.id.btn_send);
             mTvTitle = mDialogBinding.findViewById(R.id.tv_title);
+            mTvNum = mDialogBinding.findViewById(R.id.tv_num_s);
+            mEditReply.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+//                    mTvNum.setText(editable.length());
+                }
+            });
 
             mEditReply.setFocusable(true);
             mEditReply.setFocusableInTouchMode(true);

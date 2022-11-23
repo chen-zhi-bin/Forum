@@ -36,12 +36,13 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         android:layout_marginTop="@dimen/dp_10"/>
 
-    <Button
+    <TextView
         android:id="@+id/btn_send"
         android:layout_width="@dimen/dp_60"
         android:layout_height="@dimen/dp_28"
         android:background="@drawable/blue_solid_btn_selector"
         android:text="发送"
+        android:gravity="center"
         android:layout_marginTop="@dimen/dp_10"
         app:layout_constraintTop_toBottomOf="@+id/edit_reply"
         app:layout_constraintRight_toRightOf="parent"
@@ -50,10 +51,12 @@
         android:textSize="@dimen/sp_13" />
 
     <TextView
+        android:id="@+id/tv_num_s"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_10"
         android:text="1000"
+        android:visibility="gone"
         android:textColor="@color/grey_light"
         android:layout_below="@+id/edit_reply"
         app:layout_constraintTop_toTopOf="@+id/btn_send"

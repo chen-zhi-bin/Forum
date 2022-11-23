@@ -13,6 +13,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.module_ucenter.R;
@@ -40,6 +41,13 @@ public class MessageListActivity extends AppCompatActivity {
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         initView();
         initListener();
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mRelativeLayout);
     }
 
     private void initListener() {

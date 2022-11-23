@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_header_avatar"
             tools:text="gs_wenbing" />
 
-        <Button
+        <TextView
             android:id="@+id/tv_header_follow"
             android:layout_width="70dp"
             android:layout_height="@dimen/dp_24"
