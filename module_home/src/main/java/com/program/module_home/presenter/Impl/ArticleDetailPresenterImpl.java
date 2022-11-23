@@ -25,6 +25,7 @@ import com.program.moudle_base.model.FollowBean;
 import com.program.moudle_base.model.NewCollection;
 import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import java.util.Map;
 
@@ -139,15 +140,22 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
             }
         }
     };
-    private final String mToken;
+    private String mToken;
+    private final SharedPreferencesUtils mSharedPreferencesUtils;
 
     public ArticleDetailPresenterImpl() {
         mApi = RetrofitManager.getInstence().getApi();
-        mToken = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
     }
 
     @Override
     public void postNewCollection(NewCollection data) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.postNewCollection(data,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -514,6 +522,11 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
     @Override
     public void getUserFollowState(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.getFollowState(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -546,6 +559,11 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
     @Override
     public void addFollow(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.addFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -578,6 +596,11 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
     @Override
     public void unFollow(String userId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.unFollow(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -676,6 +699,11 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
     @Override
     public void unFavorite(String favoriteId) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (mToken.equals("")||mToken==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.unFavorite(favoriteId,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

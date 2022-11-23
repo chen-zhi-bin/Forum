@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_home.R;
@@ -50,8 +51,15 @@ public class PriseListActivity extends AppCompatActivity implements IPriseListAc
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test","PriseListActivity + article id ="+mArticleId);
         initView();
+        initStatusBar();
         initPresenter();
         initListener();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
     }
 
     private void initListener() {

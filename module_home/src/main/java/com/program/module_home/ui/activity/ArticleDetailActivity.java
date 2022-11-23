@@ -36,6 +36,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
@@ -152,6 +153,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private int mNewFolderstate = 0;
     private ImageView mIvSwitchCover;
     private List<ImageItem> mSelectImage = new ArrayList<>();
+    private RelativeLayout mIncludeBar;
 
     @Subscribe
     @Override
@@ -168,9 +170,17 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         mToken = SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         thisActivity = this;
         initView();
+        initStatusBar();
         initPresenter();
         initListener();
         initPickerConfig();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
+        StatusBarUtil.setPaddingSmart(this,mLayoutHeaderAvatar);
     }
 
     private void initPickerConfig() {
@@ -626,10 +636,10 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     }
 
     private void initView() {
-        RelativeLayout includeBar = this.findViewById(R.id.include_bar);
-        includeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
-        includeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
-        mTvTitle = includeBar.findViewById(R.id.tv_title);
+        mIncludeBar = this.findViewById(R.id.include_bar);
+        mIncludeBar.findViewById(R.id.tvSearch).setVisibility(View.GONE);
+        mIncludeBar.findViewById(R.id.ivBack).setOnClickListener(view -> finish());
+        mTvTitle = mIncludeBar.findViewById(R.id.tv_title);
 
         mIvSwitch = this.findViewById(R.id.iv_switch);
         mIvSwitch.setTag(0);

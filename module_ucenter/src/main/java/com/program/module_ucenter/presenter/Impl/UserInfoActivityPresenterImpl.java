@@ -61,6 +61,10 @@ public class UserInfoActivityPresenterImpl implements IUserInfoActivityPresenter
     @Override
     public void getUserInfo() {
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (token.equals("")||token==null){
+            mCallback.setErrorMsg("尚未登录");
+            return;
+        }
         mApi.getUcenterInfo(token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

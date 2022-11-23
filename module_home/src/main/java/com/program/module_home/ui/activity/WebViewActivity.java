@@ -19,6 +19,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.RoutePath;
 import com.program.module_home.R;
 import com.tencent.smtt.sdk.QbSdk;
@@ -38,6 +39,7 @@ public class WebViewActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private TextView mTvTitle;
     private RelativeLayout mToolbar;
+    private RelativeLayout mIncludeBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +48,24 @@ public class WebViewActivity extends AppCompatActivity {
         ARouter.getInstance().inject(this);         //不添加会收不到信息
         LogUtils.d("test", "url = " + mUrl);
         initView();
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
     }
 
     private void initView() {
-        RelativeLayout includeBar = this.findViewById(R.id.include_bar);
-        includeBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
+        mIncludeBar = this.findViewById(R.id.include_bar);
+        mIncludeBar.findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        mTvTitle = includeBar.findViewById(R.id.tv_title);
+        mTvTitle = mIncludeBar.findViewById(R.id.tv_title);
         mX5webView = this.findViewById(R.id.x5webview);
         mProgressBar = this.findViewById(R.id.progressBar);
         mToolbar = this.findViewById(R.id.toolbar);
