@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.moudle_base.base.BaseActivity;
@@ -51,6 +52,9 @@ public class MainActivity extends BaseActivity {
         mForgetOrLoginTv = this.findViewById(R.id.tv_forget);
         mTextView=findViewById(R.id.tv_logo);
         mRegisterOrLoginTv=findViewById(R.id.tv_register);
+
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
     }
 
     @Override

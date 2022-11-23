@@ -24,7 +24,7 @@
         android:textColor="@color/textSecondary"
         android:textStyle="bold"
         android:drawablePadding="@dimen/dp_10"
-        android:drawableTop="@mipmap/ic_launcher" />
+        android:drawableTop="@mipmap/logo" />
 
     <LinearLayout
         android:id="@+id/layout"
