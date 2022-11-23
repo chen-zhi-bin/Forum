@@ -17,6 +17,7 @@ import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -97,7 +98,7 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
         }
     };
     private final SharedPreferencesUtils mSharedPreferencesUtils;
-    private final String mToken;
+    private String mToken;
 
     public MoyuDetailPresenterImpl() {
         mApi = RetrofitManager.getInstence().getApi();
@@ -267,7 +268,11 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
 
     @Override
     public void getFollowState(String uid) {
-
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.getFollowState(uid, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -300,6 +305,11 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
 
     @Override
     public void addFollow(String uid) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.addFollow(uid, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -332,6 +342,11 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
 
     @Override
     public void unFollow(String uid) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.unFollow(uid, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -364,6 +379,11 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
 
     @Override
     public void toIssueComment(MomentComment momentComment) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.sendComment(mToken,momentComment)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -396,6 +416,11 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
 
     @Override
     public void toIssueSubComment(MomentSubComment momentSubComment) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.sendSubComment(mToken,momentSubComment)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())

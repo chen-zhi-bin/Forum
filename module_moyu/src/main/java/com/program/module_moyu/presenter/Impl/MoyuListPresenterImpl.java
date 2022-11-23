@@ -16,6 +16,7 @@ import com.program.module_moyu.presenter.IMoyuListFragmentPresenter;
 import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observer;
@@ -179,6 +180,11 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
 
     @Override
     public void getFollowListMore() {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.getFollowList(page,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -275,7 +281,12 @@ public class MoyuListPresenterImpl implements IMoyuListFragmentPresenter {
 
     @Override
     public void getUpdateMoyuInfo(String moyuid) {
-        mApi.getMoyuDetail(moyuid,mToken!=null?mToken:"")
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
+        mApi.getMoyuDetail(moyuid,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .compose(mCallback.TobindToLifecycle())

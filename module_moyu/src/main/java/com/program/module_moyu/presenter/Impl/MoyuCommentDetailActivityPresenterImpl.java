@@ -16,6 +16,7 @@ import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -69,6 +70,10 @@ public class MoyuCommentDetailActivityPresenterImpl implements IMoyuCommentDetai
     @Override
     public void toIssueComment(MomentSubComment momentSubComment) {
         String token = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE, "");
+        if (token.equals("")||token==null){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.sendSubComment(token,momentSubComment)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())

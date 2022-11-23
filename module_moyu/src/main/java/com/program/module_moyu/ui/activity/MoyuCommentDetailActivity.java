@@ -25,6 +25,7 @@ import com.hjq.shape.layout.ShapeLinearLayout;
 import com.hjq.shape.view.ShapeTextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
@@ -79,6 +80,7 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
             EventBusUtils.INSTANCE.register(this);
         }
         initView();
+        initStatusBar();
         initEvent();
         initPresenter();
     }
@@ -155,6 +157,13 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
 
         mReplyBottomSheetDialog = new ReplyBottomSheetDialog(this, R.style.BottomSheetDialog);
     }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mTitleBar);
+    }
+
 
 
     private void showReplyDialog(MomentSubCommentBean item){

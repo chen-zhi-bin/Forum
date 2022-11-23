@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.module_moyu.R;
 import com.program.module_moyu.adapter.FishPoneSelectAdapter;
@@ -94,6 +95,13 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
         mRvFishPoneList.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new FishPoneSelectAdapter();
         mRvFishPoneList.setAdapter(mAdapter);
+        initStatusBar();
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mTitleBar);
     }
 
     @Override

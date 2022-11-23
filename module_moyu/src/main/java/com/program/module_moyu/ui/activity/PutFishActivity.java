@@ -27,6 +27,7 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
@@ -87,6 +88,7 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.modulemoyu_activity_put_fish);
         initView();
+        initStatusBar();
         initPresenter();
         initEvent();
         initPickerConfig();
@@ -243,6 +245,12 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
         mWaitDialog.setCancelable(false);
         mEditDialog = new EditDialog(this);
         mEditDialog.setTitle("请输入你想分享的网址");
+    }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mTitleBar);
     }
 
 

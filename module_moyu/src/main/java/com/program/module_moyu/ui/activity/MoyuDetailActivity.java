@@ -30,6 +30,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hjq.shape.layout.ShapeLinearLayout;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.DateUtils;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
@@ -114,6 +115,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     }
 
     private ShapeLinearLayout mBottomReply;
+    private RelativeLayout mIncludeBar;
 
 
     @Subscribe
@@ -132,9 +134,17 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory()); //没有这个图片不会显示
         mMyId = SharedPreferencesUtils.getInstance(this).getString(SharedPreferencesUtils.USER_ID);
         initView();
+        initStatusBar();
         initListener();
         initPresenter();
     }
+
+    private void initStatusBar() {
+        StatusBarUtil.immersive(this);
+        StatusBarUtil.darkMode(this,true);
+        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
+    }
+
 
     private void initPresenter() {
         mMoyuDetailPresenter = PresenterManager.getInstance().getMoyuDetailPresenter();
@@ -225,9 +235,9 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     }
 
     private void initView() {
-        RelativeLayout includeBar = this.findViewById(R.id.include_bar);
-        TextView tvSearch = includeBar.findViewById(R.id.tvSearch);
-        mIvBack = includeBar.findViewById(R.id.ivBack);
+        mIncludeBar = this.findViewById(R.id.include_bar);
+        TextView tvSearch = mIncludeBar.findViewById(R.id.tvSearch);
+        mIvBack = mIncludeBar.findViewById(R.id.ivBack);
         tvSearch.setVisibility(View.GONE);
 //        new CommentAdapter(this, CollectionsKt.mutableListOf());
         mAdapter = new CommentAdapter();

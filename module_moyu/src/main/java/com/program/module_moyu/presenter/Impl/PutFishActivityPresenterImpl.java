@@ -13,6 +13,7 @@ import com.program.module_moyu.utils.RetrofitManager;
 import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.model.BaseResponseBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -66,7 +67,11 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
 
     @Override
     public void postImage(MultipartBody.Part part) {
-        String token = mInstance.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        String token = mInstance.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (token.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.postImage(part,token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -99,7 +104,11 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
 
     @Override
     public void postMoment(Moment moment) {
-        String token = mInstance.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        String token = mInstance.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (token.equals("")){
+            ToastUtils.showToast("尚未登录");
+            return;
+        }
         mApi.postMoyu(moment,token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
