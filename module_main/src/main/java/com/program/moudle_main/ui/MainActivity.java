@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.program.lib_base.LogUtils;
@@ -29,6 +30,7 @@ import com.program.moudle_main.R2;
 
 import butterknife.BindView;
 
+@Route(path = RoutePath.Main.PAGE_MAIN)
 public class MainActivity extends BaseActivity {
 
     @BindView(R2.id.main_navigation_bar)

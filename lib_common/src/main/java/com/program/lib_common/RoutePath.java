@@ -3,6 +3,10 @@ package com.program.lib_common;
 public class RoutePath {
     public static final String PATH="path";
 
+    public static class Main{
+        public static final String PAGE_MAIN="/main/MainActivity";
+    }
+
     public static class Login{
         public static final String PATH_lOGIN="/login/login";
     }

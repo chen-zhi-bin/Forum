@@ -17,4 +17,10 @@
         <!-- 宽高比例 -->
         <attr name="sizeRatio" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="indicator">
+        <attr name="normalColor" format="color" />
+        <attr name="selectedColor" format="color" />
+    </declare-styleable>
+
 </resources>

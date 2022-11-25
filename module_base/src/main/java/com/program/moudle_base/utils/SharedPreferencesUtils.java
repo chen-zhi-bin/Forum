@@ -19,6 +19,7 @@ public class SharedPreferencesUtils {
     public static final String USER_TOKEN_COOKIE = "token_press";                       //token
     public static final String USER_PHONE = "user_phone";                       //电话
     public static final String USER_ID = "user_id";                             //id
+    public static final String IS_FIRST_LAUNCHER = "is_first";                             //id
 
 
 
