@@ -15,6 +15,7 @@ import com.program.lib_base.LogUtils;
 import com.program.lib_common.event.UpdateItemEvent;
 import com.program.moudle_base.R;
 import com.program.moudle_base.utils.EventBusUtils;
+import com.program.moudle_base.utils.ToastUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -42,6 +43,7 @@ public abstract class BaseFragment extends Fragment {
     public void retry(){
         //点击重新加载
 //        LogUtils.d(this,"on retry..");
+//        ToastUtils.showToast("刷新");
         onRetryClick();
     }
 

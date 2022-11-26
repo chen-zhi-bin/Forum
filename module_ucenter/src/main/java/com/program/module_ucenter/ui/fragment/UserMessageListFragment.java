@@ -346,6 +346,7 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
     @Override
     public void setError(String s) {
         ToastUtils.showToast(s);
+        onError();
         if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
         }
@@ -355,8 +356,35 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
     }
 
     @Override
-    public void onError() {
+    protected void onRetryClick() {
+        switch (pageType) {
+            case Constants.Ucenter.PAGE_MSG_AT:
+                mMsgListPresenter.getMsgListAt();
+                break;
+            case Constants.Ucenter.PAGE_MSG_STAR:
+                mMsgListPresenter.getMsgThumbList();
+                break;
+            case Constants.Ucenter.PAGE_MSG_DYNAMIC:
+                mMsgListPresenter.getMsgMomentList();
+                break;
+            case Constants.Ucenter.PAGE_MSG_ARTICLE:
+                mMsgListPresenter.getMsgArticleList();
+                break;
+            case Constants.Ucenter.PAGE_MSG_WENDA:
+                mMsgListPresenter.getMsgWendaList();
+                break;
+        }
+    }
 
+    @Override
+    protected void relese() {
+        super.relese();
+        mMsgListPresenter.unregisterViewCallback();
+    }
+
+    @Override
+    public void onError() {
+        setupState(State.ERROR);
     }
 
     @Override
@@ -366,7 +394,7 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
 
     @Override
     public void onEmpty() {
-
+        setupState(State.EMPTY);
     }
 
     public interface onMessageListListener {

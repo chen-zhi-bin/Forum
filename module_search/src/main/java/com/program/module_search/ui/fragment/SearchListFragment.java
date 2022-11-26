@@ -203,6 +203,19 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     }
 
     @Override
+    protected void onRetryClick() {
+        if (!mKeyword.equals("")) {
+            search();
+        }
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mSearchListFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public LifecycleTransformer<Object> TobindToLifecycle() {
         BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
         return RxLifecycle.bind(objectBehaviorSubject);

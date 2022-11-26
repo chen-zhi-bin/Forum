@@ -262,6 +262,17 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
     }
 
     @Override
+    protected void onRetryClick() {
+        mHomeListFragmentPresenter.getRecommend(mCategoryId);
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mHomeListFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
     }
