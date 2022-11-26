@@ -20,7 +20,7 @@
         android:layout_height="49dp"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        app:labelVisibilityMode="selected"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/moudulemain_my_navigation_items"
         tools:ignore="MissingConstraints" />
 
