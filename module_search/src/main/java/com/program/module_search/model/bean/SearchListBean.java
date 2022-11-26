@@ -10,7 +10,7 @@ import java.util.List;
 public class SearchListBean implements Serializable {
 
     @SerializedName("success")
-    private Boolean success; // FIXME check this code
+    private Boolean success;
     @SerializedName("code")
     private Integer code;
     @SerializedName("message")
@@ -46,7 +46,7 @@ public class SearchListBean implements Serializable {
 
     public static class DataBean implements Serializable {
         @SerializedName("total")
-        private Integer total; // FIXME check this code
+        private Integer total;
         @SerializedName("pageSize")
         private Integer pageSize;
         @SerializedName("currentPage")
