@@ -228,6 +228,23 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
     }
 
     @Override
+    protected void onRetryClick() {
+        if (mTopicId.equals("1")){
+            mMoyuListPresenter.getRecommendList();
+        }else if (mTopicId.equals("2")){
+            mMoyuListPresenter.getFollowList();
+        }else {
+            mMoyuListPresenter.getList(mTopicId);
+        }
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mMoyuListPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public LifecycleTransformer<Object> TobindToLifecycle() {
         BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
         return  RxLifecycle.bind(objectBehaviorSubject);

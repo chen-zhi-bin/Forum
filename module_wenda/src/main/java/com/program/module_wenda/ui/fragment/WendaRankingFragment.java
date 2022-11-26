@@ -283,6 +283,17 @@ public class WendaRankingFragment extends BaseFragment implements IWendaRankingF
     }
 
     @Override
+    protected void onRetryClick() {
+        mWendaRankingFragmentPresenter.getRankingList();
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mWendaRankingFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public void onError() {
         setupState(State.ERROR);
     }

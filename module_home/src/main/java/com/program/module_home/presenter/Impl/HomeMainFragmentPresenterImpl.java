@@ -65,8 +65,16 @@ public class HomeMainFragmentPresenterImpl implements IHomeMainFragmentPresenter
                         categoryDB.setDescription(datum.getDescription());
                         categoryDB.setCreateTime(datum.getCreateTime());
                         categoryDB.setPyName(datum.getPyName());
+                        categoryDB.setMy(false);
                         categoryDBS.add(categoryDB);
                     }
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            super.run();
+                            mDao.insertList(categoryDBS);
+                        }
+                    }.start();
                     mCallback.setCategoryList(categoryDBS);
                     break;
                 case RETURN_IS_LOGIN:

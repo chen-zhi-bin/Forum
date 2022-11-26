@@ -151,6 +151,9 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
     public void setMoyuList(List<MoyuItemBean> data) {
 
 //        mMoyuAdapter.addData(data);
+        if (data.size()==0){
+            onEmpty();
+        }
         mMoyuAdapter.setNewInstance(data);
         if (mRefreshLayout.isRefreshing()){
             mRefreshLayout.finishRefresh();
@@ -169,6 +172,7 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
 
     @Override
     public void setErrorMsg(String msg) {
+        onError();
         ToastUtils.showToast(msg);
         if (mRefreshLayout.isLoading()) {
             mRefreshLayout.finishLoadMore();
@@ -182,8 +186,19 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
     }
 
     @Override
-    public void onError() {
+    protected void onRetryClick() {
+        mMoyuPreseenter.getMoyuList(mUserId);
+    }
 
+    @Override
+    protected void relese() {
+        super.relese();
+        mMoyuPreseenter.unregisterViewCallback();
+    }
+
+    @Override
+    public void onError() {
+        setupState(State.ERROR);
     }
 
     @Override
@@ -193,7 +208,7 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
 
     @Override
     public void onEmpty() {
-
+        setupState(State.EMPTY);
     }
 
 

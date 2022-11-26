@@ -95,6 +95,17 @@ public class UserRankingFragment extends BaseFragment implements IUserRankingFra
     }
 
     @Override
+    protected void onRetryClick() {
+        mUserRankingFragmentPresenter.getRankingSob();
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mUserRankingFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public void onError() {
         setupState(State.ERROR);
     }

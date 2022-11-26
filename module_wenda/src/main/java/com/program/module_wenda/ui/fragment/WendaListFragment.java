@@ -121,6 +121,17 @@ public class WendaListFragment extends BaseFragment implements IWendaListFragmen
     }
 
     @Override
+    protected void onRetryClick() {
+        mWendaListFragmentPresenter.getWendaList(mWendaType);
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mWendaListFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public void onError() {
         setupState(State.ERROR);
     }

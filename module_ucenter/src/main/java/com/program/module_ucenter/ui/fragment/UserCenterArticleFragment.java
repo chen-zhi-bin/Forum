@@ -220,13 +220,34 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
     }
 
     @Override
+    protected void onRetryClick() {
+        switch (mDataType) {
+            case Constants.DATA_TPTE_ARTICLE:
+                mCenterArticlePresenter.getArticleList(mUserId);
+                break;
+            case Constants.DATA_TPTE_SHARA:
+                mCenterArticlePresenter.getShareList(mUserId);
+                break;
+            case Constants.DATA_TPTE_WENDA:
+                mCenterArticlePresenter.getWendaList(mUserId);
+                break;
+        }
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mCenterArticlePresenter.unregisterViewCallback();
+    }
+
+    @Override
     public void ToastErrorMsg(String msg) {
         ToastUtils.showToast(msg);
     }
 
     @Override
     public void onError() {
-
+        setupState(State.ERROR);
     }
 
     @Override

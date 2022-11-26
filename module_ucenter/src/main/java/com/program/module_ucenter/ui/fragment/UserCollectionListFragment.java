@@ -106,6 +106,17 @@ public class UserCollectionListFragment extends BaseFragment implements IUserCol
     }
 
     @Override
+    protected void onRetryClick() {
+        mUserCollectionListFragmentPresenter.getCollectionList();
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mUserCollectionListFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public LifecycleTransformer<Object> getBindLifecycle() {
         BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
         return  RxLifecycle.bind(objectBehaviorSubject);

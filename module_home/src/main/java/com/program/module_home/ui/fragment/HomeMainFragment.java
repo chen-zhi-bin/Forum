@@ -131,6 +131,18 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
     }
 
     @Override
+    protected void onRetryClick() {
+        mHomeMainFragmentPresenter.getCategoryList();
+        mHomeMainFragmentPresenter.getUserIsLogin();
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+       mHomeMainFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public void onError() {
 
     }

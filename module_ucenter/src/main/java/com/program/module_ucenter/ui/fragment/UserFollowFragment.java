@@ -182,6 +182,24 @@ public class UserFollowFragment extends BaseFragment implements IUserFollowFragm
     }
 
     @Override
+    protected void onRetryClick() {
+        switch (mPageType){
+            case Constants.Ucenter.PAGE_FOLLOW:
+                mUsrFollowFragmentPresenter.getFollowList(mUserId);
+                break;
+            case Constants.Ucenter.PAGE_FANS:
+                mUsrFollowFragmentPresenter.getFansList(mUserId);
+                break;
+        }
+    }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mUsrFollowFragmentPresenter.unregisterViewCallback();
+    }
+
+    @Override
     public LifecycleTransformer<Object> getBindLifecycle() {
         BehaviorSubject<Object> objectBehaviorSubject = BehaviorSubject.create();
         return  RxLifecycle.bind(objectBehaviorSubject);
