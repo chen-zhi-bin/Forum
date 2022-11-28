@@ -199,11 +199,12 @@ public class WendaRankingFragment extends BaseFragment implements IWendaRankingF
     private int headerViewIndex = 1;
     @Override
     public void setFollowStateHeader(FollowBean data) {
+        LogUtils.d("test","data follow = "+data.toString());
         int childCount = mLinearlayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             TextView childAt = mLinearlayout.getChildAt(i).findViewById(R.id.tv_follow);
             TextView child = mLinearlayout.getChildAt(i).findViewById(R.id.et_nickname);
-            if (childAt.getTag().equals("-1")) {
+            if (childAt.getTag().equals("-1")&&data.getData()!=null) {
                 LogUtils.d("test", "tag =====" + childAt.getTag() + ">>data===" + data.getData()+"  = child"+child.getText().toString());
                 CommonViewUtils.setFollowState(childAt, data.getData());
 //                childAt.setTag(0);
@@ -227,9 +228,12 @@ public class WendaRankingFragment extends BaseFragment implements IWendaRankingF
 
     @Override
     public void setFollowState(FollowBean data) {
+        LogUtils.d("test","userlistIndex = "+userlistIndex);
         if (userlistIndex - 3<mAdapter.getItemCount()){
             TextView view = (TextView) mAdapter.getViewByPosition(userlistIndex - 2, R.id.tv_follow);
-            CommonViewUtils.setFollowState(view, data.getData());
+            if (data.getData()!=null){
+                CommonViewUtils.setFollowState(view, data.getData());
+            }
             userlistIndex++;
             if (userlistIndex<mList.size()){
                 mWendaRankingFragmentPresenter.getUserFollowState(mList.get(userlistIndex).getUserId(),1);
@@ -290,7 +294,7 @@ public class WendaRankingFragment extends BaseFragment implements IWendaRankingF
     @Override
     protected void relese() {
         super.relese();
-        mWendaRankingFragmentPresenter.unregisterViewCallback();
+        mWendaRankingFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override

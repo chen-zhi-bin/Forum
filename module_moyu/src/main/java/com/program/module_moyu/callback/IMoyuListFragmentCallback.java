@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface IMoyuListFragmentCallback extends IBaseCallback {
 
+    String getKey();
+
     void setMoyuUpdate(MoyuRequestBean.DataBean data);
 
     void setList(List<MoyuItemBean> data);

@@ -95,7 +95,7 @@ public class UserRankingFragmentPresentereImpl implements IUserRankingFragmentPr
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IUserRankingFragmentCallback callback) {
             mCallback = null;
     }
 

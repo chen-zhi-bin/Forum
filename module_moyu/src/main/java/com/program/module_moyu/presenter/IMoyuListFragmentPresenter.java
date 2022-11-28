@@ -5,18 +5,18 @@ import com.program.moudle_base.base.IBasePresenter;
 
 public interface IMoyuListFragmentPresenter extends IBasePresenter<IMoyuListFragmentCallback> {
 
-    void getRecommendList();
+    void getRecommendList(String key);
 
-    void getRecommendListMore();
+    void getRecommendListMore(String key);
 
-    void getFollowList();
+    void getFollowList(String key);
 
-    void getFollowListMore();
+    void getFollowListMore(String key);
 
     void getList(String topicId);
 
     void getListMore(String topicId);
 
-    void getUpdateMoyuInfo(String moyuid);
+    void getUpdateMoyuInfo(String key,String moyuid);
 
 }

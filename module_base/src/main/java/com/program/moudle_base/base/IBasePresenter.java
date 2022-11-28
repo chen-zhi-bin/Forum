@@ -11,6 +11,6 @@ public interface IBasePresenter<T> {
     /**
      * 取消注册
      */
-    void unregisterViewCallback();
+    void unregisterViewCallback(T callback);
 
 }

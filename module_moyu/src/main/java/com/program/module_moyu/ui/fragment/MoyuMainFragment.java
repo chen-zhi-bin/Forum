@@ -129,4 +129,10 @@ public class MoyuMainFragment extends BaseFragment implements IMoyuMainFragmentC
     public void onEmpty() {
         setupState(State.EMPTY);
     }
+
+    @Override
+    protected void relese() {
+        super.relese();
+        mMoyuMainFragmentPresenter.unregisterViewCallback(this);
+    }
 }

@@ -30,7 +30,7 @@ public class ForgetPresenterImpl implements IForgetPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IForgetCallback callback) {
         mCallback = null;
     }
 

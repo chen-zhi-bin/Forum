@@ -6,6 +6,9 @@ import com.program.module_ucenter.model.domain.UserWendaBean;
 import com.program.moudle_base.base.IBaseCallback;
 
 public interface IUserCenterArticleCallback extends IBaseCallback {
+
+    String getType();
+
     void setArticleData(ArticleBean data);
 
     void setShareData(ShareBean data);

@@ -747,7 +747,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
-
+    public void unregisterViewCallback(IArticleDetailCallback callback) {
+        this.mCallback = null;
     }
 }

@@ -63,7 +63,7 @@ public class MoyuCommentDetailActivityPresenterImpl implements IMoyuCommentDetai
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IMoyuCommentDetailActivityCallback callback) {
         mCallback = null;
     }
 

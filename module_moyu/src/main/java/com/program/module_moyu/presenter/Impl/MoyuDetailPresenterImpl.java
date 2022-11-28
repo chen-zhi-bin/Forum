@@ -112,7 +112,7 @@ public class MoyuDetailPresenterImpl implements IMoyuDetailPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IMoyuDetailCallback callback) {
         mCallback = null;
     }
 

@@ -185,7 +185,7 @@ public class MoyuPreseenterImpl implements IMoyuPresentere {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IMoyuCallback callback) {
             mCallback =null;
     }
 }

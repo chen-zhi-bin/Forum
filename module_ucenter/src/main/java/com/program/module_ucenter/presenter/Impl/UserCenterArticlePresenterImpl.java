@@ -1,5 +1,6 @@
 package com.program.module_ucenter.presenter.Impl;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -18,6 +19,9 @@ import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.youth.banner.util.BannerUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
@@ -26,6 +30,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresenter {
     private IUserCenterArticleCallback mCallback = null;
+    private List<IUserCenterArticleCallback> mCallbacks = new ArrayList<>();
     private final SharedPreferencesUtils mSharedPreferencesUtils;
     private final UcenterApi mApi;
 
@@ -43,6 +48,12 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
+            String key = msg.getData().getString("key");
+            for (IUserCenterArticleCallback callback : mCallbacks) {
+                if (callback.getType().equals(key)) {
+                    mCallback = callback;
+                }
+            }
             switch (msg.what) {
                 case RETURN_ARTICLE:
                     if ((((ArticleBean) msg.obj).getData().getList() == null || ((ArticleBean) msg.obj).getData().getList().size() == 0)) {
@@ -124,9 +135,17 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
     private int mArticlePage = 1;
 
     @Override
-    public void getArticleList(String userId) {
+    public void getArticleList(String type,String userId) {
 //        LogUtils.d(UserCenterArticlePresenterImpl.class,"getArticleList");
         mArticlePage = 1;
+        for (IUserCenterArticleCallback callback : mCallbacks) {
+            if (callback.getType().equals(type)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
         mApi.getArticle(userId, mArticlePage,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -141,12 +160,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                         Message message = new Message();
                         message.what = articleBean.getCode() == Constants.SUCCESS ? RETURN_ARTICLE : RETURN_ARTICLE_ERROR;
                         message.obj = articleBean;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(type);
                     }
 
                     @Override
@@ -156,18 +176,29 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                 });
     }
 
-    private void requestFailed() {
+    private void requestFailed(String type) {
         Message message = new Message();
         message.what = ERROR;
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
+        message.setData(bundle);
         mHandler.sendMessage(message);
     }
 
     private int mSharePage = 1;
 
     @Override
-    public void getShareList(String userId) {
+    public void getShareList(String type,String userId) {
 //        LogUtils.d(UserCenterArticlePresenterImpl.class,"getShareList");
         mSharePage = 1;
+        for (IUserCenterArticleCallback callback : mCallbacks) {
+            if (callback.getType().equals(type)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
         mApi.getShare(userId, mSharePage,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -182,12 +213,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                         Message message = new Message();
                         message.what = shareBean.getCode() == Constants.SUCCESS ? RETURN_SHARE : RETURN_SHARE_ERROR;
                         message.obj = shareBean;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(type);
                     }
 
                     @Override
@@ -200,9 +232,17 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
     private int mWendaPage = 1;
 
     @Override
-    public void getWendaList(String userId) {
+    public void getWendaList(String type,String userId) {
 //        LogUtils.d(UserCenterArticlePresenterImpl.class, "getWendaList");
         mWendaPage = 1;
+        for (IUserCenterArticleCallback callback : mCallbacks) {
+            if (callback.getType().equals(type)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
         mApi.getWenda(userId, mWendaPage,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -218,12 +258,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                         Message message = new Message();
                         message.what = userWendaBean.getCode() == Constants.SUCCESS ? RETURN_WENDA : RETURN_WENDA_ERROR;
                         message.obj = userWendaBean;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(type);
                     }
 
                     @Override
@@ -234,7 +275,15 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
     }
 
     @Override
-    public void getArticleListMore(String userId) {
+    public void getArticleListMore(String type,String userId) {
+        for (IUserCenterArticleCallback callback : mCallbacks) {
+            if (callback.getType().equals(type)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
         mApi.getArticle(userId, mArticlePage,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -249,12 +298,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                         Message message = new Message();
                         message.what = data.getCode() == Constants.SUCCESS ? RETURN_ARTICLE_MORE : RETURN_ARTICLE_ERROR;
                         message.obj = data;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(type);
                     }
 
                     @Override
@@ -265,7 +315,15 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
     }
 
     @Override
-    public void getShareListMore(String userId) {
+    public void getShareListMore(String type,String userId) {
+        for (IUserCenterArticleCallback callback : mCallbacks) {
+            if (callback.getType().equals(type)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
         mApi.getShare(userId, mSharePage,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -281,12 +339,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                         Message message = new Message();
                         message.what = shareBean.getCode() == Constants.SUCCESS ? RETURN_SHARE_MORE : RETURN_SHARE_ERROR;
                         message.obj = shareBean;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(type);
                     }
 
                     @Override
@@ -297,7 +356,15 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
     }
 
     @Override
-    public void getWendaListMore(String userId) {
+    public void getWendaListMore(String type,String userId) {
+        for (IUserCenterArticleCallback callback : mCallbacks) {
+            if (callback.getType().equals(type)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",type);
         mApi.getWenda(userId, mWendaPage,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -313,12 +380,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
                         Message message = new Message();
                         message.what = userWendaBean.getCode() == Constants.SUCCESS ? RETURN_WENDA_MORE : RETURN_WENDA_ERROR;
                         message.obj = userWendaBean;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(type);
                     }
 
                     @Override
@@ -330,11 +398,13 @@ public class UserCenterArticlePresenterImpl implements IUserCenterArticlePresent
 
     @Override
     public void registerViewCallback(IUserCenterArticleCallback callback) {
-        this.mCallback = callback;
+        if (!mCallbacks.contains(callback)) {
+            mCallbacks.add(callback);
+        }
     }
 
     @Override
-    public void unregisterViewCallback() {
-        mCallback = null;
+    public void unregisterViewCallback(IUserCenterArticleCallback callback) {
+        mCallbacks.remove(callback);
     }
 }

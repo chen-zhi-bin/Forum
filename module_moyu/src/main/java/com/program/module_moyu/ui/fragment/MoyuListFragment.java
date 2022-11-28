@@ -87,9 +87,9 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
         mMoyuListPresenter = PresenterManager.getInstance().getMoyuListPresenter();
         mMoyuListPresenter.registerViewCallback(this);
         if (mTopicId.equals("1")){
-            mMoyuListPresenter.getRecommendList();
+            mMoyuListPresenter.getRecommendList(mTopicId);
         }else if (mTopicId.equals("2")){
-            mMoyuListPresenter.getFollowList();
+            mMoyuListPresenter.getFollowList(mTopicId);
         }else {
             mMoyuListPresenter.getList(mTopicId);
         }
@@ -101,9 +101,9 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 if (mTopicId.equals("1")){
-                    mMoyuListPresenter.getRecommendList();
+                    mMoyuListPresenter.getRecommendList(mTopicId);
                 }else if (mTopicId.equals("2")){
-                    mMoyuListPresenter.getFollowList();
+                    mMoyuListPresenter.getFollowList(mTopicId);
                 }else {
                     mMoyuListPresenter.getList(mTopicId);
                 }
@@ -113,9 +113,9 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 if (mTopicId.equals("1")){
-                    mMoyuListPresenter.getRecommendListMore();
+                    mMoyuListPresenter.getRecommendListMore(mTopicId);
                 }else if (mTopicId.equals("2")){
-                    mMoyuListPresenter.getFollowListMore();
+                    mMoyuListPresenter.getFollowListMore(mTopicId);
                 }else {
                     mMoyuListPresenter.getListMore(mTopicId);
                 }
@@ -161,7 +161,12 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
 
     private void updateItem(String id) {
         LogUtils.d(MoyuListFragment.class,"event ,moyuId = "+id);
-        mMoyuListPresenter.getUpdateMoyuInfo(id);
+        mMoyuListPresenter.getUpdateMoyuInfo(mTopicId,id);
+    }
+
+    @Override
+    public String getKey() {
+        return mTopicId;
     }
 
     @Override
@@ -223,16 +228,16 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
 
     @Override
     public void setErrorMsg(String msg) {
-        setupState(State.SUCCESS);
+        onError();
         ToastUtils.showToast(msg);
     }
 
     @Override
     protected void onRetryClick() {
         if (mTopicId.equals("1")){
-            mMoyuListPresenter.getRecommendList();
+            mMoyuListPresenter.getRecommendList(mTopicId);
         }else if (mTopicId.equals("2")){
-            mMoyuListPresenter.getFollowList();
+            mMoyuListPresenter.getFollowList(mTopicId);
         }else {
             mMoyuListPresenter.getList(mTopicId);
         }
@@ -241,7 +246,7 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
     @Override
     protected void relese() {
         super.relese();
-        mMoyuListPresenter.unregisterViewCallback();
+        mMoyuListPresenter.unregisterViewCallback(this);
     }
 
     @Override

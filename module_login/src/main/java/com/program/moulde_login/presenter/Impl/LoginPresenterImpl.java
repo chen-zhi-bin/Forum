@@ -101,7 +101,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(ILoginCallback callback) {
         mLoginCallback =null;
     }
 }

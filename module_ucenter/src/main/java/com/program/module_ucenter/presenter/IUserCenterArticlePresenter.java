@@ -5,16 +5,16 @@ import com.program.moudle_base.base.IBasePresenter;
 
 public interface IUserCenterArticlePresenter extends IBasePresenter<IUserCenterArticleCallback> {
 
-    void getArticleList(String userId);
+    void getArticleList(String type,String userId);
 
-    void getShareList(String userId);
+    void getShareList(String type,String userId);
 
-    void getWendaList(String userId);
+    void getWendaList(String type,String userId);
 
-    void getArticleListMore(String userId);
+    void getArticleListMore(String type,String userId);
 
-    void getShareListMore(String userId);
+    void getShareListMore(String type,String userId);
 
-    void getWendaListMore(String userId);
+    void getWendaListMore(String type,String userId);
 
 }

@@ -65,14 +65,13 @@ public class SettingPresenterImpl implements ISettingPresenter {
 
     @Override
     public void registerViewCallback(ISettingCallback callback) {
-
         mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(UcenterApplication.getAppContext());
         mApi = RetrofitManager.getInstence().getApi();
         this.mCallback = callback;
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(ISettingCallback callback) {
         mCallback=null;
     }
 

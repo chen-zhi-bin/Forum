@@ -61,7 +61,7 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IPutFishActivityCallback callback) {
         this.mCallback = null;
     }
 

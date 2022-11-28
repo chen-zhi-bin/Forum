@@ -102,7 +102,7 @@ public class UserRankingFragment extends BaseFragment implements IUserRankingFra
     @Override
     protected void relese() {
         super.relese();
-        mUserRankingFragmentPresenter.unregisterViewCallback();
+        mUserRankingFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override

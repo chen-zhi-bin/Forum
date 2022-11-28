@@ -960,6 +960,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         if (EventBusUtils.INSTANCE.isRegistered(this)){
             EventBusUtils.INSTANCE.unRegister(this);
         }
+        mArticleDetailPresenter.unregisterViewCallback(this);
         super.onDestroy();
     }
 

@@ -49,7 +49,7 @@ public class FishPoneSelectionActivityPresenterImpl implements IFishPoneSelectio
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IFishPoneSelectionActivityCallback callback) {
         mCallback = null;
     }
 

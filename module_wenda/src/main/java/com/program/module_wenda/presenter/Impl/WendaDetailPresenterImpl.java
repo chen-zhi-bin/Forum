@@ -487,7 +487,7 @@ public class WendaDetailPresenterImpl implements IWendaDetailPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
-
+    public void unregisterViewCallback(IWendaDetailCallback callback) {
+        this.mCallback = null;
     }
 }

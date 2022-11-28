@@ -404,7 +404,7 @@ public class WendaAnswerPresenterImpl implements IWendaAnswerPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IWendaAnswerCallback callback) {
         mCallback = null;
     }
 }

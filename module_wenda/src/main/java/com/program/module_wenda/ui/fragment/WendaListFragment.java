@@ -89,6 +89,11 @@ public class WendaListFragment extends BaseFragment implements IWendaListFragmen
     }
 
     @Override
+    public String getWendaType() {
+        return mWendaType;
+    }
+
+    @Override
     public void setWendaList(WendaListBean data) {
         setupState(State.SUCCESS);
         finishRefresh();
@@ -128,7 +133,7 @@ public class WendaListFragment extends BaseFragment implements IWendaListFragmen
     @Override
     protected void relese() {
         super.relese();
-        mWendaListFragmentPresenter.unregisterViewCallback();
+        mWendaListFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override

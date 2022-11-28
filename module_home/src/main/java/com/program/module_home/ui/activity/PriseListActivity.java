@@ -112,6 +112,12 @@ public class PriseListActivity extends AppCompatActivity implements IPriseListAc
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPriseListActivityPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

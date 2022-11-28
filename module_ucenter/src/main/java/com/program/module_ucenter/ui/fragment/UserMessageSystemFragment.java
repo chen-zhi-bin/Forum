@@ -89,6 +89,12 @@ public class UserMessageSystemFragment extends BaseFragment implements IMsgSyste
     }
 
     @Override
+    protected void relese() {
+        super.relese();
+        mMsgSystemPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

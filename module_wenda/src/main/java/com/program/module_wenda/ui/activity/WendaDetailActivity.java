@@ -437,6 +437,12 @@ public class WendaDetailActivity extends RxAppCompatActivity implements IWendaDe
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWendaDetailPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

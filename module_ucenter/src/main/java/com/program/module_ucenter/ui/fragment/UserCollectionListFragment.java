@@ -113,7 +113,7 @@ public class UserCollectionListFragment extends BaseFragment implements IUserCol
     @Override
     protected void relese() {
         super.relese();
-        mUserCollectionListFragmentPresenter.unregisterViewCallback();
+        mUserCollectionListFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override

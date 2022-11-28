@@ -278,6 +278,12 @@ public class UserFragment extends BaseFragment implements IUserFragmentCallback 
     }
 
     @Override
+    protected void relese() {
+        super.relese();
+        mUserFragmentPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

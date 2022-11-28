@@ -199,7 +199,7 @@ public class MoyuCommentDetailActivity extends AppCompatActivity implements IMoy
         if (EventBusUtils.INSTANCE.isRegistered(this)){
             EventBusUtils.INSTANCE.unRegister(this);
         }
-        mMoyuCommentDetailActivityPresenter.unregisterViewCallback();
+        mMoyuCommentDetailActivityPresenter.unregisterViewCallback(this);
         super.onDestroy();
     }
 

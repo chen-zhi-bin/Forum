@@ -86,7 +86,7 @@ public class PriseListActivityPresenterImpl implements IPriseListActivityPresent
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IPriseListActivityCallback callback) {
         mCallback = null;
     }
 }

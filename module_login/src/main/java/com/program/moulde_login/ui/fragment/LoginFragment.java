@@ -93,6 +93,12 @@ public class LoginFragment extends BaseFragment implements ILoginCallback {
     }
 
     @Override
+    protected void relese() {
+        super.relese();
+        mLoginPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

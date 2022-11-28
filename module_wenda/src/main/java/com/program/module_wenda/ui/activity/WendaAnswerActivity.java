@@ -505,6 +505,12 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWendaAnswerPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void setUnFollowMsgError(String msg) {
 
     }

@@ -193,7 +193,7 @@ public class UserCenterMoyuFragment extends BaseFragment implements IMoyuCallbac
     @Override
     protected void relese() {
         super.relese();
-        mMoyuPreseenter.unregisterViewCallback();
+        mMoyuPreseenter.unregisterViewCallback(this);
     }
 
     @Override

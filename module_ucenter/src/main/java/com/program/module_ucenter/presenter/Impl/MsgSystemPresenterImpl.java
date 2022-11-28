@@ -157,7 +157,7 @@ public class MsgSystemPresenterImpl implements IMsgSystemPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
-
+    public void unregisterViewCallback(IMsgSystemCallback callback) {
+        this.mCallback = null;
     }
 }

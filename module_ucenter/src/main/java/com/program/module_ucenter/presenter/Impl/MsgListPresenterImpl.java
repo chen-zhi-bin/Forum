@@ -465,7 +465,7 @@ public class MsgListPresenterImpl implements IMsgListPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IMsgListCallback callback) {
         mCallback = null;
     }
 }

@@ -213,7 +213,7 @@ public class UsrFollowFragmentPresenterImpl implements IUserFollowFragmentPresen
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IUserFollowFragmentCallback callback) {
         mCallback = null;
     }
 

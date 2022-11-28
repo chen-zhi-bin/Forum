@@ -8,6 +8,8 @@ import com.trello.rxlifecycle4.LifecycleTransformer;
 
 public interface IHomeListFragmentCallback extends IBaseCallback {
 
+    String getKey();
+
     void setBanner(BannerBean data);
 
     void setHomeItem(HomeItemBean data);

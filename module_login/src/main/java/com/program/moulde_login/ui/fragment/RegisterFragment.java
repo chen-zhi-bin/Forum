@@ -126,6 +126,12 @@ public class RegisterFragment extends BaseFragment implements CodeEditView.Phone
     }
 
     @Override
+    protected void relese() {
+        super.relese();
+        mRegisterPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

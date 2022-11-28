@@ -139,7 +139,7 @@ public class HomeMainFragment extends BaseFragment implements IHomeMainFragmentC
     @Override
     protected void relese() {
         super.relese();
-       mHomeMainFragmentPresenter.unregisterViewCallback();
+       mHomeMainFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override

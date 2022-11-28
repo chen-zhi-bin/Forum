@@ -6,6 +6,8 @@ import com.trello.rxlifecycle4.LifecycleTransformer;
 
 public interface ISearchListFragmentCallback extends IBaseCallback {
 
+    String getType();
+
     void setSearchResults(SearchListBean data);
 
     void setSearchMoreResults(SearchListBean data);

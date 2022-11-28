@@ -120,6 +120,12 @@ public class ForgetFragment extends BaseFragment implements CodeEditView.PhoneCo
     }
 
     @Override
+    protected void relese() {
+        super.relese();
+        mForgetPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

@@ -196,7 +196,7 @@ public class UserFollowFragment extends BaseFragment implements IUserFollowFragm
     @Override
     protected void relese() {
         super.relese();
-        mUsrFollowFragmentPresenter.unregisterViewCallback();
+        mUsrFollowFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override

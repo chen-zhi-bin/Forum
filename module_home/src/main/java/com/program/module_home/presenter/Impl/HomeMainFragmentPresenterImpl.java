@@ -215,7 +215,8 @@ public class HomeMainFragmentPresenterImpl implements IHomeMainFragmentPresenter
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IHomeMainFragmentCallback callback) {
+        this.mCallback = null;
     }
 
 

@@ -17,6 +17,7 @@ import com.program.module_search.R;
 import com.program.module_search.callback.ISearchListFragmentCallback;
 import com.program.module_search.model.bean.SearchListBean;
 import com.program.module_search.presenter.ISearchListFragmentPresenter;
+import com.program.module_search.presenter.Impl.SearchListFragmentPresenterImpl;
 import com.program.module_search.ui.adapter.SearchListAdapter;
 import com.program.module_search.utils.PresenterManager;
 import com.program.moudle_base.base.BaseApplication;
@@ -51,7 +52,8 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     private String mType;
     private RecyclerView mRvList;
     private SmartRefreshLayout mRefreshLayout;
-    private ISearchListFragmentPresenter mSearchListFragmentPresenter;
+//    private ISearchListFragmentPresenter mSearchListFragmentPresenter;
+    private SearchListFragmentPresenterImpl mSearchListFragmentPresenter;
     private String mKeyword = "";
     private SearchListAdapter mAdapter;
 
@@ -121,8 +123,10 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
 
     @Override
     protected void initPresenter() {
-        mSearchListFragmentPresenter = PresenterManager.getInstance().getSearchListFragmentPresenter();
+//        mSearchListFragmentPresenter = PresenterManager.getInstance().getSearchListFragmentPresenter();
+        mSearchListFragmentPresenter = new SearchListFragmentPresenterImpl();
         mSearchListFragmentPresenter.registerViewCallback(this);
+//        mSearchListFragmentPresenter.registerViewCallback(this);
         if (!mKeyword.equals("")) {
             search();
         }
@@ -155,6 +159,11 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
             mKeyword = s;
             search();
         }
+    }
+
+    @Override
+    public String getType() {
+        return mType;
     }
 
     @Override
@@ -212,7 +221,8 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
     @Override
     protected void relese() {
         super.relese();
-        mSearchListFragmentPresenter.unregisterViewCallback();
+        mSearchListFragmentPresenter.unregisterViewCallback(this);
+//        mSearchListFragmentPresenter.unregisterViewCallback();
     }
 
     @Override

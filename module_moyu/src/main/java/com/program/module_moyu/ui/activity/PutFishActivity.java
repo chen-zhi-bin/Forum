@@ -326,4 +326,10 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPutFishActivityPresenter.unregisterViewCallback(this);
+    }
 }

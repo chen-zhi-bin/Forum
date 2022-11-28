@@ -119,7 +119,7 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
     protected void initPresenter() {
         mHomeListFragmentPresenter = PresenterManager.getInstance().getHomeListFragmentPresenter();
         mHomeListFragmentPresenter.registerViewCallback(this);
-        mHomeListFragmentPresenter.getRecommend(mCategoryId);
+        mHomeListFragmentPresenter.getRecommend(mCategoryId,mCategoryId);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                mHomeListFragmentPresenter.getRecommend(mCategoryId);
+                mHomeListFragmentPresenter.getRecommend(mCategoryId,mCategoryId);
             }
         });
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -157,6 +157,11 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
                 mHomeListFragmentPresenter.getRecommendMore(mCategoryId);
             }
         });
+    }
+
+    @Override
+    public String getKey() {
+        return mCategoryId;
     }
 
     @Override
@@ -246,7 +251,7 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
 
     private void updateItem(String id) {
         LogUtils.d("test","event id = "+id);
-        mHomeListFragmentPresenter.getUpdateArticleInfo(id);
+        mHomeListFragmentPresenter.getUpdateArticleInfo(mCategoryId,id);
     }
 
     private void finishLoadMore() {
@@ -263,18 +268,19 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
 
     @Override
     protected void onRetryClick() {
-        mHomeListFragmentPresenter.getRecommend(mCategoryId);
+        mHomeListFragmentPresenter.getRecommend(mCategoryId,mCategoryId);
     }
 
     @Override
     protected void relese() {
         super.relese();
-        mHomeListFragmentPresenter.unregisterViewCallback();
+        mHomeListFragmentPresenter.unregisterViewCallback(this);
     }
 
     @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
+        onError();
     }
 
     @Override
@@ -303,6 +309,6 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
 
     @Override
     public void onEmpty() {
-
+        setupState(State.EMPTY);
     }
 }

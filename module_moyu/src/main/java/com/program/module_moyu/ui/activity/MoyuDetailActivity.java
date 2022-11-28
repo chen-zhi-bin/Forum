@@ -488,6 +488,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
         if (EventBusUtils.INSTANCE.isRegistered(this)){
             EventBusUtils.INSTANCE.unRegister(this);
         }
+        mMoyuDetailPresenter.unregisterViewCallback(this);
         super.onDestroy();
     }
 }

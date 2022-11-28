@@ -145,6 +145,12 @@ public class FishPoneSelectionActivity extends BaseActivity implements IFishPone
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFishPoneSelectionActivityPresenter.unregisterViewCallback(this);
+    }
+
+    @Override
     public void onError() {
 
     }

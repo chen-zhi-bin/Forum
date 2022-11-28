@@ -1,19 +1,21 @@
 package com.program.module_wenda.presenter.Impl;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
 import androidx.annotation.NonNull;
 
-import com.program.lib_base.LogUtils;
 import com.program.lib_common.Constants;
 import com.program.module_wenda.callback.IWendaListFragmentCallback;
 import com.program.module_wenda.model.WendaApi;
-import com.program.module_wenda.model.bean.WendaBean;
 import com.program.module_wenda.model.bean.WendaListBean;
 import com.program.module_wenda.presenter.IWendaListFragmentPresenter;
 import com.program.module_wenda.utils.RetrofitManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observer;
@@ -24,6 +26,7 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
 
     private final WendaApi mApi;
     private IWendaListFragmentCallback mCallback = null;
+    private List<IWendaListFragmentCallback> mCallbacks = new ArrayList<>();
 
     private static final int ERROR = -1;
     private static final int RETURN_ERROR = 0;
@@ -32,6 +35,12 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
+            String key = msg.getData().getString("key");
+            for (IWendaListFragmentCallback callback : mCallbacks) {
+                if (callback.getWendaType().equals(key)) {
+                    mCallback = callback;
+                }
+            }
             switch (msg.what) {
                 case ERROR:
                     mCallback.setErrorMsg("错误,请稍后重试");
@@ -59,6 +68,13 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
 
     @Override
     public void getWendaList(String wendaType) {
+        for (IWendaListFragmentCallback callback : mCallbacks) {
+            if (callback.getWendaType().equals(wendaType)) {
+                mCallback = callback;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",wendaType);
         page = 1;
         mApi.getWendaList(page, wendaType, -2)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -75,12 +91,13 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
                         Message message = new Message();
                         message.what = ((WendaListBean) o).getCode() == Constants.SUCCESS ? RETURN_WENDA_LIST : RETURN_ERROR;
                         message.obj = o;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(wendaType);
                     }
 
                     @Override
@@ -92,6 +109,13 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
 
     @Override
     public void getWendaListMore(String wendaType) {
+        for (IWendaListFragmentCallback callback : mCallbacks) {
+            if (callback.getWendaType().equals(wendaType)) {
+                mCallback = callback;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",wendaType);
         mApi.getWendaList(page, wendaType, -2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
@@ -107,12 +131,13 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
                         Message message = new Message();
                         message.what = ((WendaListBean) o).getCode() == Constants.SUCCESS ? RETURN_WENDA_LIST_MORE : RETURN_ERROR;
                         message.obj = o;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(wendaType);
                     }
 
                     @Override
@@ -122,19 +147,23 @@ public class WendaListFragmentPresenterImpl implements IWendaListFragmentPresent
                 });
     }
 
-    private void requestFailed() {
+    private void requestFailed(String wendaType) {
         Message message = new Message();
         message.what = ERROR;
+        Bundle bundle = new Bundle();
+        bundle.putString("key",wendaType);
         mHandler.sendMessage(message);
     }
 
     @Override
     public void registerViewCallback(IWendaListFragmentCallback callback) {
-        this.mCallback = callback;
+        if (!mCallbacks.contains(callback)) {
+            mCallbacks.add(callback);
+        }
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IWendaListFragmentCallback callback) {
         mCallback = null;
     }
 }

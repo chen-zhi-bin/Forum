@@ -28,7 +28,7 @@ public class RegisterPresenterImpl implements IRegisterPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IRegisterCallback callback) {
         mCallback = null;
     }
 

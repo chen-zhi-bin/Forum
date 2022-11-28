@@ -152,7 +152,7 @@ public class MsgCenterPresenterImpl implements IMsgCenterPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IMsgCenterCallback callback) {
         mCallback=null;
     }
 

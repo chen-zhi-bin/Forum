@@ -7,6 +7,8 @@ import com.trello.rxlifecycle4.LifecycleTransformer;
 
 public interface IWendaListFragmentCallback extends IBaseCallback {
 
+    String getWendaType();
+
     void setWendaList(WendaListBean data);
 
     void setWendaListMore(WendaListBean data);

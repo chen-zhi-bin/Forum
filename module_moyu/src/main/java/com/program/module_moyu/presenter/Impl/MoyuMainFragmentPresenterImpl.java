@@ -101,7 +101,7 @@ public class MoyuMainFragmentPresenterImpl implements IMoyuMainFragmentPresenter
     }
 
     @Override
-    public void unregisterViewCallback() {
-
+    public void unregisterViewCallback(IMoyuMainFragmentCallback callback) {
+        this.mCallback = callback;
     }
 }

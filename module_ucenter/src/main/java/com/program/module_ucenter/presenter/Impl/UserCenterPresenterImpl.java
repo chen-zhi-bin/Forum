@@ -92,7 +92,7 @@ public class UserCenterPresenterImpl implements IUserCenterPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IUserCenterCallback callback) {
         mCallback = null;
     }
 

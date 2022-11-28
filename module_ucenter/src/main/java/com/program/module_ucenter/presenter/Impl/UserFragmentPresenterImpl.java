@@ -79,7 +79,7 @@ public class UserFragmentPresenterImpl implements IUserFragmentPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IUserFragmentCallback callback) {
         mCallback = null;
     }
 

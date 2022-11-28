@@ -85,13 +85,13 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
                 MultiItemEntity item = mAdapter.getItem(0);
                 switch (item.getItemType()) {
                     case 1:
-                        mCenterArticlePresenter.getArticleList(mUserId);
+                        mCenterArticlePresenter.getArticleList(mDataType,mUserId);
                         break;
                     case 2:
-                        mCenterArticlePresenter.getShareList(mUserId);
+                        mCenterArticlePresenter.getShareList(mDataType,mUserId);
                         break;
                     case 3:
-                        mCenterArticlePresenter.getWendaList(mUserId);
+                        mCenterArticlePresenter.getWendaList(mDataType,mUserId);
                         break;
                 }
             }
@@ -102,13 +102,13 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
                 MultiItemEntity item = mAdapter.getItem(0);
                 switch (item.getItemType()) {
                     case 1:
-                        mCenterArticlePresenter.getArticleListMore(mUserId);
+                        mCenterArticlePresenter.getArticleListMore(mDataType,mUserId);
                         break;
                     case 2:
-                        mCenterArticlePresenter.getShareListMore(mUserId);
+                        mCenterArticlePresenter.getShareListMore(mDataType,mUserId);
                         break;
                     case 3:
-                        mCenterArticlePresenter.getWendaListMore(mUserId);
+                        mCenterArticlePresenter.getWendaListMore(mDataType,mUserId);
                         break;
                 }
             }
@@ -139,17 +139,22 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
         mCenterArticlePresenter.registerViewCallback(this);
         switch (mDataType) {
             case Constants.DATA_TPTE_ARTICLE:
-                mCenterArticlePresenter.getArticleList(mUserId);
+                mCenterArticlePresenter.getArticleList(mDataType,mUserId);
                 break;
             case Constants.DATA_TPTE_SHARA:
-                mCenterArticlePresenter.getShareList(mUserId);
+                mCenterArticlePresenter.getShareList(mDataType,mUserId);
                 break;
             case Constants.DATA_TPTE_WENDA:
-                mCenterArticlePresenter.getWendaList(mUserId);
+                mCenterArticlePresenter.getWendaList(mDataType,mUserId);
                 break;
         }
     }
 
+
+    @Override
+    public String getType() {
+        return mDataType;
+    }
 
     @Override
     public void setArticleData(ArticleBean data) {
@@ -173,13 +178,13 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
 
     @Override
     public void setShareData(ShareBean data) {
+        setupState(State.SUCCESS);
         LogUtils.d("ShareData","ShareData data success");
         mAdapter.setList(data.getData().getList());
         finishRefresh();
         if (!data.getData().getHasNext()) {
             mRefreshLayout.setEnableLoadMore(false);
         }
-        setupState(State.SUCCESS);
     }
 
     @Override
@@ -223,13 +228,13 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
     protected void onRetryClick() {
         switch (mDataType) {
             case Constants.DATA_TPTE_ARTICLE:
-                mCenterArticlePresenter.getArticleList(mUserId);
+                mCenterArticlePresenter.getArticleList(mDataType,mUserId);
                 break;
             case Constants.DATA_TPTE_SHARA:
-                mCenterArticlePresenter.getShareList(mUserId);
+                mCenterArticlePresenter.getShareList(mDataType,mUserId);
                 break;
             case Constants.DATA_TPTE_WENDA:
-                mCenterArticlePresenter.getWendaList(mUserId);
+                mCenterArticlePresenter.getWendaList(mDataType,mUserId);
                 break;
         }
     }
@@ -237,7 +242,7 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
     @Override
     protected void relese() {
         super.relese();
-        mCenterArticlePresenter.unregisterViewCallback();
+        mCenterArticlePresenter.unregisterViewCallback(this);
     }
 
     @Override
@@ -252,7 +257,7 @@ public class UserCenterArticleFragment extends BaseFragment implements IUserCent
 
     @Override
     public void onLoading() {
-
+        setupState(State.LOADING);
     }
 
     @Override

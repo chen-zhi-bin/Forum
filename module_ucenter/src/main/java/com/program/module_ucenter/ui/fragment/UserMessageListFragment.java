@@ -379,7 +379,7 @@ public class UserMessageListFragment extends BaseFragment implements IMsgListCal
     @Override
     protected void relese() {
         super.relese();
-        mMsgListPresenter.unregisterViewCallback();
+        mMsgListPresenter.unregisterViewCallback(this);
     }
 
     @Override

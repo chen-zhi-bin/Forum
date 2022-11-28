@@ -135,7 +135,7 @@ public class UserCollectionListFragmentPresenterImpl implements IUserCollectionL
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IUserCollectionListFragmentCallback callback) {
         mCallback = null;
     }
 }

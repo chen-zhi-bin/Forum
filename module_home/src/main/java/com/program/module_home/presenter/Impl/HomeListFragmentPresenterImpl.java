@@ -1,5 +1,6 @@
 package com.program.module_home.presenter.Impl;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -17,6 +18,9 @@ import com.program.module_home.presenter.IHomeListFragmentPresenter;
 import com.program.module_home.utils.RetrofitManager;
 import com.program.moudle_base.utils.ToastUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -24,6 +28,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter {
     private IHomeListFragmentCallback mCallback = null;
+    private List<IHomeListFragmentCallback> mCallbacks = new ArrayList<>();
     private final HomeApi mApi;
 
     private static final int ERROR = -1;         //能请求，但是有错误
@@ -36,6 +41,12 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
+            String key = msg.getData().getString("key");
+            for (IHomeListFragmentCallback callback : mCallbacks) {
+                if (callback.getKey().equals(key)) {
+                    mCallback = callback;
+                }
+            }
             switch (msg.what) {
                 case ERROR:
                     mCallback.setRequestError(((HomeItemBean) msg.obj).getMessage());
@@ -70,7 +81,15 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
     private int page = 0;
 
     @Override
-    public void getUpdateArticleInfo(String id) {
+    public void getUpdateArticleInfo(String key,String id) {
+        for (IHomeListFragmentCallback callback : mCallbacks) {
+            if (callback.getKey().equals(id)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",key);
         mApi.getArticleDetail(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -87,6 +106,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                         Message message = new Message();
                         message.what=((ArticleDetailBean)o).getCode()==Constants.SUCCESS?RETURN_HOME_ITEM_UPDATE:ERROR;
                         message.obj = o;
+                        message.setData(bundle);
                         mHandler.sendMessage(message);
                     }
 
@@ -103,7 +123,15 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
     }
 
     @Override
-    public void getRecommend(String id) {
+    public void getRecommend(String key,String id) {
+        for (IHomeListFragmentCallback callback : mCallbacks) {
+            if (callback.getKey().equals(id)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",key);
         page = 1;
         if (id.equals("1")) {
             //轮播图
@@ -121,6 +149,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                         public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                             Message message = new Message();
                             message.what = RETURN_BANNER;
+                            message.setData(bundle);
                             message.obj = o;
                             mHandler.sendMessage(message);
                         }
@@ -150,6 +179,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                         public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                             Message message = new Message();
                             message.what = ((HomeItemBean) o).getCode() == Constants.SUCCESS ? RETURN_HOME_ITEM_BEAN : ERROR;
+                            message.setData(bundle);
                             message.obj = o;
                             mHandler.sendMessage(message);
                         }
@@ -179,6 +209,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                         public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                             Message message = new Message();
                             message.what = ((HomeItemBean) o).getCode() == Constants.SUCCESS ? RETURN_HOME_ITEM_BEAN : ERROR;
+                            message.setData(bundle);
                             message.obj = o;
                             mHandler.sendMessage(message);
                         }
@@ -199,6 +230,15 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
 
     @Override
     public void getRecommendMore(String id) {
+
+        for (IHomeListFragmentCallback callback : mCallbacks) {
+            if (callback.getKey().equals(id)) {
+                mCallback = callback;
+                break;
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("key",id);
         if (id.equals("1")){
             mApi.getRecommend(page)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -214,6 +254,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                         public void onNext(@io.reactivex.rxjava3.annotations.NonNull Object o) {
                             Message message = new Message();
                             message.what = ((HomeItemBean)o).getCode()==Constants.SUCCESS?RETURN_HOME_ITEM_BEAN_MORE:ERROR;
+                            message.setData(bundle);
                             message.obj = o;
                             mHandler.sendMessage(message);
                         }
@@ -244,6 +285,7 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
                             Message message = new Message();
                             message.what = ((HomeItemBean)o).getCode()==Constants.SUCCESS?RETURN_HOME_ITEM_BEAN_MORE:ERROR;
                             message.obj = o;
+                            message.setData(bundle);
                             mHandler.sendMessage(message);
                         }
 
@@ -268,12 +310,15 @@ public class HomeListFragmentPresenterImpl implements IHomeListFragmentPresenter
 
     @Override
     public void registerViewCallback(IHomeListFragmentCallback callback) {
-        this.mCallback = callback;
+//        this.mCallback = callback;
+        if (!mCallbacks.contains(callback)) {
+            mCallbacks.add(callback);
+        }
     }
 
     @Override
-    public void unregisterViewCallback() {
-
+    public void unregisterViewCallback(IHomeListFragmentCallback callback) {
+        mCallbacks.remove(callback);
     }
 
 }

@@ -275,6 +275,6 @@ public class UserInfoActivity extends BaseActivity implements IUserInfoActivityC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mUserInfoActivityPresenter.unregisterViewCallback();
+        mUserInfoActivityPresenter.unregisterViewCallback(this);
     }
 }

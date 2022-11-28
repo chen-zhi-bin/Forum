@@ -75,11 +75,13 @@ public class WendaRankingFragmentPresenterImpl implements IWendaRankingFragmentP
         }
     };
     private final WendaApi mApi;
-    private final String mToken;
+    private String mToken;
+    private final SharedPreferencesUtils mSharedPreferencesUtils;
 
     public WendaRankingFragmentPresenterImpl(){
         mApi = RetrofitManager.getInstence().getApi();
-        mToken = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mSharedPreferencesUtils = SharedPreferencesUtils.getInstance(BaseApplication.getAppContext());
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
     }
 
     @Override
@@ -121,6 +123,7 @@ public class WendaRankingFragmentPresenterImpl implements IWendaRankingFragmentP
      */
     @Override
     public void getUserFollowState(String userId,int path) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
         mApi.getFollowState(userId, mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -133,7 +136,7 @@ public class WendaRankingFragmentPresenterImpl implements IWendaRankingFragmentP
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull FollowBean followBean) {
                         Message message = new Message();
-                        message.what = followBean.getCode() == Constants.SUCCESS ? (path==0?RETURN_FOLLOW_Header:RETURN_FOLLOW_ELSE): RETURN_FOLLOW_ERROR;
+                        message.what = (path==0?RETURN_FOLLOW_Header:RETURN_FOLLOW_ELSE);
                         message.obj = followBean;
                         mHandler.sendMessage(message);
                     }
@@ -224,7 +227,7 @@ public class WendaRankingFragmentPresenterImpl implements IWendaRankingFragmentP
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IWendaRankingFragmentCallback callback) {
         mCallback = null;
     }
 }

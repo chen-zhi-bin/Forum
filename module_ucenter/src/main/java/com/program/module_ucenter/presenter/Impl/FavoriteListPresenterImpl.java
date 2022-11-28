@@ -136,7 +136,7 @@ public class FavoriteListPresenterImpl implements IFavoriteListPresenter {
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IFavoriteListCallback callback) {
         mCallback = null;
     }
 }

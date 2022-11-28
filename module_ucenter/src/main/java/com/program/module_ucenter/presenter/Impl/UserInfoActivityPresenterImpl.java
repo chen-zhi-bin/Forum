@@ -140,7 +140,7 @@ public class UserInfoActivityPresenterImpl implements IUserInfoActivityPresenter
     }
 
     @Override
-    public void unregisterViewCallback() {
+    public void unregisterViewCallback(IUserInfoActivityCallback callback) {
         mCallback = null;
     }
 }
