@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.program.lib_base.LogUtils;
+import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.Constants;
 import com.program.lib_common.RoutePath;
 import com.program.lib_common.UIUtils;
@@ -66,6 +67,7 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+ // TODO: 2022/11/28  此页顶部状态栏在真机上显示错误，
 @Route(path = RoutePath.Ucenter.PAGE_UCENTER)
 public class UserCenterActivity extends AppCompatActivity implements IUserCenterCallback {
 
@@ -129,10 +131,17 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         Mojito.initialize(GlideImageLoader.Companion.with(this), new SketchImageLoadFactory());
 
         initView();
+        initStatusBar();
         initPreseenter();
     }
 
-    private void initPreseenter() {
+     private void initStatusBar() {
+         StatusBarUtil.immersive(this);
+         StatusBarUtil.darkMode(this,true);
+         StatusBarUtil.setPaddingSmart(this,mToobar);
+     }
+
+     private void initPreseenter() {
         mUserCenterPresenter = PresenterManager.getInstance().getUserCenterPresenter();
         mUserCenterPresenter.registerViewCallback(this);
 //        mUserCenterPresenter.geetUserInfo(userId);
@@ -151,6 +160,10 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
         mBtnToolbarFollow.setTag(-1);
         mBtnFollow = findViewById(R.id.btn_follow);
         mBtnFollow.setTag(-1);
+        mBtnFollow.setVisibility(View.VISIBLE);
+        mBtnToolbarFollow.setVisibility(View.VISIBLE);
+        CommonViewUtils.setFollowState(mBtnFollow,Integer.parseInt(mBtnFollow.getTag().toString()));
+        CommonViewUtils.setFollowState(mBtnToolbarFollow, Integer.parseInt(mBtnToolbarFollow.getTag().toString()));
         mVpContent = findViewById(R.id.vp_content);
         mToobar = this.findViewById(R.id.toolbar);
         mToolbarLayout = findViewById(R.id.toolbar_layout);
@@ -383,8 +396,6 @@ public class UserCenterActivity extends AppCompatActivity implements IUserCenter
     @Override
     public void setFollowState(FollowBean data) {
         LogUtils.d(UserCenterActivity.class,"follow data = "+data);
-        mBtnFollow.setVisibility(View.VISIBLE);
-        mBtnToolbarFollow.setVisibility(View.VISIBLE);
         CommonViewUtils.setFollowState(mBtnFollow, data.getData());
         CommonViewUtils.setFollowState(mBtnToolbarFollow, data.getData());
     }
