@@ -14,6 +14,8 @@ import com.program.forum.GuideBean;
 import com.program.forum.R;
 import com.program.lib_base.StatusBarUtil;
 import com.program.lib_common.service.main.MainServiceWrap;
+import com.program.moudle_base.base.BaseApplication;
+import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.ViewPagerIndicator;
 
@@ -49,6 +51,7 @@ public class GuideActivity extends AppCompatActivity {
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 if (view.getId()==R.id.tv_hello){
                     MainServiceWrap.Singletion.INSTANCE.getHolder().launchMain();
+                    SharedPreferencesUtils.getInstance(BaseApplication.getAppContext()).putBoolean(SharedPreferencesUtils.IS_FIRST_LAUNCHER,false);
                     finish();
                 }
             }

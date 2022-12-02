@@ -33,7 +33,6 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     Intent intent = new Intent(SplashActivity.this, GuideActivity.class);
                     startActivity(intent);
-                    instance.putBoolean(SharedPreferencesUtils.IS_FIRST_LAUNCHER,false);
                     finish();
                 }
             };
