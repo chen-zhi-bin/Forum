@@ -58,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_36"
         android:layout_marginTop="@dimen/dp_20"
-        android:background="@drawable/blue_hollow_btn_selector"
+        android:background="@drawable/blue_solid_btn_selector"
         android:gravity="center"
         android:text="修改密码"
         android:textColor="@color/white"
