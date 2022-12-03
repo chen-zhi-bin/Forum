@@ -1,6 +1,7 @@
 package com.program.module_wenda.ui.activity;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -96,6 +97,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
     private ImageView mIvRight;
     private SharedPreferencesUtils mSharedPreferencesUtils;
     private RelativeLayout mIncludeBar;
+    private ConstraintLayout mTitleBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
         StatusBarUtil.immersive(this);
         StatusBarUtil.darkMode(this,true);
         StatusBarUtil.setPaddingSmart(this,mIncludeBar);
+        StatusBarUtil.setPaddingSmart(this,mTitleBar);
     }
 
     private void initPresenter() {
@@ -321,6 +324,7 @@ public class WendaAnswerActivity extends RxAppCompatActivity implements IWendaAn
 
     private void initView() {
         mIncludeBar = this.findViewById(R.id.include_bar);
+        mTitleBar = this.findViewById(R.id.layout_header_avatar);
         mRvContent = this.findViewById(R.id.rv_content);
         mTvHeaderBickName = this.findViewById(R.id.tv_header_nickname);
         mIvHeaderAvatar = this.findViewById(R.id.iv_header_avatar);
