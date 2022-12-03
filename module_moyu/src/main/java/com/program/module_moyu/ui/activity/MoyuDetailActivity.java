@@ -1,6 +1,7 @@
 package com.program.module_moyu.ui.activity;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -116,6 +117,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
 
     private ShapeLinearLayout mBottomReply;
     private RelativeLayout mIncludeBar;
+    private ConstraintLayout mTitleBar;
 
 
     @Subscribe
@@ -142,7 +144,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     private void initStatusBar() {
         StatusBarUtil.immersive(this);
         StatusBarUtil.darkMode(this,true);
-        StatusBarUtil.setPaddingSmart(this,mIncludeBar);
+        StatusBarUtil.setPaddingSmart(this,mTitleBar);
     }
 
 
@@ -235,6 +237,7 @@ public class MoyuDetailActivity extends RxAppCompatActivity implements IMoyuDeta
     }
 
     private void initView() {
+        mTitleBar = this.findViewById(R.id.title_bar);
         mIncludeBar = this.findViewById(R.id.include_bar);
         TextView tvSearch = mIncludeBar.findViewById(R.id.tvSearch);
         mIvBack = mIncludeBar.findViewById(R.id.ivBack);
