@@ -293,6 +293,7 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
 
     @Override
     public void setImageReturn(BaseResponseBean data) {
+
         if (data.getSuccess()){
             mPostedImagesPath.add((String) data.getData());
             if (postIndex<mSelectImage.size()-1){
@@ -302,6 +303,11 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
         }else {
             mPostedImagesPath.clear();
             postIndex = 0;
+            ToastUtils.showToast(data.getMessage());
+            if (mWaitDialog.isShowing()){
+                mWaitDialog.dismiss();
+            }
+            return;
         }
         if (mPostedImagesPath.size()-1==postIndex){
             mPutFishActivityPresenter.postMoment(
@@ -325,6 +331,9 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
     @Override
     public void setRequestError(String msg) {
         ToastUtils.showToast(msg);
+        if (mWaitDialog.isShowing()) {
+            mWaitDialog.dismiss();
+        }
     }
 
     @Override

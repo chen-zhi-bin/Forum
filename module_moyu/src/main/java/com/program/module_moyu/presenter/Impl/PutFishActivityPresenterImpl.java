@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.program.lib_base.LogUtils;
 import com.program.module_moyu.callback.IPutFishActivityCallback;
 import com.program.module_moyu.model.MoyuApi;
 import com.program.module_moyu.model.bean.Moment;
@@ -38,7 +37,7 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
             switch (msg.what){
                 case ERROR:
                 case RETURN_ERROR:
-                    mCallback.setRequestError("错误,请稍后重试");
+                    mCallback.setRequestError(msg.obj.toString());
                     break;
                 case RETURN_IMAGE:
                     mCallback.setImageReturn((BaseResponseBean)msg.obj);
@@ -69,7 +68,7 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
     public void postImage(MultipartBody.Part part) {
         String token = mInstance.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
         if (token.equals("")){
-            ToastUtils.showToast("尚未登录");
+            responseError("尚未登录");
             return;
         }
         mApi.postImage(part,token)
@@ -92,7 +91,7 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                       responseError();
+                       responseError(e.getMessage());
                     }
 
                     @Override
@@ -106,7 +105,7 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
     public void postMoment(Moment moment) {
         String token = mInstance.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
         if (token.equals("")){
-            ToastUtils.showToast("尚未登录");
+           responseError("尚未登录");
             return;
         }
         mApi.postMoyu(moment,token)
@@ -129,7 +128,7 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        responseError();
+                        responseError(e.getMessage());
                     }
 
                     @Override
@@ -139,9 +138,10 @@ public class PutFishActivityPresenterImpl implements IPutFishActivityPresenter {
                 });
     }
 
-    private void responseError() {
+    private void responseError(String msg) {
         Message message = new Message();
         message.what = ERROR;
+        message.obj = msg;
         mHandler.sendMessage(message);
     }
 }

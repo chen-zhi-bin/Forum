@@ -34,7 +34,7 @@ public interface MoyuApi {
      * 上传图片
      */
     @Multipart
-    @POST("/ct/image/mo_yu")
+    @POST("/oss/image/mo_yu")
     Observable<BaseResponseBean> postImage(@Part MultipartBody.Part file, @Header("sob_token")String token);
 
     @GET("ct/moyu/topic")
