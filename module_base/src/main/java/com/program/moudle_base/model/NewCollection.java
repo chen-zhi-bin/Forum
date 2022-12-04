@@ -16,10 +16,10 @@ public class NewCollection {
      */
     private String name;
     private String description;
-    private MultipartBody.Part cover;
+    private String cover;
     private String permission;
 
-    public NewCollection(String name, String description, MultipartBody.Part cover, String permission) {
+    public NewCollection(String name, String description, String cover, String permission) {
         this.name = name;
         this.description = description;
         this.cover = cover;
@@ -34,7 +34,7 @@ public class NewCollection {
         return description;
     }
 
-    public MultipartBody.Part getCover() {
+    public String getCover() {
         return cover;
     }
 

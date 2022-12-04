@@ -10,9 +10,13 @@ import com.program.moudle_base.model.NewCollection;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+
 public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCallback> {
 
     void postNewCollection(NewCollection data);
+
+    void postCollectionImage(MultipartBody.Part part);
 
     void getArticleDetail(String articleId);
 
@@ -74,6 +78,11 @@ public interface IArticleDetailPresenter extends IBasePresenter<IArticleDetailCa
      * 得到收藏列表
      */
     void getCollectionList();
+
+    /**
+     * 得到更多收藏列表
+     */
+    void getCollectionListMore();
 
     /**
      * 收藏

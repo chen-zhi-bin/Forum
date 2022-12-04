@@ -19,16 +19,23 @@
         android:textColor="@color/colorAccent"
         android:layout_alignParentRight="true"
         android:textSize="@dimen/sp_13"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_folder"
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_collection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/dp_40"
-        android:overScrollMode="never"
-        android:layout_below="@+id/tv_add"
-        android:layout_above="@+id/btn_submit"
-        />
+        android:layout_below="@+id/tv_add">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_folder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_40"
+            android:overScrollMode="never"
+            android:layout_below="@+id/tv_add"
+            android:layout_above="@+id/btn_submit"
+            />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
     <Button
         android:id="@+id/btn_submit"
         android:layout_width="match_parent"

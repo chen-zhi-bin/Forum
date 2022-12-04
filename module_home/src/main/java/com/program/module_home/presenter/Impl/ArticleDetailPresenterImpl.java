@@ -27,13 +27,12 @@ import com.program.moudle_base.model.PriseQrCodeBean;
 import com.program.moudle_base.utils.SharedPreferencesUtils;
 import com.program.moudle_base.utils.ToastUtils;
 
-import java.util.Map;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 
 public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
@@ -60,15 +59,17 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     private static final int RETURN_ARTICLE_PRISE = 15;   //打赏文章
     private static final int RETURN_ARTICLE_COLLECTION_STATE = 16;   //文章是否收藏
     private static final int RETURN_COLLECTION_LIST = 17;   //收藏列表
-    private static final int RETURN_FAVORITE = 18;   //添加收藏
-    private static final int RETURN_UN_FAVORITE = 19;   //取消收藏
-    private static final int RETURN_NEW_COLLECTION_MSG = 20;   //新建收藏集
+    private static final int RETURN_COLLECTION_LIST_MORE = 18;   //更多收藏列表
+    private static final int RETURN_FAVORITE = 19;   //添加收藏
+    private static final int RETURN_UN_FAVORITE = 20;   //取消收藏
+    private static final int RETURN_NEW_COLLECTION_IMAGE = 21;   //新建收藏集
+    private static final int RETURN_NEW_COLLECTION_MSG = 22;   //新建收藏集
     private final Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@androidx.annotation.NonNull Message msg) {
             switch (msg.what) {
                 case ERROR:
-                    mCallback.setRequestError("连接超时,请稍后重试");
+                    mCallback.setRequestError(msg.obj.toString());
                     break;
                 case RETURN_ERROR:
                     mCallback.setRequestError("网络错误");
@@ -126,13 +127,21 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     mCallback.setCheckCollectionState((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_COLLECTION_LIST:
+                    pageCollection++;
                     mCallback.setCollectionList((CollectionBean)msg.obj);
+                    break;
+                case RETURN_COLLECTION_LIST_MORE:
+                    pageCollection++;
+                    mCallback.setCollectionListMore((CollectionBean)msg.obj);
                     break;
                 case RETURN_FAVORITE:
                     mCallback.setFavorite((BaseResponseBean)msg.obj);
                     break;
                 case RETURN_UN_FAVORITE:
                     mCallback.setUnFavorite((BaseResponseBean)msg.obj);
+                    break;
+                case RETURN_NEW_COLLECTION_IMAGE:
+                    mCallback.returnCollectionImageMsg((BaseResponseBean) msg.obj);
                     break;
                 case RETURN_NEW_COLLECTION_MSG:
                     mCallback.returnNewCollectionMsg((BaseResponseBean)msg.obj);
@@ -153,7 +162,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     public void postNewCollection(NewCollection data) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         if (mToken.equals("")||mToken==null){
-            ToastUtils.showToast("尚未登录");
+            requestFailed("尚未登录");
             return;
         }
         mApi.postNewCollection(data,mToken)
@@ -184,7 +193,44 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 //                            LogUtils.d("test","error ="+stackTraceElement.toString());
 //
 //                        }
-                        requestFailed();
+                        requestFailed(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void postCollectionImage(MultipartBody.Part part) {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        if (mToken.equals("")||mToken==null){
+            requestFailed("尚未登录");
+            return;
+        }
+        mApi.postCollectionImage(part,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what = RETURN_NEW_COLLECTION_IMAGE;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -216,7 +262,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -248,7 +294,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -283,7 +329,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -315,7 +361,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -348,7 +394,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -382,7 +428,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -414,7 +460,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -446,7 +492,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -478,7 +524,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -510,7 +556,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -524,7 +570,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     public void getUserFollowState(String userId) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         if (mToken.equals("")||mToken==null){
-            ToastUtils.showToast("尚未登录");
+            requestFailed("尚未登录");
             return;
         }
         mApi.getFollowState(userId, mToken)
@@ -547,7 +593,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -561,7 +607,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     public void addFollow(String userId) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         if (mToken.equals("")||mToken==null){
-            ToastUtils.showToast("尚未登录");
+            requestFailed("尚未登录");
             return;
         }
         mApi.addFollow(userId, mToken)
@@ -584,7 +630,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -598,7 +644,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     public void unFollow(String userId) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         if (mToken.equals("")||mToken==null){
-            ToastUtils.showToast("尚未登录");
+            requestFailed("尚未登录");
             return;
         }
         mApi.unFollow(userId, mToken)
@@ -621,7 +667,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -635,6 +681,11 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     @Override
     public void getCollectionList() {
         pageCollection = 1;
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE,"");
+        if (mToken.equals("")||mToken==null){
+            requestFailed("尚未登录");
+            return;
+        }
         mApi.getCollectionList(pageCollection,mToken)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -655,7 +706,40 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getCollectionListMore() {
+        mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
+        mApi.getCollectionList(pageCollection,mToken)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .compose(mCallback.TobindToLifecycle())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Object o) {
+                        Message message = new Message();
+                        message.what= RETURN_COLLECTION_LIST_MORE;
+                        message.obj = o;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -687,7 +771,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -701,7 +785,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
     public void unFavorite(String favoriteId) {
         mToken = mSharedPreferencesUtils.getString(SharedPreferencesUtils.USER_TOKEN_COOKIE);
         if (mToken.equals("")||mToken==null){
-            ToastUtils.showToast("尚未登录");
+            requestFailed("尚未登录");
             return;
         }
         mApi.unFavorite(favoriteId,mToken)
@@ -725,7 +809,7 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                     @Override
                     public void onError(@NonNull Throwable e) {
                         LogUtils.d("test","test = "+e.getMessage().toString());
-                        requestFailed();
+                        requestFailed(e.getMessage());
                     }
 
                     @Override
@@ -735,9 +819,10 @@ public class ArticleDetailPresenterImpl implements IArticleDetailPresenter {
                 });
     }
 
-    private void requestFailed() {
+    private void requestFailed(String msg) {
         Message message = new Message();
         message.what = ERROR;
+        message.obj = msg;
         mHandler.sendMessage(message);
     }
 

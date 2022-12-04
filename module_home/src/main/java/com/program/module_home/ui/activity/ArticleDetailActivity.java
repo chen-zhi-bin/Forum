@@ -75,6 +75,10 @@ import com.program.moudle_base.utils.ToastUtils;
 import com.program.moudle_base.view.FixedHeightBottomSheetDialog;
 import com.program.moudle_base.view.MyCodeViewJava;
 import com.program.moudle_base.view.ReplyBottomSheetDialog;
+import com.program.moudle_base.view.WaitDialog;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.components.support.RxAppCompatActivity;
 
@@ -154,6 +158,10 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
     private ImageView mIvSwitchCover;
     private List<ImageItem> mSelectImage = new ArrayList<>();
     private RelativeLayout mIncludeBar;
+    private WaitDialog mWaitDialog = null;
+    private String mNewcollectionName;
+    private String mNewCollectiondescription;
+    private SmartRefreshLayout mRefreshCollection;
 
     @Subscribe
     @Override
@@ -367,6 +375,7 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         LayoutInflater from = LayoutInflater.from(this);
         View inflate = from.inflate(R.layout.modulehome_home_dialog_collection_folder, null);
         TextView tvAdd = inflate.findViewById(R.id.tv_add);
+        mRefreshCollection = inflate.findViewById(R.id.refresh_collection);
         RecyclerView rvFolder = inflate.findViewById(R.id.rv_folder);
         rvFolder.setLayoutManager(new LinearLayoutManager(this));
         CollectFolderAdapter adapter = new CollectFolderAdapter();
@@ -394,6 +403,13 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
             @Override
             public void onClick(View view) {
                 mBottomNewFolderSheetDialog.show();
+            }
+        });
+        mRefreshCollection.setEnableRefresh(false);
+        mRefreshCollection.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                mArticleDetailPresenter.getCollectionListMore();
             }
         });
         mBottomSheetDialog.setContentView(inflate);
@@ -432,40 +448,34 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         tvPut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo:新建收藏夹，需要调整
-//                LogUtils.d("test",etNickName.getText().toString());
-//                LogUtils.d("test",etDesc.getText().toString());
-//                LogUtils.d("test"," state ="+ mNewFolderstate);
-//                LogUtils.d("test",mSelectImage.toString());
-//                LogUtils.d("test",mSelectImage.get(0).getPath());
-                NewCollection newCollection = new NewCollection(
-                        etNickName.getText().toString(),
-                        etDesc.getText().toString(),
-//                        new File(mSelectImage.get(0).getPath()),
-                        createPartByPathAndKet(mSelectImage.get(0).getPath(), "image"),
-                        mNewFolderstate + ""
-                );
-//                LogUtils.d("test","n  = "+(newCollection.getCover() instanceof MultipartBody.Part));
-//                LogUtils.d("test","n  = "+newCollection.getCover().toString());
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("name",etNickName.getText().toString());
-//                map.put("description",etDesc.getText().toString());
-//                map.put("cover",  createPartByPathAndKet(mSelectImage.get(0).getPath(), "file"));
-//                map.put("permission",mNewFolderstate + "");
-                mArticleDetailPresenter.postNewCollection(newCollection);
+                //新建收藏夹
+
+                mNewcollectionName = etNickName.getText().toString();
+                mNewCollectiondescription = etDesc.getText().toString();
+
+                if (mNewcollectionName.equals("")||mNewCollectiondescription.equals("")){
+                    ToastUtils.showToast("收藏夹的名字或描述为空");
+                    return;
+                }
+                //上传图片
+                mArticleDetailPresenter.postCollectionImage(createPartByPathAndKet(mSelectImage.get(0).getPath(),"image"));
+
             }
         });
         mBottomNewFolderSheetDialog.setContentView(inflate);
     }
 
     private MultipartBody.Part createPartByPathAndKet(String path, String key) {
+//        File file = new File(path);
+//        RequestBody body = RequestBody.create(MediaType.parse("image/*"), file);
+//        MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), body);
+//        return part;
+
         File file = new File(path);
-//        LogUtils.d("test","file = "+file.getName());
-//        LogUtils.d("test","file = "+file.getPath());
-//        LogUtils.d("test","file = "+file);
-        RequestBody body = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part part = MultipartBody.Part.createFormData(key, file.getName(), body);
-        return part;
+        String[] split = path.split("\\.");
+        RequestBody body = RequestBody.create(MediaType.parse("image/"+split[split.length-1]), file);
+        MultipartBody.Part formData = MultipartBody.Part.createFormData(key, file.getName(), body);
+        return formData;
     }
 
     /**
@@ -688,6 +698,9 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
                 R.style.BottomSheetDialog
         );
         initWebView();
+        mWaitDialog = new WaitDialog(this);
+        mWaitDialog.setText("上传中...");
+        mWaitDialog.setCancelable(false);
     }
 
     @SuppressLint("JavascriptInterface")
@@ -712,7 +725,35 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
 
     @Override
     public void returnNewCollectionMsg(BaseResponseBean data) {
+        if (data.getSuccess()){
+            mArticleDetailPresenter.getCollectionList();
+            mBottomNewFolderSheetDialog.dismiss();
+        }else {
+            if (mWaitDialog.isShowing()) {
+                mWaitDialog.isShowing();
+            }
+        }
+        ToastUtils.showToast(data.getMessage());
+    }
 
+    @Override
+    public void returnCollectionImageMsg(BaseResponseBean data) {
+        if (data.getSuccess()){
+            NewCollection newCollection = new NewCollection(
+                    mNewcollectionName,
+                    mNewCollectiondescription,
+//                        new File(mSelectImage.get(0).getPath()),
+                    data.getData().toString(),
+                    mNewFolderstate + ""
+            );
+
+            mArticleDetailPresenter.postNewCollection(newCollection);
+        }else {
+            ToastUtils.showToast(data.getMessage());
+            if (mWaitDialog.isShowing()) {
+                mWaitDialog.dismiss();
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -940,6 +981,20 @@ public class ArticleDetailActivity extends RxAppCompatActivity implements IArtic
         if (mCollectFolderAdapter != null) {
             mCollectFolderAdapter.getData().clear();
             mCollectFolderAdapter.setNewData(data.getData().getContent());
+            if (data.getData().getLast()){
+                mRefreshCollection.setEnableLoadMore(false);
+            }
+        }
+    }
+
+    @Override
+    public void setCollectionListMore(CollectionBean data) {
+        mCollectFolderAdapter.addData(data.getData().getContent());
+        if (mRefreshCollection.isLoading()) {
+            mRefreshCollection.finishLoadMore();
+        }
+        if (!data.getSuccess()){
+            ToastUtils.showToast(data.getMessage());
         }
     }
 

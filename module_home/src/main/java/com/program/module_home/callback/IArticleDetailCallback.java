@@ -15,6 +15,8 @@ public interface IArticleDetailCallback extends IBaseCallback {
 
     void returnNewCollectionMsg(BaseResponseBean data);
 
+    void returnCollectionImageMsg(BaseResponseBean data);
+
     void setArticleDetail(ArticleDetailBean.DataBean data);
 
     void setRequestError(String msg);
@@ -52,6 +54,8 @@ public interface IArticleDetailCallback extends IBaseCallback {
     void setUnFollowMsgError(String msg);
 
     void setCollectionList(CollectionBean data);
+
+    void setCollectionListMore(CollectionBean data);
 
     void setFavorite(BaseResponseBean data);
 

@@ -26,6 +26,7 @@ import java.util.logging.Handler;
 
 import io.reactivex.rxjava3.core.Observable;
 import kotlin.jvm.JvmSuppressWildcards;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -33,6 +34,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -49,6 +51,13 @@ public interface HomeApi {
      */
     @POST("/ct/ucenter/collection")
     Observable<BaseResponseBean> postNewCollection(@Body NewCollection data, @Header("sob_token")String token);
+
+    /**
+     * 上传收藏夹封面
+     */
+    @Multipart
+    @POST("/oss/image/collection")
+    Observable<BaseResponseBean> postCollectionImage(@Part MultipartBody.Part file, @Header("sob_token")String token);
 
     /**
      * 首页分类列表
