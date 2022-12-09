@@ -158,7 +158,18 @@ public class PutFishActivity extends AppCompatActivity implements IPutFishActivi
                     return;
                 }
                 mWaitDialog.show();
-                mPutFishActivityPresenter.postImage(createPartByPathAndKet(mSelectImage.get(0).getPath(),"image"));
+                if (mSelectImage==null||mSelectImage.size()==0){
+                    mPutFishActivityPresenter.postMoment(
+                            new Moment(
+                                    mEtInputContent.getText().toString(),
+                                    mMoyuId,
+                                    mPostedImagesPath,
+                                    mUrlLink
+                            )
+                    );
+                }else {
+                    mPutFishActivityPresenter.postImage(createPartByPathAndKet(mSelectImage.get(0).getPath(),"image"));
+                }
             }
         });
         mIvImage.setOnClickListener(new View.OnClickListener() {
