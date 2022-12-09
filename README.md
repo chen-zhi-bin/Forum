@@ -4,7 +4,7 @@ java+MVP+组件化     阳光沙滩APP
 
 ##### 技术
 
-java、Glide、Retrofit、okHttp、BRVAH、XXPermissions、RxJava等等
+java、Glide、Retrofit、okHttp、BRVAH、XXPermissions、RxJava、eventBus、Handler等等
 
 ##### 功能
 
