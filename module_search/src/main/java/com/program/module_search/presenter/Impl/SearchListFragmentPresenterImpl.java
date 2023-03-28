@@ -86,11 +86,16 @@ public class SearchListFragmentPresenterImpl implements ISearchListFragmentPrese
     @Override
     public void getSearchList(String keyword, String type) {
 //        LogUtils.d("test","this = "+mCallbackMap.toString());
+        LogUtils.d("test","============================");
+        LogUtils.d("test",type.toString());
         for (ISearchListFragmentCallback callback : mCallbacks) {
             if (callback.getType().equals(type)) {
                 mCallback = callback;
             }
         }
+        LogUtils.d("test",mCallback.toString());
+        LogUtils.d("test",mCallback.getType());
+
         Bundle bundle = new Bundle();
         bundle.putString("key",type);
         page = 1;

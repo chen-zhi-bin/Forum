@@ -16,6 +16,7 @@ import com.program.lib_common.service.moyu.wrap.MoyuServiceWrap;
 import com.program.lib_common.service.ucenter.wrap.UcenterServiceWrap;
 import com.program.module_moyu.R;
 import com.program.module_moyu.callback.IMoyuListFragmentCallback;
+import com.program.moudle_base.base.BaseApplication;
 import com.program.moudle_base.model.MoyuRequestBean;
 import com.program.module_moyu.presenter.IMoyuListFragmentPresenter;
 import com.program.module_moyu.utils.PresenterManager;
@@ -32,6 +33,10 @@ import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle4.LifecycleTransformer;
 import com.trello.rxlifecycle4.RxLifecycle;
+
+import net.mikaelzero.mojito.Mojito;
+import net.mikaelzero.mojito.loader.glide.GlideImageLoader;
+import net.mikaelzero.mojito.view.sketch.SketchImageLoadFactory;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -268,5 +273,11 @@ public class MoyuListFragment extends BaseFragment implements IMoyuListFragmentC
     @Override
     public void onEmpty() {
         setupState(State.EMPTY);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Mojito.initialize(GlideImageLoader.Companion.with(BaseApplication.getAppContext()), new SketchImageLoadFactory());
     }
 }

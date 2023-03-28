@@ -116,6 +116,12 @@ public class HomeListFragment extends BaseFragment implements IHomeListFragmentC
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Mojito.initialize(GlideImageLoader.Companion.with(BaseApplication.getAppContext()), new SketchImageLoadFactory()); //初始化
+    }
+
+    @Override
     protected void initPresenter() {
         mHomeListFragmentPresenter = PresenterManager.getInstance().getHomeListFragmentPresenter();
         mHomeListFragmentPresenter.registerViewCallback(this);

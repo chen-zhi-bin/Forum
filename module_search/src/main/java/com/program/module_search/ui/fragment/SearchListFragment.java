@@ -253,4 +253,10 @@ public class SearchListFragment extends BaseFragment implements ISearchListFragm
         }
         super.onDestroy();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Mojito.initialize(GlideImageLoader.Companion.with(BaseApplication.getAppContext()), new SketchImageLoadFactory());
+    }
 }
