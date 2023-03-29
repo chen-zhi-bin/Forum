@@ -132,7 +132,7 @@ public class ImageSwitchActivity extends AppCompatActivity implements ImageListA
 
             @Override
             public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-                if (cursor != null) {
+                if (cursor != null&&!cursor.isClosed()) {
                     String[] columnNames = cursor.getColumnNames();
                     while (cursor.moveToNext()) {
 //                        Log.d("test", "===========================");
